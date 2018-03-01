@@ -81,20 +81,26 @@ namespace LCS
         internal List<CloudHostedInstance> GetCheInstances()
         {
             var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetDeployementDetails/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
-            result.EnsureSuccessStatusCode();
 
-            var responseBody = result.Content.ReadAsStringAsync().Result;
-            responseBody = responseBody.TrimStart('(');
-            responseBody = responseBody.TrimEnd(')');
-
-            var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
-
-            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
-            if(cloudHostedInstancesUnsorted != null)
+            if (result.IsSuccessStatusCode)
             {
-                list.AddRange( cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
+                result.EnsureSuccessStatusCode();
+
+                var responseBody = result.Content.ReadAsStringAsync().Result;
+                responseBody = responseBody.TrimStart('(');
+                responseBody = responseBody.TrimEnd(')');
+
+                var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
+
+                List<CloudHostedInstance> list = new List<CloudHostedInstance>();
+                if (cloudHostedInstancesUnsorted != null)
+                {
+                    list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
+                }
+                return list;
             }
-            return list;
+
+            return null;
         }
 
         internal List<CloudHostedInstance> GetSaasInstances()
