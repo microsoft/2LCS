@@ -104,32 +104,39 @@ namespace LCS
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success)
+
+            //Not all projects have deployed their MS hosted environments. Try / Catch to silence the error.
+            try
             {
-                if (response.Data != null)
+                if (response.Success)
                 {
-                    var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString());
-                    if (instances != null)
+                    if (response.Data != null)
                     {
-                        List<CloudHostedInstance> list = new List<CloudHostedInstance>();
-                        foreach (var item in instances)
+                        var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString());
+                        if (instances != null)
                         {
-                            foreach (var instance in item.DeploymentInstances)
+                            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
+                            foreach (var item in instances)
                             {
-                                if (instance.IsDeployed == true)
+                                foreach (var instance in item.DeploymentInstances)
                                 {
-                                    var details = GetSaasDeploymentDetail(instance.EnvironmentId);
-                                    if(details != null)
+                                    if (instance.IsDeployed == true)
                                     {
-                                        list.Add(details);
+                                        var details = GetSaasDeploymentDetail(instance.EnvironmentId);
+                                        if (details != null)
+                                        {
+                                            list.Add(details);
+                                        }
                                     }
                                 }
                             }
+                            return list.OrderBy(x => x.InstanceId).ToList();
                         }
-                        return list.OrderBy(x => x.InstanceId).ToList();
                     }
                 }
             }
+            catch { }
+
             return null;
         }
 
