@@ -180,16 +180,20 @@ namespace LCS.Forms
             if (reloadFromLcs)
             {
                 _saasInstancesList = _httpClientHelper.GetSaasInstances();
-                _saasInstancesSource.DataSource = _saasInstancesList;
-                if(Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+
+                if (_saasInstancesList != null)
                 {
-                    Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
-                        .Select(x => { x.SaasInstances = _saasInstancesList; return x;} )
-                            .ToList();
+                    _saasInstancesSource.DataSource = _saasInstancesList;
+                    if (Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                    {
+                        Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
+                            .Select(x => { x.SaasInstances = _saasInstancesList; return x; })
+                                .ToList();
+                    }
+
+                    Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                    Properties.Settings.Default.Save();
                 }
-                
-                Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-                Properties.Settings.Default.Save();
             }
             else
             {
@@ -209,16 +213,19 @@ namespace LCS.Forms
             if (reloadFromLcs)
             {
                 _cheInstancesList = _httpClientHelper.GetCheInstances();
-                _cheInstancesSource.DataSource = _cheInstancesList;
-                if(Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                if (_cheInstancesList != null)
                 {
-                    Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
-                        .Select(x => { x.CheInstances = _cheInstancesList; return x;} )
-                            .ToList();
-                }
-                
-                Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-                Properties.Settings.Default.Save();
+                    _cheInstancesSource.DataSource = _cheInstancesList;
+                    if (Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                    {
+                        Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
+                            .Select(x => { x.CheInstances = _cheInstancesList; return x; })
+                                .ToList();
+                    }
+
+                    Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                    Properties.Settings.Default.Save();
+                }                
             }
             else
             {
