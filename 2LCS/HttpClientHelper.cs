@@ -104,11 +104,21 @@ namespace LCS
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
+
+            //Not all LCS will have deployed their MS hosted environments. JsonConvert.DeserializeObject doesn't tolerate nulls be default.
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
+
             if (response.Success)
             {
                 if (response.Data != null)
                 {
-                    var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString());
+                    //Not all LCS will have deployed their MS hosted environments. JsonConvert.DeserializeObject doesn't tolerate nulls be default.
+                    var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString(), settings);
+
                     if (instances != null)
                     {
                         List<CloudHostedInstance> list = new List<CloudHostedInstance>();
@@ -119,7 +129,7 @@ namespace LCS
                                 if (instance.IsDeployed == true)
                                 {
                                     var details = GetSaasDeploymentDetail(instance.EnvironmentId);
-                                    if(details != null)
+                                    if (details != null)
                                     {
                                         list.Add(details);
                                     }
