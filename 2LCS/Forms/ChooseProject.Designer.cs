@@ -32,13 +32,13 @@
             this.button1 = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.projectsDataGridView = new System.Windows.Forms.DataGridView();
-            this.refreshButton = new System.Windows.Forms.Button();
             this.Favorite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ProjectName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.OrganizationName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CreatedByUserName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.refreshButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.projectsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -92,17 +92,6 @@
             this.projectsDataGridView.TabIndex = 0;
             this.projectsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_ColumnHeaderMouseClick);
             // 
-            // refreshButton
-            // 
-            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.refreshButton.Location = new System.Drawing.Point(13, 399);
-            this.refreshButton.Name = "refreshButton";
-            this.refreshButton.Size = new System.Drawing.Size(152, 33);
-            this.refreshButton.TabIndex = 3;
-            this.refreshButton.Text = "Refresh list";
-            this.refreshButton.UseVisualStyleBackColor = true;
-            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
-            // 
             // Favorite
             // 
             this.Favorite.DataPropertyName = "Favorite";
@@ -145,6 +134,17 @@
             this.CreatedByUserName.HeaderText = "Created By";
             this.CreatedByUserName.Name = "CreatedByUserName";
             this.CreatedByUserName.ReadOnly = true;
+            // 
+            // refreshButton
+            // 
+            this.refreshButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.refreshButton.Location = new System.Drawing.Point(13, 399);
+            this.refreshButton.Name = "refreshButton";
+            this.refreshButton.Size = new System.Drawing.Size(152, 33);
+            this.refreshButton.TabIndex = 3;
+            this.refreshButton.Text = "Refresh list";
+            this.refreshButton.UseVisualStyleBackColor = true;
+            this.refreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
             // 
             // ChooseProject
             // 

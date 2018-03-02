@@ -882,7 +882,7 @@ $@"
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
-            notifyIcon.BalloonTipTitle = "Lightweight LCS was minimized to system tray";
+            notifyIcon.BalloonTipTitle = "LCS companion app was minimized to system tray";
             if(_selectedProject != null)
             {
                 notifyIcon.BalloonTipText = $"LCS Project ID: {_selectedProject.Id} : {_selectedProject.Name} : {_selectedProject.OrganizationName}";
