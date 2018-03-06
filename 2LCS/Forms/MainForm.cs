@@ -162,6 +162,13 @@ namespace LCS.Forms
 
         private void RefreshMenuItem_Click(object sender, EventArgs e)
         {
+            notifyIcon.Visible = true;
+
+            notifyIcon.BalloonTipText = "Looking up all environments from LCS and displaying them.";
+            notifyIcon.BalloonTipTitle = "Fetching environments";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
             if (tabControl.SelectedTab == tabControl.TabPages["cheTabPage"])
             {
                 RefreshChe(true);
@@ -172,6 +179,8 @@ namespace LCS.Forms
                 RefreshSaas(true);
                 RefreshChe(true);
             }
+
+            notifyIcon.Visible = false;
         }
 
         private void RefreshSaas(bool reloadFromLcs = true)
@@ -883,7 +892,8 @@ $@"
         private void MainForm_Resize(object sender, EventArgs e)
         {
             notifyIcon.BalloonTipTitle = "LCS companion app was minimized to system tray";
-            if(_selectedProject != null)
+
+            if (_selectedProject != null)
             {
                 notifyIcon.BalloonTipText = $"LCS Project ID: {_selectedProject.Id} : {_selectedProject.Name} : {_selectedProject.OrganizationName}";
             }
@@ -891,6 +901,7 @@ $@"
             if (FormWindowState.Minimized == WindowState)
             {
                 notifyIcon.Visible = true;
+                notifyIcon.ShowBalloonTip(2000);
                 Hide();    
             }
             else if (FormWindowState.Normal == WindowState)
