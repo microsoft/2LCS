@@ -545,7 +545,7 @@ $@"
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
-                if (MessageBox.Show($"Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show($"Deallocation is the step before deletion. Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tasks.Add(Task.Run(() => new HttpClientHelper(_cookies){LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.StartStopDeployment(instance, "deallocate")));
                 }
@@ -561,7 +561,7 @@ $@"
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
-                if (MessageBox.Show($"Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show($"Deletion cannot be cancelled or rolled back. Do you really want to delete {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.DeleteEnvironment(instance)));
                 }
