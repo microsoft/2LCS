@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.cheDataGridView = new System.Windows.Forms.DataGridView();
             this.cheInstanceId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheEnvironmentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -1079,7 +1078,7 @@
             // notifyIcon
             // 
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon.Icon = Properties.Resources.favicon_white;
+            this.notifyIcon.Icon = global::LCS.Properties.Resources.favicon_white;
             this.notifyIcon.Text = "2LCS - Lightweight LCS";
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
@@ -1092,14 +1091,14 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Controls.Add(this.statusStrip);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MainMenuStrip = this.mainMenuStrip;
             this.MinimumSize = new System.Drawing.Size(600, 360);
             this.Name = "MainForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2LCS - Lifecycle Services companion app";
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).EndInit();
             this.cheInstanceContextMenu.ResumeLayout(false);
             this.mainMenuStrip.ResumeLayout(false);

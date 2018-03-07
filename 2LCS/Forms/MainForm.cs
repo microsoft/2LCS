@@ -30,7 +30,6 @@ namespace LCS.Forms
         public List<LcsProject> Projects;
         public List<CustomLink> Links;
 
-
         private List<CloudHostedInstance> _cheInstancesList;
         private List<CloudHostedInstance> _saasInstancesList;
         private BindingSource _cheInstancesSource = new BindingSource();
@@ -39,6 +38,7 @@ namespace LCS.Forms
         [DllImport("wininet.dll", SetLastError = true)]
         public static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, Int32 dwFlags, IntPtr lpReserved);
         private const Int32 InternetCookieHttponly = 0x2000;
+        private FormWindowState previousState;
 
         public MainForm()
         {
@@ -164,7 +164,7 @@ namespace LCS.Forms
 
         private void RefreshMenuItem_Click(object sender, EventArgs e)
         {
-            notifyIcon.Visible = true;
+            //notifyIcon.Visible = true;
 
             notifyIcon.BalloonTipText = $"Fetching list of environments for project {_selectedProject.Name} from LCS. Please wait...";
             notifyIcon.BalloonTipTitle = "Fetching environments";
@@ -181,7 +181,7 @@ namespace LCS.Forms
                 RefreshSaas(true);
                 RefreshChe(true);
             }
-            notifyIcon.Visible = false;
+            //notifyIcon.Visible = false;
         }
 
         private void RefreshSaas(bool reloadFromLcs = true)
@@ -888,31 +888,6 @@ $@"
             Cursor = Cursors.Default;
         }
 
-        private void MainForm_Resize(object sender, EventArgs e)
-        {
-            notifyIcon.BalloonTipTitle = "LCS companion app was minimized to system tray";
-            
-            if (_selectedProject != null)
-            {
-                notifyIcon.BalloonTipText = $"LCS Project ID: {_selectedProject.Id} : {_selectedProject.Name} : {_selectedProject.OrganizationName}";
-            }
-            else
-            {
-                notifyIcon.BalloonTipText = "LCS Project ID: Not selected";
-            }
-
-            if (FormWindowState.Minimized == WindowState)
-            {
-                notifyIcon.Visible = true;
-                notifyIcon.ShowBalloonTip(2000);
-                Hide();    
-            }
-            else if (FormWindowState.Normal == WindowState)
-            {
-                notifyIcon.Visible = false;
-            }
-        }
-
         private void ShowRDPDetailsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -945,12 +920,20 @@ $@"
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            Show();
-            WindowState = FormWindowState.Normal;
+            if(WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
+            {
+                previousState = WindowState;
+                WindowState = FormWindowState.Minimized;
+            }
+            else if(WindowState == FormWindowState.Minimized)
+            {
+                WindowState = previousState;
+            }
         }
 
         private void LoginToLCSMenuItem_Click(object sender, EventArgs e)
         {
+            WebBrowserHelper.FixBrowserVersion();
             using (Login form = new Login())
             {
                 form.ShowDialog();

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AvailableKBs));
             this.availableKBsDataGridView = new System.Windows.Forms.DataGridView();
             this.KBNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.BugNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -113,10 +112,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1218, 444);
             this.Controls.Add(this.availableKBsDataGridView);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(780, 400);
             this.Name = "AvailableKBs";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Load += new System.EventHandler(this.AvailableKBs_Load);
             ((System.ComponentModel.ISupportInitialize)(this.availableKBsDataGridView)).EndInit();

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ChooseProject));
             this.button1 = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.projectsDataGridView = new System.Windows.Forms.DataGridView();
@@ -156,10 +155,11 @@
             this.Controls.Add(this.projectsDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.button1);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(780, 400);
             this.Name = "ChooseProject";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Choose LCS project";
             this.Load += new System.EventHandler(this.ChooseProject_Load);

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RDPDetails));
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
@@ -50,11 +49,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 322);
             this.Controls.Add(this.textBox1);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(560, 320);
             this.Name = "RDPDetails";
+            this.ShowInTaskbar = false;
             this.Load += new System.EventHandler(this.Credentials_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

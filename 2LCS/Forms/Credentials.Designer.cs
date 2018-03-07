@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Credentials));
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -53,11 +52,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(684, 429);
             this.Controls.Add(this.dataGridView1);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(560, 320);
             this.Name = "Credentials";
+            this.ShowInTaskbar = false;
             this.Text = "Credentials";
             this.Load += new System.EventHandler(this.Credentials_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

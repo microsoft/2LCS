@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Login));
             this.webBrowser1 = new LCS.ExtendedWebBrowser();
             this.SuspendLayout();
             // 
@@ -38,6 +37,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.ScriptErrorsSuppressed = true;
             this.webBrowser1.Size = new System.Drawing.Size(1550, 822);
             this.webBrowser1.TabIndex = 0;
             this.webBrowser1.UserAgent = null;
@@ -49,10 +49,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1550, 822);
             this.Controls.Add(this.webBrowser1);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "Login";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Login to LCS";
             this.Load += new System.EventHandler(this.Login_Load);

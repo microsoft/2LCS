@@ -117,108 +117,106 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="cheInstanceId.UserAddedColumn" type="System.Boolean, mscorlib">
+  <metadata name="cheInstanceId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheEnvironmentId.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheEnvironmentId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheDisplayName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheDisplayName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheTopologyName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheTopologyName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheTopologyType.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheTopologyType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheTopologyVersion.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheTopologyVersion.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheCurrentPlatformVersion.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheCurrentPlatformVersion.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheCurrentPlatformReleaseName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheCurrentPlatformReleaseName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheCurrentApplicationReleaseName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheCurrentApplicationReleaseName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheBuildInfo.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheBuildInfo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheDeploymentStatus.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheDeploymentStatus.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheDeploymentAction.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheDeploymentAction.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheDeployedBy.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheDeployedBy.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="cheDeployedOn.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="cheDeployedOn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="cheInstanceContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  </metadata>
+  <metadata name="cheInstanceContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </data>
-  <data name="mainMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  </metadata>
+  <metadata name="mainMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>295, 17</value>
-  </data>
-  <data name="saasInstanceId.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasInstanceId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasEnvironmentId.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasEnvironmentId.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasDisplayName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasDisplayName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasTopologyName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasTopologyName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasTopologyType.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasTopologyType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasTopologyVersion.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasTopologyVersion.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasCurrentPlatformVersion.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasCurrentPlatformVersion.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasCurrentPlatformReleaseName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasCurrentPlatformReleaseName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasCurrentApplicationReleaseName.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasCurrentApplicationReleaseName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasBuildInfo.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasBuildInfo.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasDeploymentStatus.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasDeploymentStatus.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasDeploymentAction.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasDeploymentAction.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasDeployedBy.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasDeployedBy.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasDeployedOn.UserAddedColumn" type="System.Boolean, mscorlib">
+  </metadata>
+  <metadata name="saasDeployedOn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </data>
-  <data name="saasInstanceContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  </metadata>
+  <metadata name="saasInstanceContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>482, 17</value>
-  </data>
-  <data name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  </metadata>
+  <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>757, 17</value>
-  </data>
-  <data name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing">
+  </metadata>
+  <metadata name="notifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>905, 17</value>
-  </data>
-  <data name="$this.TrayHeight" type="System.Int32, mscorlib">
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>57</value>
-  </data>
+  </metadata>
 </root>

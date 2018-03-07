@@ -145,10 +145,11 @@
             this.Controls.Add(this.linksDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.Icon = Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(960, 420);
             this.Name = "CustomLinks";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Custom links";
             this.Load += new System.EventHandler(this.CustomLinks_Load);
