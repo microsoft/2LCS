@@ -164,8 +164,6 @@ namespace LCS.Forms
 
         private void RefreshMenuItem_Click(object sender, EventArgs e)
         {
-            //notifyIcon.Visible = true;
-
             notifyIcon.BalloonTipText = $"Fetching list of environments for project {_selectedProject.Name} from LCS. Please wait...";
             notifyIcon.BalloonTipTitle = "Fetching environments";
 
@@ -181,7 +179,6 @@ namespace LCS.Forms
                 RefreshSaas(true);
                 RefreshChe(true);
             }
-            //notifyIcon.Visible = false;
         }
 
         private void RefreshSaas(bool reloadFromLcs = true)
