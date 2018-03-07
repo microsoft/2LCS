@@ -100,6 +100,8 @@ namespace LCS.Forms
             }
             projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             projectsSource.ResetBindings(false);
+            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            Properties.Settings.Default.Save();
             Cursor = Cursors.Default;
         }
     }

@@ -145,7 +145,7 @@
             this.Controls.Add(this.linksDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(960, 420);
             this.Name = "CustomLinks";

@@ -74,7 +74,9 @@ namespace LCS.Forms
                 changeProjectMenuItem.Enabled = true;
                 cheInstanceContextMenu.Enabled = true;
                 saasInstanceContextMenu.Enabled = true;
-
+                loginToLcsMenuItem.Enabled = false;
+                logoutToolStripMenuItem.Enabled = true;
+                
                 _selectedProject = GetLcsProjectFromCookie();
                 if (_selectedProject != null)
                 {
@@ -164,7 +166,7 @@ namespace LCS.Forms
         {
             notifyIcon.Visible = true;
 
-            notifyIcon.BalloonTipText = "Looking up all environments from LCS and displaying them.";
+            notifyIcon.BalloonTipText = $"Fetching list of environments for project {_selectedProject.Name} from LCS. Please wait...";
             notifyIcon.BalloonTipTitle = "Fetching environments";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -179,7 +181,6 @@ namespace LCS.Forms
                 RefreshSaas(true);
                 RefreshChe(true);
             }
-
             notifyIcon.Visible = false;
         }
 
@@ -464,8 +465,6 @@ $@"
                 if (!form.Cancelled && (form.LcsProject != null))
                 {
                     Projects = form.Projects;
-                    Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-                    Properties.Settings.Default.Save();
                     if (_selectedProject == null || form.LcsProject.Id != _selectedProject.Id)
                     {
                         _cheInstancesSource.DataSource = null;
@@ -892,10 +891,14 @@ $@"
         private void MainForm_Resize(object sender, EventArgs e)
         {
             notifyIcon.BalloonTipTitle = "LCS companion app was minimized to system tray";
-
+            
             if (_selectedProject != null)
             {
                 notifyIcon.BalloonTipText = $"LCS Project ID: {_selectedProject.Id} : {_selectedProject.Name} : {_selectedProject.OrganizationName}";
+            }
+            else
+            {
+                notifyIcon.BalloonTipText = "LCS Project ID: Not selected";
             }
 
             if (FormWindowState.Minimized == WindowState)
@@ -968,6 +971,8 @@ $@"
                         changeProjectMenuItem.Enabled = true;
                         cheInstanceContextMenu.Enabled = true;
                         saasInstanceContextMenu.Enabled = true;
+                        logoutToolStripMenuItem.Enabled = true;
+                        loginToLcsMenuItem.Enabled = false;
                         ChangeProjectMenuItem_Click(null, null);
                     }
                 }
@@ -1026,6 +1031,18 @@ $@"
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show($"When you log off, all locally saved information about your projects and instances will be deleted. You will need to refresh data from LCS.{Environment.NewLine}{Environment.NewLine}Application will restart.{Environment.NewLine}{Environment.NewLine}Do you want to proceed?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                Properties.Settings.Default.projects = "";
+                Properties.Settings.Default.instances = "";
+                Properties.Settings.Default.cookie = "";
+                Properties.Settings.Default.Save();
+                Application.Restart();
+            }
         }
     }
 

@@ -81,7 +81,7 @@ namespace LCS
         internal List<CloudHostedInstance> GetCheInstances()
         {
             var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetDeployementDetails/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
-
+            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
             if (result.IsSuccessStatusCode)
             {
                 result.EnsureSuccessStatusCode();
@@ -91,16 +91,12 @@ namespace LCS
                 responseBody = responseBody.TrimEnd(')');
 
                 var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
-
-                List<CloudHostedInstance> list = new List<CloudHostedInstance>();
                 if (cloudHostedInstancesUnsorted != null)
                 {
                     list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
                 }
-                return list;
             }
-
-            return null;
+            return list;
         }
 
         internal List<CloudHostedInstance> GetSaasInstances()
@@ -117,17 +113,15 @@ namespace LCS
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore
             };
-
+            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
             if (response.Success)
             {
                 if (response.Data != null)
                 {
                     //Not all LCS will have deployed their MS hosted environments. JsonConvert.DeserializeObject doesn't tolerate nulls be default.
                     var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString(), settings);
-
                     if (instances != null)
                     {
-                        List<CloudHostedInstance> list = new List<CloudHostedInstance>();
                         foreach (var item in instances)
                         {
                             foreach (var instance in item.DeploymentInstances)
@@ -142,11 +136,10 @@ namespace LCS
                                 }
                             }
                         }
-                        return list.OrderBy(x => x.InstanceId).ToList();
                     }
                 }
             }
-            return null;
+            return list.OrderBy(x => x.InstanceId).ToList();
         }
 
         internal CloudHostedInstance GetSaasDeploymentDetail(string environmentId)

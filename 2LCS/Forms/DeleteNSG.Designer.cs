@@ -87,7 +87,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Properties.Resources.favicon_blue;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "DeleteNSG";

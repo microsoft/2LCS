@@ -156,7 +156,7 @@
             this.Controls.Add(this.projectsDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.button1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(780, 400);
             this.Name = "ChooseProject";

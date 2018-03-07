@@ -82,6 +82,7 @@
             this.changeProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.cheTabPage = new System.Windows.Forms.TabPage();
             this.saasTabPage = new System.Windows.Forms.TabPage();
@@ -559,7 +560,8 @@
             this.loginToLcsMenuItem,
             this.changeProjectMenuItem,
             this.refreshMenuItem,
-            this.customLinksToolStripMenuItem});
+            this.customLinksToolStripMenuItem,
+            this.logoutToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Size = new System.Drawing.Size(1478, 33);
@@ -595,6 +597,14 @@
             this.customLinksToolStripMenuItem.Size = new System.Drawing.Size(179, 29);
             this.customLinksToolStripMenuItem.Text = "Define c&ustom links";
             this.customLinksToolStripMenuItem.Click += new System.EventHandler(this.CustomLinksToolStripMenuItem_Click);
+            // 
+            // logoutToolStripMenuItem
+            // 
+            this.logoutToolStripMenuItem.Enabled = false;
+            this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(81, 29);
+            this.logoutToolStripMenuItem.Text = "Logout";
+            this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // tabControl
             // 
@@ -1069,7 +1079,7 @@
             // notifyIcon
             // 
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Icon = Properties.Resources.favicon_white;
             this.notifyIcon.Text = "2LCS - Lightweight LCS";
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
@@ -1082,7 +1092,7 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Controls.Add(this.statusStrip);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Icon = Properties.Resources.favicon_blue;
             this.MainMenuStrip = this.mainMenuStrip;
             this.MinimumSize = new System.Drawing.Size(600, 360);
             this.Name = "MainForm";
@@ -1215,6 +1225,7 @@
         private System.Windows.Forms.ToolStripMenuItem saasManageVirtualMachineToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasRdpAndPasswordsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasCriticalMetadataHotfixesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem logoutToolStripMenuItem;
     }
 }
 
