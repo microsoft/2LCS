@@ -4,11 +4,11 @@ using System;
 
 namespace LCS
 {
-    public class WebBrowserHelper
+    public static class WebBrowserHelper
     {
         public static int GetEmbVersion()
         {
-            int ieVer = GetBrowserVersion();
+            var ieVer = GetBrowserVersion();
 
             if (ieVer > 9)
                 return ieVer * 1000 + 1;
@@ -21,7 +21,7 @@ namespace LCS
 
         public static void FixBrowserVersion()
         {
-            string appName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var appName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location);
             FixBrowserVersion(appName);
         }
 
@@ -58,29 +58,24 @@ namespace LCS
             }
         } // End Sub FixBrowserVersion_Internal 
 
-        public static int GetBrowserVersion()
+        private static int GetBrowserVersion()
         {
             // string strKeyPath = @"HKLM\SOFTWARE\Microsoft\Internet Explorer";
-            string strKeyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer";
-            string[] ls = new string[] { "svcVersion", "svcUpdateVersion", "Version", "W2kVersion" };
+            const string strKeyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer";
+            var ls = new[] { "svcVersion", "svcUpdateVersion", "Version", "W2kVersion" };
 
-            int maxVer = 0;
-            for (int i = 0; i < ls.Length; ++i)
+            var maxVer = 0;
+            foreach (var t in ls)
             {
-                object objVal = Microsoft.Win32.Registry.GetValue(strKeyPath, ls[i], "0");
-                string strVal = System.Convert.ToString(objVal);
-                if (strVal != null)
-                {
-                    int iPos = strVal.IndexOf('.');
-                    if (iPos > 0)
-                        strVal = strVal.Substring(0, iPos);
+                var objVal = Microsoft.Win32.Registry.GetValue(strKeyPath, t, "0");
+                var strVal = Convert.ToString(objVal);
+                var iPos = strVal.IndexOf('.');
+                if (iPos > 0)
+                    strVal = strVal.Substring(0, iPos);
 
-                    int res = 0;
-                    if (int.TryParse(strVal, out res))
-                        maxVer = Math.Max(maxVer, res);
-                } // End if (strVal != null)
-
-            } // Next i
+                if (int.TryParse(strVal, out var res))
+                    maxVer = Math.Max(maxVer, res);
+            }
 
             return maxVer;
         } // End Function GetBrowserVersion 

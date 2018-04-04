@@ -4,14 +4,14 @@ using System.Windows.Forms;
 
 namespace LCS.Forms
 {
-    public partial class AddNSG : Form
+    public partial class AddNsg : Form
     {
         public Dictionary<string, string> Rule { get; set; }
         public bool Cancelled { get; private set; }
 
         private const int CpNocloseButton = 0x200;
 
-        public AddNSG()
+        public AddNsg()
         {
             InitializeComponent();
         }
@@ -37,12 +37,12 @@ namespace LCS.Forms
 
         private bool ValidateRule()
         {
-            if (String.IsNullOrEmpty(textBox1.Text))
+            if (string.IsNullOrEmpty(textBox1.Text))
             {
                 MessageBox.Show("Rule name is empty.");
                 return false;
             }
-            if (String.IsNullOrEmpty(textBox2.Text))
+            if (string.IsNullOrEmpty(textBox2.Text))
             {
                 MessageBox.Show("IP address field is empty.");
                 return false;

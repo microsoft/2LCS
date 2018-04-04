@@ -15,8 +15,8 @@ namespace LCS.Forms
         internal LcsProject LcsProject { get; private set; }
         internal HttpClientHelper HttpClientHelper { get; set; }
 
-        private bool sortAscending = false;
-        BindingSource projectsSource = new BindingSource();
+        private bool _sortAscending;
+        readonly BindingSource _projectsSource = new BindingSource();
 
         private const int CpNocloseButton = 0x200;
 
@@ -59,34 +59,29 @@ namespace LCS.Forms
             projectsDataGridView.AutoGenerateColumns = false;
             if (!SystemInformation.TerminalServerSession)
             {
-                Type dgvType = projectsDataGridView.GetType();
-                System.Reflection.PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                pi.SetValue(projectsDataGridView, true, null);
+                var dgvType = projectsDataGridView.GetType();
+                var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                if (pi != null) pi.SetValue(projectsDataGridView, true, null);
             }
-            projectsDataGridView.DataSource = projectsSource;
+            projectsDataGridView.DataSource = _projectsSource;
             Projects = JsonConvert.DeserializeObject<List<LcsProject>>(Properties.Settings.Default.projects);
             if(Projects != null)
             {
-                projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
+                _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             }
         }
 
         private void DataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (projectsDataGridView.DataSource != null)
-            {
-                if (sortAscending)
-                    projectsSource.DataSource = Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList();
-                else
-                    projectsSource.DataSource = Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
-                sortAscending = !sortAscending;
-            }
+            if (projectsDataGridView.DataSource == null) return;
+            _projectsSource.DataSource = _sortAscending ? Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _sortAscending = !_sortAscending;
         }
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            List<LcsProject> favoritesSaved = new List<LcsProject>();
+            var favoritesSaved = new List<LcsProject>();
             if(Projects != null)
             {
                 favoritesSaved = Projects.Where(x => x.Favorite == true).ToList();
@@ -98,8 +93,8 @@ namespace LCS.Forms
                     .Select(newProject => { newProject.Favorite = true; return newProject;} )
                         .ToList();
             }
-            projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
-            projectsSource.ResetBindings(false);
+            _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
+            _projectsSource.ResetBindings(false);
             Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
             Properties.Settings.Default.Save();
             Cursor = Cursors.Default;

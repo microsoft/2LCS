@@ -1,6 +1,6 @@
 ﻿namespace LCS.Forms
 {
-    partial class RDPDetails
+    partial class RdpDetails
     {
         /// <summary>
         /// Required designer variable.
@@ -53,7 +53,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(560, 320);
-            this.Name = "RDPDetails";
+            this.Name = "RdpDetails";
             this.ShowInTaskbar = false;
             this.Load += new System.EventHandler(this.Credentials_Load);
             this.ResumeLayout(false);

@@ -3,14 +3,14 @@ using System.Windows.Forms;
 
 namespace LCS.Forms
 {
-    public partial class DeleteNSG : Form
+    public partial class DeleteNsg : Form
     {
         public string Rule { get; set; }
         public bool Cancelled { get; private set; }
 
         private const int CpNocloseButton = 0x200;
 
-        public DeleteNSG()
+        public DeleteNsg()
         {
             InitializeComponent();
         }

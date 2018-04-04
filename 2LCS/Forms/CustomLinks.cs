@@ -11,7 +11,7 @@ namespace LCS.Forms
     {
         internal bool Cancelled { get; private set; }
         private List<JsonObjects.CustomLink> _linksList;
-        private BindingSource _linksSource = new BindingSource();
+        private readonly BindingSource _linksSource = new BindingSource();
         private bool _sortAscending = true;
         private const int CpNocloseButton = 0x200;
 
@@ -48,15 +48,12 @@ namespace LCS.Forms
             linksDataGridView.AutoGenerateColumns = false;
             if (!SystemInformation.TerminalServerSession)
             {
-                Type dgvType = linksDataGridView.GetType();
-                System.Reflection.PropertyInfo pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                pi.SetValue(linksDataGridView, true, null);
+                var dgvType = linksDataGridView.GetType();
+                var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                if (pi != null) pi.SetValue(linksDataGridView, true, null);
             }
-            _linksList = JsonConvert.DeserializeObject<List<JsonObjects.CustomLink>>(Properties.Settings.Default.links);
-            if(_linksList == null)
-            {
-                _linksList = new List<JsonObjects.CustomLink>();
-            }
+            _linksList = JsonConvert.DeserializeObject<List<JsonObjects.CustomLink>>(Properties.Settings.Default.links) ??
+                         new List<JsonObjects.CustomLink>();
             _linksSource.DataSource = _linksList;
             linksDataGridView.DataSource = _linksSource;
         }
@@ -76,28 +73,21 @@ namespace LCS.Forms
 
         private void LinksDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (linksDataGridView.DataSource != null && _linksList != null)
-            {
-                if (_sortAscending)
-                    _linksSource.DataSource = _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList();
-                else
-                    _linksSource.DataSource = _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
-                _sortAscending = !_sortAscending;
-                linksDataGridView.ClearSelection();
-            }
+            if (linksDataGridView.DataSource == null || _linksList == null) return;
+            _linksSource.DataSource = _sortAscending ? _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _sortAscending = !_sortAscending;
+            linksDataGridView.ClearSelection();
         }
 
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var count = linksDataGridView.SelectedRows.Count;
-            if(count > 0)
+            if (count <= 0) return;
+            for (var i = 0; i < count; i++)
             {
-                for (int i = 0; i < count; i++)
+                if (!linksDataGridView.SelectedRows[0].IsNewRow)
                 {
-                    if (!linksDataGridView.SelectedRows[0].IsNewRow)
-                    {
-                        linksDataGridView.Rows.RemoveAt(linksDataGridView.SelectedRows[0].Index);
-                    }
+                    linksDataGridView.Rows.RemoveAt(linksDataGridView.SelectedRows[0].Index);
                 }
             }
         }

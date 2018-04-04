@@ -20,7 +20,6 @@ namespace LCS.Forms
             {
                 DataSource = CredentialsDict
             };
-            ;
             dataGridView1.DataSource = bs;
             dataGridView1.Columns[0].HeaderText = "Login";
             dataGridView1.Columns[1].HeaderText = "Password";

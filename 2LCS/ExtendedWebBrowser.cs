@@ -4,7 +4,7 @@ namespace LCS
 {
     public class ExtendedWebBrowser : WebBrowser
     {
-        bool renavigating = false;
+        private bool _renavigating;
 
         public string UserAgent { get; set; }
 
@@ -34,16 +34,16 @@ namespace LCS
         {
             if (!string.IsNullOrEmpty(UserAgent))
             {
-                if (!renavigating)
+                if (!_renavigating)
                 {
-                    headers += string.Format("User-Agent: {0}\r\n", UserAgent);
-                    renavigating = true;
+                    headers += $"User-Agent: {UserAgent}\r\n";
+                    _renavigating = true;
                     cancel = true;
                     Navigate((string)url, (string)targetFrameName, (byte[])postData, (string)headers);
                 }
                 else
                 {
-                    renavigating = false;
+                    _renavigating = false;
                 }
             }
         }

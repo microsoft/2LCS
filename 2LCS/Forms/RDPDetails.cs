@@ -3,11 +3,11 @@ using System.Windows.Forms;
 
 namespace LCS.Forms
 {
-    public partial class RDPDetails : Form
+    public partial class RdpDetails : Form
     {
         public string Caption { get; set; }
         public string Details { get; set; }
-        public RDPDetails()
+        public RdpDetails()
         {
             InitializeComponent();
         }

@@ -4,19 +4,19 @@ using System.Threading;
 
 namespace LCS
 {
-    internal class RDPCredentials : IDisposable
+    internal class RdpCredentials : IDisposable
     {
         private string Host { get; }
 
-        public RDPCredentials(string Host, string UserName, string Password)
+        public RdpCredentials(string host, string userName, string password)
         {
-            this.Host = Host;
+            Host = host;
             var cmdkey = new Process
             {
                 StartInfo =
                 {
                     FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\cmdkey.exe"),
-                    Arguments = $@"/generic:TERMSRV/{Host} /user:{UserName} /pass:{Password}",
+                    Arguments = $@"/generic:TERMSRV/{host} /user:{userName} /pass:{password}",
                     WindowStyle = ProcessWindowStyle.Hidden
                 }
             };

@@ -1,6 +1,6 @@
 ﻿namespace LCS.Forms
 {
-    partial class AddNSG
+    partial class AddNsg
     {
         /// <summary>
         /// Required designer variable.
@@ -111,7 +111,7 @@
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "AddNSG";
+            this.Name = "AddNsg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add firewall exception";

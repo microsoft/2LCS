@@ -1,6 +1,6 @@
 ﻿namespace LCS.Forms
 {
-    partial class DeleteNSG
+    partial class DeleteNsg
     {
         /// <summary>
         /// Required designer variable.
@@ -89,7 +89,7 @@
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DeleteNSG";
+            this.Name = "DeleteNsg";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Delete firewall exception";

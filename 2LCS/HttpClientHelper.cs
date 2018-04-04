@@ -8,20 +8,20 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace LCS
 {
-    internal class HttpClientHelper : IDisposable
+    internal sealed class HttpClientHelper : IDisposable
     {
         private readonly HttpClient _httpClient;
-        private readonly HttpClientHandler _httpClientHandler;
-        public string LcsUrl { get; set; }
-        public string LcsUpdateUrl { get; set; }
+        public string LcsUrl { private get; set; }
+        public string LcsUpdateUrl { private get; set; }
 
-        public CookieContainer CookieContainer { get; private set; }
-        public string LcsProjectId { get; set; }
-        private bool disposed;
+        public CookieContainer CookieContainer { get; }
+        public string LcsProjectId { private get; set; }
+        private bool _disposed;
         private StringContent _stringContent;
 
         internal HttpClientHelper(CookieContainer cookieContainer)
@@ -30,16 +30,16 @@ namespace LCS
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
             CookieContainer = cookieContainer;
-            _httpClientHandler = new HttpClientHandler {
+            var httpClientHandler = new HttpClientHandler {
                 CookieContainer = CookieContainer,
                 AllowAutoRedirect = true,
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
             };
 
-            _httpClient = new HttpClient(_httpClientHandler)
+            _httpClient = new HttpClient(httpClientHandler)
             {
-                Timeout = TimeSpan.FromMinutes(1)
+                Timeout = TimeSpan.FromMinutes(5)
             };
 
             _httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
@@ -69,32 +69,29 @@ namespace LCS
                     cookie.Expired = true;
                 }
             }
-            if (!String.IsNullOrEmpty(LcsProjectId))
-            {
-                CookieContainer.Add(new Uri(LcsUrl), new Cookie("lcspid", LcsProjectId));
-                CookieContainer.Add(new Uri(LcsUpdateUrl), new Cookie("lcspid", LcsProjectId));
-                Properties.Settings.Default.cookie = CookieContainer.GetCookieHeader(new Uri(LcsUrl)).Replace(';', ',');
-                Properties.Settings.Default.Save();
-            }
+
+            if (string.IsNullOrEmpty(LcsProjectId)) return;
+            CookieContainer.Add(new Uri(LcsUrl), new Cookie("lcspid", LcsProjectId));
+            CookieContainer.Add(new Uri(LcsUpdateUrl), new Cookie("lcspid", LcsProjectId));
+            Properties.Settings.Default.cookie = CookieContainer.GetCookieHeader(new Uri(LcsUrl)).Replace(';', ',');
+            Properties.Settings.Default.Save();
         }
 
         internal List<CloudHostedInstance> GetCheInstances()
         {
             var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetDeployementDetails/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
-            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
-            if (result.IsSuccessStatusCode)
+            var list = new List<CloudHostedInstance>();
+            if (!result.IsSuccessStatusCode) return list;
+            result.EnsureSuccessStatusCode();
+
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            responseBody = responseBody.TrimStart('(');
+            responseBody = responseBody.TrimEnd(')');
+
+            var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
+            if (cloudHostedInstancesUnsorted != null)
             {
-                result.EnsureSuccessStatusCode();
-
-                var responseBody = result.Content.ReadAsStringAsync().Result;
-                responseBody = responseBody.TrimStart('(');
-                responseBody = responseBody.TrimEnd(')');
-
-                var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
-                if (cloudHostedInstancesUnsorted != null)
-                {
-                    list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
-                }
+                list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
             }
             return list;
         }
@@ -113,28 +110,22 @@ namespace LCS
                 NullValueHandling = NullValueHandling.Ignore,
                 MissingMemberHandling = MissingMemberHandling.Ignore
             };
-            List<CloudHostedInstance> list = new List<CloudHostedInstance>();
-            if (response.Success)
+            var list = new List<CloudHostedInstance>();
+            if (!response.Success) return list.OrderBy(x => x.InstanceId).ToList();
             {
-                if (response.Data != null)
+                if (response.Data == null) return list.OrderBy(x => x.InstanceId).ToList();
+                //Not all LCS will have deployed their MS hosted environments. JsonConvert.DeserializeObject doesn't tolerate nulls be default.
+                var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString(), settings);
+                if (instances == null) return list.OrderBy(x => x.InstanceId).ToList();
+                foreach (var item in instances)
                 {
-                    //Not all LCS will have deployed their MS hosted environments. JsonConvert.DeserializeObject doesn't tolerate nulls be default.
-                    var instances = JsonConvert.DeserializeObject<List<SAASInstance>>(response.Data.ToString(), settings);
-                    if (instances != null)
+                    foreach (var instance in item.DeploymentInstances)
                     {
-                        foreach (var item in instances)
+                        if (!instance.IsDeployed) continue;
+                        var details = GetSaasDeploymentDetail(instance.EnvironmentId);
+                        if (details != null)
                         {
-                            foreach (var instance in item.DeploymentInstances)
-                            {
-                                if (instance.IsDeployed == true)
-                                {
-                                    var details = GetSaasDeploymentDetail(instance.EnvironmentId);
-                                    if (details != null)
-                                    {
-                                        list.Add(details);
-                                    }
-                                }
-                            }
+                            list.Add(details);
                         }
                     }
                 }
@@ -149,20 +140,13 @@ namespace LCS
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success)
-            {
-                if(response.Data == null)
-                {
-                    return null; ;
-                }
-                return JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
-            }
-            else return null;
+            if (!response.Success) return null;
+            return response.Data == null ? null : JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
         }
 
-        internal List<RDPConnectionDetails> GetRDPConnectionDetails(CloudHostedInstance instance)
+        internal List<RDPConnectionDetails> GetRdpConnectionDetails(CloudHostedInstance instance)
         {
-            List<RDPConnectionDetails> list = new List<RDPConnectionDetails>();
+            var list = new List<RDPConnectionDetails>();
 
             //check RDP availability
             foreach (var vm in instance.Instances)
@@ -171,47 +155,46 @@ namespace LCS
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 var rdpPresentResponse = JsonConvert.DeserializeObject<Response>(responseBody);
-                if (rdpPresentResponse.Success == true)
+                if (!rdpPresentResponse.Success) continue;
+                _httpClient.DefaultRequestHeaders.Remove("Accept");
+                _httpClient.DefaultRequestHeaders.Remove("X-Requested-With");
+                _httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+                _httpClient.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
+
+                result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=false&_={DateTimeOffset.Now.ToUnixTimeSeconds()}&isDownloadEnabled=True").Result;
+                result.EnsureSuccessStatusCode();
+                responseBody = result.Content.ReadAsStringAsync().Result;
+                var line1 = responseBody.Split('\r', '\n').FirstOrDefault();
+                if (line1 == null) continue;
+                var splited = line1.Split(':');
+
+                _httpClient.DefaultRequestHeaders.Remove("Accept");
+                _httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
+                _httpClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
+                _httpClient.DefaultRequestHeaders.Remove("Upgrade-Insecure-Requests");
+
+                vm.Credentials = GetCredentials(instance.EnvironmentId, vm.ItemName);
+
+                var localAdmin = vm.Credentials.Where(x => x.Key.Contains("Local admin")).ToDictionary(x => x.Key, x => x.Value);
+
+                var username = localAdmin.First().Key.Split('\\');
+                var domain = username[0].Split('-')[2];
+
+                var rdp = new RDPConnectionDetails
                 {
-                    _httpClient.DefaultRequestHeaders.Remove("Accept");
-                    _httpClient.DefaultRequestHeaders.Remove("X-Requested-With");
-                    _httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-                    _httpClient.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
-
-                    result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=false&_={DateTimeOffset.Now.ToUnixTimeSeconds()}&isDownloadEnabled=True").Result;
-                    result.EnsureSuccessStatusCode();
-                    responseBody = result.Content.ReadAsStringAsync().Result;
-                    var line1 = responseBody.Split(new[] { '\r', '\n' }).FirstOrDefault();
-                    var splited = line1.Split(new[] { ':' });
-
-                    _httpClient.DefaultRequestHeaders.Remove("Accept");
-                    _httpClient.DefaultRequestHeaders.Add("Accept", "*/*");
-                    _httpClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
-                    _httpClient.DefaultRequestHeaders.Remove("Upgrade-Insecure-Requests");
-
-                    vm.Credentials = GetCredentials(instance.EnvironmentId, vm.ItemName);
-
-                    var localAdmin = vm.Credentials.Where(x => x.Key.Contains("Local admin")).ToDictionary(x => x.Key, x => x.Value);
-
-                    var username = localAdmin.First().Key.Split(new[] { '\\' });
-                    var domain = username[0].Split(new[] { '-' })[2];
-
-                    RDPConnectionDetails rdp = new RDPConnectionDetails
-                    {
-                        Address = splited[2],
-                        Port = splited[3],
-                        Domain = domain,
-                        Username = username[1],
-                        Password = localAdmin.First().Value,
-                        Machine = vm.MachineName
-                    };
-                    list.Add(rdp);
-                }
+                    Address = splited[2],
+                    Port = splited[3],
+                    Domain = domain,
+                    Username = username[1],
+                    Password = localAdmin.First().Value,
+                    Machine = vm.MachineName
+                };
+                list.Add(rdp);
             }
             return list;
         }
 
-        internal async Task<bool> DeleteNSGRule(CloudHostedInstance instance, string rule)
+        internal async Task<bool> DeleteNsgRule(CloudHostedInstance instance, string rule)
         {
             var parameters =  $"lcsEnvironmentId={instance.EnvironmentId}&rulesToDelete%5B%5D={rule}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
@@ -262,11 +245,9 @@ namespace LCS
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(html);
             var node = doc.DocumentNode.SelectSingleNode("//input[@name='__RequestVerificationToken']");
-            if (node != null)
-            {
-                var token =  node.Attributes["value"].Value;
-                _httpClient.DefaultRequestHeaders.Add("__RequestVerificationToken", token);
-            }
+            if (node == null) return;
+            var token =  node.Attributes["value"].Value;
+            _httpClient.DefaultRequestHeaders.Add("__RequestVerificationToken", token);
         }
 
         public string GetEnvironmentDetailsUrl(CloudHostedInstance instance)
@@ -274,7 +255,7 @@ namespace LCS
             return $"{LcsUrl}/V2/EnvironmentDetailsV3New/{LcsProjectId}?EnvironmentId={instance.EnvironmentId}&IsDiagnosticsEnabledEnvironment={instance.IsDiagnosticsEnabledEnvironment}";
         }
 
-        internal async Task<bool> AddNSGRule(CloudHostedInstance instance, string ruleName, string ipOrCidr)
+        internal async Task<bool> AddNsgRule(CloudHostedInstance instance, string ruleName, string ipOrCidr)
         {
             var parameters =  $"lcsEnvironmentId={instance.EnvironmentId}&newRuleName={ruleName}&newRuleIpOrCidr={ipOrCidr}&newRuleService=RDP";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
@@ -295,12 +276,11 @@ namespace LCS
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success == true && response.Data != null)
+            if (response.Success && response.Data != null)
             {
                 return JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Data.ToString());
             }
-            else
-                return null;
+            return null;
         }
 
         internal List<Hotfix> GetAvailableHotfixes(string envId, int hotfixesType)
@@ -311,20 +291,17 @@ namespace LCS
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 var response = JsonConvert.DeserializeObject<Response>(responseBody);
-                if (response.Success == true && response.Data != null)
+                if (!response.Success || response.Data == null) return null;
+                var jObject = JObject.Parse(response.Data.ToString());
+                var allResults = jObject.SelectToken("AllResults");
+                var kbs = JsonConvert.DeserializeObject<List<Hotfix>>(allResults.ToString());
+                foreach (var kb in kbs)
                 {
-                    var jObject = JObject.Parse(response.Data.ToString());
-                    var allResults = jObject.SelectToken("AllResults");
-                    var kbs = JsonConvert.DeserializeObject<List<Hotfix>>(allResults.ToString());
-                    foreach (var kb in kbs)
-                    {
-                        kb.Url = $"https://fix.lcs.dynamics.com/Issue/Details/{LcsProjectId}?kb={kb.KBNumber}&bugId={kb.BugNumber}";
-                        kb.Solution = RemoveUnwantedTags(kb.Solution);
-                    }
-                    return kbs;
+                    kb.Url = $"https://fix.lcs.dynamics.com/Issue/Details/{LcsProjectId}?kb={kb.KBNumber}&bugId={kb.BugNumber}";
+                    kb.Solution = RemoveUnwantedTags(kb.Solution);
+                    kb.Title = RemoveUnwantedTags(kb.Title);
                 }
-                else
-                    return null;
+                return kbs;
             }
             catch
             {
@@ -332,33 +309,34 @@ namespace LCS
             }
         }
 
-        internal static string RemoveUnwantedTags(string data)
+        private static string RemoveUnwantedTags(string data)
         {
             if(string.IsNullOrEmpty(data)) return string.Empty;
 
             var document = new HtmlDocument();
             document.LoadHtml(data);
-            var acceptableTags = new String[] { };// { "strong", "em", "u"};
+            var acceptableTags = new string[] { };// { "strong", "em", "u"};
             var nodes = new Queue<HtmlNode>(document.DocumentNode.SelectNodes("./*|./text()"));
             while(nodes.Count > 0)
             {
                 var node = nodes.Dequeue();
                 var parentNode = node.ParentNode;
-                if(!acceptableTags.Contains(node.Name) && node.Name != "#text")
+                if (acceptableTags.Contains(node.Name) || node.Name == "#text") continue;
+                var childNodes = node.SelectNodes("./*|./text()");
+                if (childNodes != null)
                 {
-                    var childNodes = node.SelectNodes("./*|./text()");
-                    if (childNodes != null)
+                    foreach (var child in childNodes)
                     {
-                        foreach (var child in childNodes)
-                        {
-                            nodes.Enqueue(child);
-                            parentNode.InsertBefore(child, node);
-                        }
+                        nodes.Enqueue(child);
+                        parentNode.InsertBefore(child, node);
                     }
-                    parentNode.RemoveChild(node);
                 }
+                parentNode.RemoveChild(node);
             }
-            return document.DocumentNode.InnerHtml;
+            var result = document.DocumentNode.InnerHtml;
+            result = Regex.Replace(result, @"&nbsp;|\r\n|\t|\n|\r", " ");
+            result = Regex.Replace(result, @"&quot;", "\"");
+            return result;
         }
 
         internal string GetDiagEnvironmentId(CloudHostedInstance instance)
@@ -367,46 +345,55 @@ namespace LCS
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success == true && response.Data != null)
+            if (response.Success && response.Data != null)
             {
                 return response.Data.ToString();
             }
-            else
-                return null;
+            return null;
         }
 
         internal List<LcsProject> GetAllProjects()
         {
-            var pagingParams = new ProjectsPaging()
+            const int numberOfProjectsRequested = 50;
+            int numberOfProjectReturned;
+            var allProjects = new List<LcsProject>();
+            var pageNumber = 0;
+            SetRequestVerificationToken($"{LcsUrl}/V2");
+            do
             {
-                DynamicPaging = new DynamicPaging()
+                pageNumber++;
+                var pagingParams = new ProjectsPaging()
                 {
-                    StartPosition = 0,
-                    ItemsRequested = 50
-                }
-            };
-            string pagingParamsJson = JsonConvert.SerializeObject(pagingParams, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-
-            var projects = new List<LcsProject>();
-            using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
-            {
-                SetRequestVerificationToken($"{LcsUrl}/V2");
-                var result = _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent).Result;
-                result.EnsureSuccessStatusCode();
-
-                var responseBody = result.Content.ReadAsStringAsync().Result;
-                var response = JsonConvert.DeserializeObject<Response>(responseBody);
-                if (response.Success)
-                {
-                    if(response.Data == null)
+                    DynamicPaging = new DynamicPaging()
                     {
-                        return null; ;
+                        StartPosition = pageNumber * numberOfProjectsRequested - numberOfProjectsRequested,
+                        ItemsRequested = numberOfProjectsRequested
                     }
-                    projects = JsonConvert.DeserializeObject<ProjectsData>(response.Data.ToString()).Results;
+                };
+                var pagingParamsJson = JsonConvert.SerializeObject(pagingParams, new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Auto});
+
+                using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
+                {
+                    var result = _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent).Result;
+                    result.EnsureSuccessStatusCode();
+
+                    var responseBody = result.Content.ReadAsStringAsync().Result;
+                    var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                    if (response.Success && response.Data != null)
+                    {
+                        var projects = JsonConvert.DeserializeObject<ProjectsData>(response.Data.ToString()).Results;
+                        numberOfProjectReturned = projects.Count;
+                        allProjects.AddRange(projects);
+                    }
+                    else
+                    {
+                        numberOfProjectReturned = 0;
+                    }
                 }
             }
+            while (numberOfProjectReturned == numberOfProjectsRequested);
             _httpClient.DefaultRequestHeaders.Remove("__RequestVerificationToken");
-            return projects;
+            return allProjects;
         }
 
         /// <summary>
@@ -422,18 +409,13 @@ namespace LCS
         /// Dispose
         /// </summary>
         /// <param name="disposing">enable dispose</param>
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
-            if (!disposed)
+            if (_disposed) return;
+            _disposed = true;
+            if (disposing)
             {
-                disposed = true;
-                if (disposing)
-                {
-                    if (_httpClient != null)
-                    {
-                        _httpClient.Dispose();
-                    }
-                }
+                _httpClient?.Dispose();
             }
         }
     }
