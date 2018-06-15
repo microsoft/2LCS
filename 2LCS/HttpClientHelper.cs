@@ -140,8 +140,9 @@ namespace LCS
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (!response.Success) return null;
-            return response.Data == null ? null : JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
+            return !response.Success
+                ? null
+                : response.Data == null ? null : JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
         }
 
         internal List<RDPConnectionDetails> GetRdpConnectionDetails(CloudHostedInstance instance)
@@ -276,11 +277,9 @@ namespace LCS
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success && response.Data != null)
-            {
-                return JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Data.ToString());
-            }
-            return null;
+            return response.Success && response.Data != null
+                ? JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Data.ToString())
+                : null;
         }
 
         internal List<Hotfix> GetAvailableHotfixes(string envId, int hotfixesType)
@@ -345,11 +344,7 @@ namespace LCS
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            if (response.Success && response.Data != null)
-            {
-                return response.Data.ToString();
-            }
-            return null;
+            return response.Success && response.Data != null ? response.Data.ToString() : null;
         }
 
         internal List<LcsProject> GetAllProjects()

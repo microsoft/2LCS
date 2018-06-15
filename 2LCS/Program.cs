@@ -1,5 +1,6 @@
 ﻿using LCS.Forms;
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace LCS
@@ -12,6 +13,9 @@ namespace LCS
         [STAThread]
         static void Main()
         {
+            Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+            
             // Copy user settings from previous application version if necessary
             if (Properties.Settings.Default.update)
             {
@@ -23,5 +27,34 @@ namespace LCS
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
         }
+
+        static MainForm GetMainForm()
+        {
+            foreach (Form form in Application.OpenForms)
+                if (form is MainForm)
+                    return (MainForm)form;
+            return null;
+        }
+        static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+            switch (e.Exception.Source)
+            {
+                case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
+                    MessageBox.Show("Please login to LCS again. Your cookie probably expired.");
+                    var mainForm = GetMainForm();
+                    mainForm.Cursor = Cursors.Default;
+                    mainForm.SetLoginButtonEnabled();
+                    break;
+                default:
+                    throw e.Exception;
+            }
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            // Log the exception, display it, etc
+            //Debug.WriteLine((e.ExceptionObject as Exception).Message);
+        }
     }
 }
+

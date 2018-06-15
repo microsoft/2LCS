@@ -37,7 +37,9 @@ namespace LCS.Forms
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            if(projectsDataGridView.SelectedRows.Count > 0)
+            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            Properties.Settings.Default.Save();
+            if (projectsDataGridView.SelectedRows.Count > 0)
             {
                 LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
             }
@@ -95,8 +97,6 @@ namespace LCS.Forms
             }
             _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             _projectsSource.ResetBindings(false);
-            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-            Properties.Settings.Default.Save();
             Cursor = Cursors.Default;
         }
     }

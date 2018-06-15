@@ -38,6 +38,28 @@ namespace LCS.Forms
         private static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, Int32 dwFlags, IntPtr lpReserved);
         private const int InternetCookieHttponly = 0x2000;
         private FormWindowState _previousState;
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool GetWindowRect(IntPtr hWnd, [Out] out RECT lpRect);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IntersectRect([Out] out RECT lprcDst, [In] ref RECT lprcSrc1, [In] ref RECT lprcSrc2);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool IsWindowVisible(IntPtr hWnd);
+
+        private const int GW_HWNDPREV = 3;
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
 
         public MainForm()
         {
@@ -444,7 +466,6 @@ namespace LCS.Forms
                         _cheInstancesSource.ResetBindings(false);
                         _saasInstancesSource.DataSource = null;
                         _saasInstancesSource.ResetBindings(false);
-                        Projects = JsonConvert.DeserializeObject<List<LcsProject>>(Properties.Settings.Default.projects); 
                         _selectedProject = form.LcsProject;
 
                         if(!Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
@@ -876,8 +897,15 @@ namespace LCS.Forms
         {
             if(WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
             {
-                _previousState = WindowState;
-                WindowState = FormWindowState.Minimized;
+                if (IsOverlapped(this))
+                {
+                    Activate();
+                }
+                else
+                {
+                    _previousState = WindowState;
+                    WindowState = FormWindowState.Minimized;
+                }
             }
             else if(WindowState == FormWindowState.Minimized)
             {
@@ -976,6 +1004,38 @@ namespace LCS.Forms
             Properties.Settings.Default.cookie = "";
             Properties.Settings.Default.Save();
             Application.Restart();
+        }
+
+        public static bool IsOverlapped(IWin32Window window)
+        {
+            if (window == null)
+                throw new ArgumentNullException("window");
+            if (window.Handle == IntPtr.Zero)
+                throw new InvalidOperationException("Window does not yet exist");
+            if (!IsWindowVisible(window.Handle))
+                return false;
+
+            IntPtr hWnd = window.Handle;
+            HashSet<IntPtr> visited = new HashSet<IntPtr> { hWnd };
+
+            RECT thisRect = new RECT();
+            GetWindowRect(hWnd, out thisRect);
+
+            while ((hWnd = GetWindow(hWnd, GW_HWNDPREV)) != IntPtr.Zero && !visited.Contains(hWnd))
+            {
+                visited.Add(hWnd);
+                RECT testRect, intersection;
+                testRect = intersection = new RECT();
+                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out testRect) && IntersectRect(out intersection, ref thisRect, ref testRect))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public void SetLoginButtonEnabled()
+        {
+            loginToLcsMenuItem.Enabled = true;
         }
     }
 
