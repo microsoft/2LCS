@@ -96,6 +96,34 @@ namespace LCS
             return list;
         }
 
+        internal List<CloudHostedInstance> GetCheInstancesV2()
+        {
+            var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetAllCheDeploymentsMetadata/{LcsProjectId}?filterBy=null&filterValue=null&?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            result.EnsureSuccessStatusCode();
+
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var response = JsonConvert.DeserializeObject<Response>(responseBody);
+
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                MissingMemberHandling = MissingMemberHandling.Ignore
+            };
+            var list = new List<CloudHostedInstance>();
+            if (response.Success)
+            {
+                if (response.Data == null) return list;
+
+                var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(response.Data.ToString(), settings);
+                if (cloudHostedInstancesUnsorted != null)
+                {
+                    list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
+                }
+                return list;
+            }
+            return list;
+        }
+
         internal List<CloudHostedInstance> GetSaasInstances()
         {
             var result = _httpClient.GetAsync($"{LcsUrl}/SAASDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
@@ -177,17 +205,23 @@ namespace LCS
                 vm.Credentials = GetCredentials(instance.EnvironmentId, vm.ItemName);
 
                 var localAdmin = vm.Credentials.Where(x => x.Key.Contains("Local admin")).ToDictionary(x => x.Key, x => x.Value);
-
-                var username = localAdmin.First().Key.Split('\\');
-                var domain = username[0].Split('-')[2];
+                var username = "Not available";
+                var domain = "Not available";
+                var password = "Not available";
+                if (localAdmin.Count == 1)
+                {
+                    username = localAdmin.First().Key.Split('\\')[1];
+                    domain = localAdmin.First().Key.Split('\\')[0].Split('-')[2];
+                    password = localAdmin.First().Value;
+                }
 
                 var rdp = new RDPConnectionDetails
                 {
                     Address = splited[2],
                     Port = splited[3],
                     Domain = domain,
-                    Username = username[1],
-                    Password = localAdmin.First().Value,
+                    Username = username,
+                    Password = password,
                     Machine = vm.MachineName
                 };
                 list.Add(rdp);

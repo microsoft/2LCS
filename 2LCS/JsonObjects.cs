@@ -19,7 +19,7 @@ namespace LCS.JsonObjects
     public class CloudHostedInstance
     {
         public object[] JITOptions { get; set; }
-        public bool JITRequestAccessEnabled { get; set; }
+        public bool JITRequestAccessEnabledState { get; set; }
         public object JITRequestActivityId { get; set; }
         public bool JITRequestShowError { get; set; }
         public object JITWorkItemDetails { get; set; }
@@ -103,6 +103,7 @@ namespace LCS.JsonObjects
         public string DisasterRecoveryLocationLabel { get; set; }
         public bool IsGuidelinesLinkVisible { get; set; }
         public bool IsARMTopology { get; set; }
+        public bool ShowSslCertRotateWarning { get; set; }
     }
 
     public class Instance
