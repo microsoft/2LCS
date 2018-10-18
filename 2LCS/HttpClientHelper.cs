@@ -205,26 +205,39 @@ namespace LCS
                 vm.Credentials = GetCredentials(instance.EnvironmentId, vm.ItemName);
 
                 var localAdmin = vm.Credentials.Where(x => x.Key.Contains("Local admin")).ToDictionary(x => x.Key, x => x.Value);
-                var username = "Not available";
-                var domain = "Not available";
-                var password = "Not available";
                 if (localAdmin.Count == 1)
                 {
-                    username = localAdmin.First().Key.Split('\\')[1];
-                    domain = localAdmin.First().Key.Split('\\')[0].Split('-')[2];
-                    password = localAdmin.First().Value;
+                    var adminUsername = localAdmin.First().Key.Split('\\')[1];
+                    var adminDomain = localAdmin.First().Key.Split('\\')[0].Split('-')[2];
+                    var adminPassword = localAdmin.First().Value;
+                    var rdp = new RDPConnectionDetails
+                    {
+                        Address = splited[2],
+                        Port = splited[3],
+                        Domain = adminDomain,
+                        Username = adminUsername,
+                        Password = adminPassword,
+                        Machine = vm.MachineName
+                    };
+                    list.Add(rdp);
                 }
-
-                var rdp = new RDPConnectionDetails
+                var localUser = vm.Credentials.Where(x => x.Key.Contains("Local user")).ToDictionary(x => x.Key, x => x.Value);
+                if (localUser.Count == 1)
                 {
-                    Address = splited[2],
-                    Port = splited[3],
-                    Domain = domain,
-                    Username = username,
-                    Password = password,
-                    Machine = vm.MachineName
-                };
-                list.Add(rdp);
+                    var userUsername = localUser.First().Key.Split('\\')[1];
+                    var userDomain = localUser.First().Key.Split('\\')[0].Split('-')[2];
+                    var userPassword = localUser.First().Value;
+                    var rdp = new RDPConnectionDetails
+                    {
+                        Address = splited[2],
+                        Port = splited[3],
+                        Domain = userDomain,
+                        Username = userUsername,
+                        Password = userPassword,
+                        Machine = vm.MachineName
+                    };
+                    list.Add(rdp);
+                }
             }
             return list;
         }
