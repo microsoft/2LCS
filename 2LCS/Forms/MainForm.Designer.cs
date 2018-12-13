@@ -309,7 +309,7 @@
             this.cheLcsInstanceLinksToolStripMenuItem,
             this.cheLcsProjectLinksToolStripMenuItem});
             this.cheInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.cheInstanceContextMenu.Size = new System.Drawing.Size(273, 247);
+            this.cheInstanceContextMenu.Size = new System.Drawing.Size(273, 214);
             this.cheInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // cheLogonToAppToolStripMenuItem
@@ -602,6 +602,7 @@
             // 
             // exportProjectDataToolStripMenuItem
             // 
+            this.exportProjectDataToolStripMenuItem.Enabled = false;
             this.exportProjectDataToolStripMenuItem.Name = "exportProjectDataToolStripMenuItem";
             this.exportProjectDataToolStripMenuItem.Size = new System.Drawing.Size(175, 29);
             this.exportProjectDataToolStripMenuItem.Text = "Export project data";

@@ -97,6 +97,7 @@ namespace LCS.Forms
                 {
                     SetLcsProjectText();
                     refreshMenuItem.Enabled = true;
+                    exportProjectDataToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
                     var projectInstance = Instances.FirstOrDefault(x => x.LcsProjectId.Equals(_selectedProject.Id));
                     if (projectInstance != null)
@@ -479,6 +480,7 @@ namespace LCS.Forms
                         }
                     }
                     refreshMenuItem.Enabled = true;
+                    exportProjectDataToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
@@ -1083,6 +1085,11 @@ namespace LCS.Forms
 
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            notifyIcon.BalloonTipText = $"Exporting data for {_selectedProject.Name} project. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting LCS project data";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
             Cursor = Cursors.WaitCursor;
             using (var document = DocX.Create(_selectedProject.Name + " - 2LCS generated.docx"))
             {
@@ -1107,7 +1114,7 @@ namespace LCS.Forms
                 var tocParagraph = document.InsertParagraph();
                 tocParagraph.InsertPageBreakAfterSelf();
 
-                if (_saasInstancesList != null)
+                if (_saasInstancesList != null && _saasInstancesList.Count > 0)
                 {
                     var instancesHeader = document.InsertParagraph("Microsoft managed instances").Heading(HeadingType.Heading1).FontSize(20d);
                     instancesHeader.SpacingAfter(40d);
@@ -1220,7 +1227,7 @@ namespace LCS.Forms
                     }
                 }
 
-                if (_cheInstancesList != null)
+                if (_cheInstancesList != null && _cheInstancesList.Count > 0)
                 {
                     var instancesHeader = document.InsertParagraph("Cloud hosted instances").Heading(HeadingType.Heading1).FontSize(20d);
                     instancesHeader.SpacingAfter(40d);
