@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Net;
 using System.Text.RegularExpressions;
+using Xceed.Words.NET;
 
 namespace LCS.Forms
 {
@@ -844,7 +845,13 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails((CloudHostedInstance)row.DataBoundItem);
-                foreach (var rdpEntry in rdpList)
+                if(rdpList.Count > 1)
+                {
+                    ChooseRdpLogonUser(rdpList);
+                }
+
+
+                foreach (var rdpEntry in rdpList.OrderByDescending(x => x.Username)) //Admin user will be the last
                 {
                     using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
                     {
@@ -1036,6 +1043,303 @@ namespace LCS.Forms
         public void SetLoginButtonEnabled()
         {
             loginToLcsMenuItem.Enabled = true;
+        }
+
+        public static string ChooseRdpLogonUser(List<RDPConnectionDetails> rdpList)
+        {
+            Form form = new Form();
+            Button button_1 = new Button();
+            Button button_2 = new Button();
+            button_1.DialogResult = DialogResult.OK;
+            button_2.DialogResult = DialogResult.Cancel;
+            FlowLayoutPanel pnl = new FlowLayoutPanel();
+            pnl.Dock = DockStyle.Fill;
+
+            form.Text = "Choose user";
+
+            form.ClientSize = new System.Drawing.Size(396, 107);
+            form.ClientSize = new System.Drawing.Size(Math.Max(300, 200), form.ClientSize.Height);
+            form.FormBorderStyle = FormBorderStyle.FixedDialog;
+            form.StartPosition = FormStartPosition.CenterScreen;
+            form.AcceptButton = button_1;
+            form.CancelButton = button_2;
+            form.MinimizeBox = false;
+            form.MaximizeBox = false;
+
+            form.Controls.AddRange(new Control[] { button_1, button_2 });
+            foreach (var rdpEntry in rdpList.OrderBy(x => x.Username))
+            {
+                pnl.Controls.Add(new RadioButton() { Text = rdpEntry.Username });
+            }
+
+            form.Controls.Add(pnl);
+
+            DialogResult dialogResult = form.ShowDialog();
+            RadioButton rbSelected = pnl.Controls
+                         .OfType<RadioButton>()
+                         .FirstOrDefault(r => r.Checked);
+            return rbSelected.Text;
+        }
+
+        private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            using (var document = DocX.Create(_selectedProject.Name + " - 2LCS generated.docx"))
+            {
+                document.InsertParagraph(_selectedProject.Name).CapsStyle(CapsStyle.caps).FontSize(40d).SpacingBefore(50d).SpacingAfter(20d);
+                document.InsertParagraph("Project Id: " + _selectedProject.Id).FontSize(14d).SpacingAfter(100d);
+                document.InsertParagraph(_selectedProject.OrganizationName).CapsStyle(CapsStyle.caps).FontSize(30d).InsertPageBreakAfterSelf();
+
+                Hyperlink link2LCS = document.AddHyperlink("2LCS", new Uri("https://github.com/Microsoft/2LCS"));
+                document.AddFooters();
+                document.AddHeaders();
+                document.DifferentFirstPage = true;
+                document.Footers.Odd.InsertParagraph("Generated with ").AppendHyperlink(link2LCS);
+
+                var toc = document.InsertTableOfContents("Table of Contents",
+                    TableOfContentsSwitches.O // use paragraphs with built in heading styles
+                    | TableOfContentsSwitches.U  // build the toc by using paragraph outline level
+                    | TableOfContentsSwitches.Z  // hide tba leader in web layout
+                    | TableOfContentsSwitches.H  // use hyperlinks
+                    | TableOfContentsSwitches.W  // preserve tabs
+                    | TableOfContentsSwitches.X);// preserve new line characters
+
+                var tocParagraph = document.InsertParagraph();
+                tocParagraph.InsertPageBreakAfterSelf();
+
+                if (_saasInstancesList != null)
+                {
+                    var instancesHeader = document.InsertParagraph("Microsoft managed instances").Heading(HeadingType.Heading1).FontSize(20d);
+                    instancesHeader.SpacingAfter(40d);
+
+                    foreach (var saasInstance in _saasInstancesList)
+                    {
+                        //instance header
+                        var instanceHeader = document.InsertParagraph(saasInstance.DisplayName).CapsStyle(CapsStyle.caps).Heading(HeadingType.Heading2).FontSize(16d);
+                        instanceHeader.SpacingAfter(10d);
+
+                        //instance table
+                        var instanceColumnWidths = new float[] { 200f, 400f };
+                        var instanceDetailsTable = document.AddTable(10, instanceColumnWidths.Length);
+                        instanceDetailsTable.SetWidths(instanceColumnWidths);
+                        instanceDetailsTable.Design = TableDesign.LightListAccent2;
+                        instanceDetailsTable.Alignment = Alignment.left;
+                        instanceDetailsTable.Rows[0].Cells[0].Paragraphs[0].Append("Name");
+                        instanceDetailsTable.Rows[0].Cells[1].Paragraphs[0].Append(saasInstance.DisplayName);
+                        instanceDetailsTable.Rows[1].Cells[0].Paragraphs[0].Append("Environment Id");
+                        instanceDetailsTable.Rows[1].Cells[1].Paragraphs[0].Append(saasInstance.EnvironmentId);
+                        instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
+                        instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(saasInstance.TopologyDisplayName);
+                        instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn);
+                        instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
+                        instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(saasInstance.DeployedBy);
+                        instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
+                        instanceDetailsTable.Rows[5].Cells[1].Paragraphs[0].Append(saasInstance.EnvironmentAdmin);
+                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application release name");
+                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(saasInstance.CurrentApplicationReleaseName);
+                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current platform release name");
+                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformReleaseName);
+                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform version");
+                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformVersion);
+                        instanceDetailsTable.Rows[9].Cells[0].Paragraphs[0].Append("Number of virtual machines");
+                        instanceDetailsTable.Rows[9].Cells[1].Paragraphs[0].Append(saasInstance.VirtualMachineCount.ToString());
+                        //Navigation links
+                        foreach (var link in saasInstance.NavigationLinks)
+                        {
+                            Hyperlink navLink = document.AddHyperlink(link.NavigationUri, new Uri(link.NavigationUri));
+                            var r = instanceDetailsTable.InsertRow();
+                            r.Cells[0].Paragraphs[0].Append(link.DisplayName);
+                            r.Cells[1].Paragraphs[0].AppendHyperlink(navLink);
+                        }
+
+                        instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
+
+                        var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
+                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                        if (rdpList.Count > 0)
+                        {
+                            var vms = document.InsertParagraph("RDP connections: " + instance.DisplayName.ToUpper()).FontSize(14d);
+                            vms.SpacingBefore(20d);
+                            vms.SpacingAfter(10d);
+                            foreach (var rdpEntry in rdpList)
+                            {
+                                //RDP details table
+                                var columnWidths = new float[] { 300f, 400f };
+                                var rdpTable = document.AddTable(4, columnWidths.Length);
+                                rdpTable.SetWidths(columnWidths);
+                                rdpTable.Design = TableDesign.LightListAccent1;
+                                rdpTable.Alignment = Alignment.left;
+                                rdpTable.AutoFit = AutoFit.Contents;
+                                rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("Machine name");
+                                rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Machine);
+                                rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("RDP address");
+                                rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
+                                rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("User name");
+                                rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
+                                rdpTable.Rows[3].Cells[0].Paragraphs[0].Append("Password");
+                                rdpTable.Rows[3].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
+                                document.InsertTable(rdpTable);
+                                document.InsertParagraph();
+                            }
+                        }
+                        foreach (var vm in instance.Instances)
+                        {
+                            var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
+                            if (CredentialsDict.Count > 0)
+                            {
+                                var credentialsParagraph = document.InsertParagraph("Credentials for " + vm.MachineName).FontSize(14d); ;
+                                credentialsParagraph.SpacingBefore(20d);
+                                credentialsParagraph.SpacingAfter(10d);
+                                // CHE credentials table
+                                var columnWidths = new float[] { 150f, 150f };
+                                var credentialsTable = document.AddTable(1, columnWidths.Length);
+                                credentialsTable.SetWidths(columnWidths);
+                                credentialsTable.Design = TableDesign.LightListAccent3;
+                                credentialsTable.Alignment = Alignment.left;
+                                credentialsTable.AutoFit = AutoFit.Contents;
+                                credentialsTable.Rows[0].Cells[0].Paragraphs[0].Append("User name");
+                                credentialsTable.Rows[0].Cells[1].Paragraphs[0].Append("Password");
+
+                                foreach (var credential in CredentialsDict)
+                                {
+                                    var r = credentialsTable.InsertRow();
+                                    r.Cells[0].Paragraphs[0].Append(credential.Key
+                                        .Replace("Dev-Local admin-", "")
+                                        .Replace("Dev-Local user-", "")
+                                        .Replace("Dev-Sql server login-", "")
+                                        .Replace("Build-Local user-", "")
+                                        .Replace("Build-Sql server login-", "")
+                                        .Replace("AOS-Local admin-", "")
+                                        .Replace("BI-Local admin-", ""));
+                                    r.Cells[1].Paragraphs[0].Append(credential.Value);
+                                }
+                                credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
+                            }
+                        }
+                    }
+                }
+
+                if (_cheInstancesList != null)
+                {
+                    var instancesHeader = document.InsertParagraph("Cloud hosted instances").Heading(HeadingType.Heading1).FontSize(20d);
+                    instancesHeader.SpacingAfter(40d);
+
+                    foreach (var instance in _cheInstancesList)
+                    {
+                        //instance header
+                        var instanceHeader = document.InsertParagraph(instance.DisplayName).CapsStyle(CapsStyle.caps).Heading(HeadingType.Heading2).FontSize(16d);
+                        instanceHeader.SpacingAfter(10d);
+
+                        //instance table
+                        var instanceColumnWidths = new float[] { 200f, 400f };
+                        var instanceDetailsTable = document.AddTable(9, instanceColumnWidths.Length);
+                        instanceDetailsTable.SetWidths(instanceColumnWidths);
+                        instanceDetailsTable.Design = TableDesign.LightListAccent2;
+                        instanceDetailsTable.Alignment = Alignment.left;
+                        instanceDetailsTable.Rows[0].Cells[0].Paragraphs[0].Append("Name");
+                        instanceDetailsTable.Rows[0].Cells[1].Paragraphs[0].Append(instance.DisplayName);
+                        instanceDetailsTable.Rows[1].Cells[0].Paragraphs[0].Append("Environment Id");
+                        instanceDetailsTable.Rows[1].Cells[1].Paragraphs[0].Append(instance.EnvironmentId);
+                        instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
+                        instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(instance.TopologyDisplayName);
+                        instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn);
+                        instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
+                        instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(instance.DeployedBy);
+                        instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
+                        instanceDetailsTable.Rows[5].Cells[1].Paragraphs[0].Append(instance.EnvironmentAdmin);
+                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application release name");
+                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(instance.CurrentApplicationReleaseName);
+                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current platform release name");
+                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformReleaseName);
+                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform version");
+                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformVersion);
+                        //Navigation links
+                        foreach (var link in instance.NavigationLinks)
+                        {
+                            Hyperlink navLink = document.AddHyperlink(link.NavigationUri, new Uri(link.NavigationUri));
+                            var r = instanceDetailsTable.InsertRow();
+                            r.Cells[0].Paragraphs[0].Append(link.DisplayName);
+                            r.Cells[1].Paragraphs[0].AppendHyperlink(navLink);
+                        }
+
+                        instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
+                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                        if (rdpList.Count > 0)
+                        {
+                            var vms = document.InsertParagraph("RDP connections: " + instance.DisplayName.ToUpper()).FontSize(14d);
+                            vms.SpacingBefore(20d);
+                            vms.SpacingAfter(10d);
+                            foreach (var rdpEntry in rdpList)
+                            {
+                                //RDP details table
+                                var columnWidths = new float[] { 300f, 400f };
+                                var rdpTable = document.AddTable(3, columnWidths.Length);
+                                rdpTable.SetWidths(columnWidths);
+                                rdpTable.Design = TableDesign.LightListAccent1;
+                                rdpTable.Alignment = Alignment.left;
+                                rdpTable.AutoFit = AutoFit.Contents;
+                                rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("RDP address");
+                                rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
+                                rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("User name");
+                                rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
+                                rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("Password");
+                                rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
+                                document.InsertTable(rdpTable);
+                                document.InsertParagraph();
+                            }
+                        }
+                        foreach (var vm in instance.Instances)
+                        {
+                            var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
+                            if (CredentialsDict.Count > 0)
+                            {
+                                var credentialsParagraph = document.InsertParagraph("Credentials").FontSize(14d); ;
+                                credentialsParagraph.SpacingBefore(20d);
+                                credentialsParagraph.SpacingAfter(10d);
+                                // CHE credentials table
+                                var columnWidths = new float[] { 150f, 150f };
+                                var credentialsTable = document.AddTable(1, columnWidths.Length);
+                                credentialsTable.SetWidths(columnWidths);
+                                credentialsTable.Design = TableDesign.LightListAccent3;
+                                credentialsTable.Alignment = Alignment.left;
+                                credentialsTable.AutoFit = AutoFit.Contents;
+                                credentialsTable.Rows[0].Cells[0].Paragraphs[0].Append("User name");
+                                credentialsTable.Rows[0].Cells[1].Paragraphs[0].Append("Password");
+
+                                foreach (var credential in CredentialsDict)
+                                {
+                                    var r = credentialsTable.InsertRow();
+                                    r.Cells[0].Paragraphs[0].Append(credential.Key
+                                        .Replace("Dev-Local admin-", "")
+                                        .Replace("Dev-Local user-", "")
+                                        .Replace("Dev-Sql server login-", "")
+                                        .Replace("Build-Local user-", "")
+                                        .Replace("Build-Sql server login-", "")
+                                        .Replace("AOS-Local admin-", "")
+                                        .Replace("BI-Local admin-", ""));
+                                    r.Cells[1].Paragraphs[0].Append(credential.Value);
+                                }
+                                credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
+                            }
+                        }
+                    }
+                }
+
+                var savefile = new SaveFileDialog
+                {
+                    FileName = _selectedProject.Name + " - 2LCS generated.docx",
+                    Filter = "Word document (*.docx)|*.docx|All files (*.*)|*.*",
+                    DefaultExt = "docx",
+                    AddExtension = true
+                };
+                if (savefile.ShowDialog() == DialogResult.OK)
+                {
+                    document.SaveAs(savefile.FileName);
+                }
+            }
+            Cursor = Cursors.Default;
         }
     }
 
