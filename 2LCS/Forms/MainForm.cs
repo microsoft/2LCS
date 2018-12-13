@@ -1195,7 +1195,7 @@ namespace LCS.Forms
                             var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
                             if (CredentialsDict.Count > 0)
                             {
-                                var credentialsParagraph = document.InsertParagraph("Credentials for " + vm.MachineName).FontSize(14d); ;
+                                var credentialsParagraph = document.InsertParagraph("Credentials for " + vm.MachineName).FontSize(14d);
                                 credentialsParagraph.SpacingBefore(20d);
                                 credentialsParagraph.SpacingAfter(10d);
                                 // CHE credentials table
@@ -1221,9 +1221,10 @@ namespace LCS.Forms
                                         .Replace("BI-Local admin-", ""));
                                     r.Cells[1].Paragraphs[0].Append(credential.Value);
                                 }
-                                credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
+                                credentialsParagraph.InsertTableAfterSelf(credentialsTable);
                             }
                         }
+                        document.InsertParagraph().InsertPageBreakAfterSelf();
                     }
                 }
 
@@ -1302,7 +1303,7 @@ namespace LCS.Forms
                             var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
                             if (CredentialsDict.Count > 0)
                             {
-                                var credentialsParagraph = document.InsertParagraph("Credentials").FontSize(14d); ;
+                                var credentialsParagraph = document.InsertParagraph("Credentials").FontSize(14d);
                                 credentialsParagraph.SpacingBefore(20d);
                                 credentialsParagraph.SpacingAfter(10d);
                                 // CHE credentials table
