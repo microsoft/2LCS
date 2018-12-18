@@ -1085,6 +1085,8 @@ namespace LCS.Forms
 
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            RefreshMenuItem_Click(null, null);
+
             notifyIcon.BalloonTipText = $"Exporting data for {_selectedProject.Name} project. Please wait...";
             notifyIcon.BalloonTipTitle = "Exporting LCS project data";
 
@@ -1218,7 +1220,13 @@ namespace LCS.Forms
                                         .Replace("Build-Local user-", "")
                                         .Replace("Build-Sql server login-", "")
                                         .Replace("AOS-Local admin-", "")
-                                        .Replace("BI-Local admin-", ""));
+                                        .Replace("BI-Local admin-", "")
+                                        .Replace("AD-AosServiceUser-", "")
+                                        .Replace("AD-SqlServiceUser-", "")
+                                        .Replace("AD-DynamicsInstallUser-", "")
+                                        .Replace("AD-SPServiceUser-", "")
+                                        .Replace("AD-BCProxyUser-", "")
+                                        .Replace("AD-Local admin-", ""));
                                     r.Cells[1].Paragraphs[0].Append(credential.Value);
                                 }
                                 credentialsParagraph.InsertTableAfterSelf(credentialsTable);
@@ -1326,7 +1334,13 @@ namespace LCS.Forms
                                         .Replace("Build-Local user-", "")
                                         .Replace("Build-Sql server login-", "")
                                         .Replace("AOS-Local admin-", "")
-                                        .Replace("BI-Local admin-", ""));
+                                        .Replace("BI-Local admin-", "")
+                                        .Replace("AD-AosServiceUser-", "")
+                                        .Replace("AD-SqlServiceUser-", "")
+                                        .Replace("AD-DynamicsInstallUser-", "")
+                                        .Replace("AD-SPServiceUser-", "")
+                                        .Replace("AD-BCProxyUser-", "")
+                                        .Replace("AD-Local admin-", ""));
                                     r.Cells[1].Paragraphs[0].Append(credential.Value);
                                 }
                                 credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
@@ -1344,7 +1358,14 @@ namespace LCS.Forms
                 };
                 if (savefile.ShowDialog() == DialogResult.OK)
                 {
-                    document.SaveAs(savefile.FileName);
+                    try
+                    {
+                        document.SaveAs(savefile.FileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                 }
             }
             Cursor = Cursors.Default;
