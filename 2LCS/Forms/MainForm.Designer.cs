@@ -81,7 +81,9 @@
             this.changeProjectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.refreshMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.exportProjectDataToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportProjectDataToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.cheTabPage = new System.Windows.Forms.TabPage();
@@ -562,7 +564,7 @@
             this.changeProjectMenuItem,
             this.refreshMenuItem,
             this.customLinksToolStripMenuItem,
-            this.exportProjectDataToolStripMenuItem,
+            this.exportToolStripMenuItem,
             this.logoutToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
@@ -600,13 +602,29 @@
             this.customLinksToolStripMenuItem.Text = "Define c&ustom links";
             this.customLinksToolStripMenuItem.Click += new System.EventHandler(this.CustomLinksToolStripMenuItem_Click);
             // 
-            // exportProjectDataToolStripMenuItem
+            // exportToolStripMenuItem
             // 
-            this.exportProjectDataToolStripMenuItem.Enabled = false;
-            this.exportProjectDataToolStripMenuItem.Name = "exportProjectDataToolStripMenuItem";
-            this.exportProjectDataToolStripMenuItem.Size = new System.Drawing.Size(175, 29);
-            this.exportProjectDataToolStripMenuItem.Text = "Export project data";
-            this.exportProjectDataToolStripMenuItem.Click += new System.EventHandler(this.ExportProjectDataToolStripMenuItem_Click);
+            this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportProjectDataToolStripMenuItem1,
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem});
+            this.exportToolStripMenuItem.Enabled = false;
+            this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(75, 29);
+            this.exportToolStripMenuItem.Text = "Export";
+            // 
+            // exportProjectDataToolStripMenuItem1
+            // 
+            this.exportProjectDataToolStripMenuItem1.Name = "exportProjectDataToolStripMenuItem1";
+            this.exportProjectDataToolStripMenuItem1.Size = new System.Drawing.Size(391, 30);
+            this.exportProjectDataToolStripMenuItem1.Text = "Export project data";
+            this.exportProjectDataToolStripMenuItem1.Click += new System.EventHandler(this.ExportProjectDataToolStripMenuItem_Click);
+            // 
+            // exportListOfInstancesForAllProjectsToolStripMenuItem
+            // 
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Name = "exportListOfInstancesForAllProjectsToolStripMenuItem";
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(391, 30);
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Text = "Export list of instances for all projects";
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Click += new System.EventHandler(this.ExportListOfInstancesForAllProjectsToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -1244,7 +1262,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeployedBy;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeployedOn;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripMenuItem exportProjectDataToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportProjectDataToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exportListOfInstancesForAllProjectsToolStripMenuItem;
     }
 }
 

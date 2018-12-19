@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Net;
 using System.Text.RegularExpressions;
 using Xceed.Words.NET;
+using CsvHelper;
 
 namespace LCS.Forms
 {
@@ -97,7 +98,7 @@ namespace LCS.Forms
                 {
                     SetLcsProjectText();
                     refreshMenuItem.Enabled = true;
-                    exportProjectDataToolStripMenuItem.Enabled = true;
+                    exportToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
                     var projectInstance = Instances.FirstOrDefault(x => x.LcsProjectId.Equals(_selectedProject.Id));
                     if (projectInstance != null)
@@ -480,7 +481,7 @@ namespace LCS.Forms
                         }
                     }
                     refreshMenuItem.Enabled = true;
-                    exportProjectDataToolStripMenuItem.Enabled = true;
+                    exportToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
@@ -1369,6 +1370,104 @@ namespace LCS.Forms
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void ExportListOfInstancesForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of instances for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting list of instances";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
+            Cursor = Cursors.WaitCursor;
+            var previousProject = _selectedProject;
+            var exportedInstances = new List<ExportedInstance>();
+            
+            Projects = _httpClientHelper.GetAllProjects();
+            foreach (var _project in Projects)
+            {
+                _selectedProject = _project;
+                _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                SetLcsProjectText();
+                RefreshChe();
+                RefreshSaas();
+
+                if (_saasInstancesList != null && _saasInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _saasInstancesList)
+                    {
+                        var exportedInstance = new ExportedInstance
+                        {
+                            ProjectId = _project.Id.ToString(),
+                            ProjectName = _project.Name,
+                            Organization = _project.OrganizationName,
+                            InstanceName = _instance.DisplayName,
+                            EnvironmentId = _instance.EnvironmentId,
+                            CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
+                            CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
+                            CurrentPlatformVersion = _instance.CurrentPlatformVersion,
+                            BuildInfo = _instance.BuildInfo,
+                            TopologyType = _instance.TopologyType,
+                            TopologyVersion = _instance.TopologyVersion,
+                            TopologyName = _instance.TopologyName,
+                            DeploymentStatus = _instance.DeploymentStatus,
+                            HostingType = "MS hosted"
+                        };
+                        exportedInstances.Add(exportedInstance);
+                    }
+                }
+
+                if (_cheInstancesList != null && _cheInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _cheInstancesList)
+                    {
+                        var exportedInstance = new ExportedInstance
+                        {
+                            ProjectId = _project.Id.ToString(),
+                            ProjectName = _project.Name,
+                            Organization = _project.OrganizationName,
+                            InstanceName = _instance.DisplayName,
+                            EnvironmentId = _instance.EnvironmentId,
+                            CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
+                            CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
+                            CurrentPlatformVersion = _instance.CurrentPlatformVersion,
+                            BuildInfo = _instance.BuildInfo,
+                            TopologyType = _instance.TopologyType,
+                            TopologyVersion = _instance.TopologyVersion,
+                            TopologyName = _instance.TopologyName,
+                            DeploymentStatus = _instance.DeploymentStatus,
+                            HostingType = "Cloud hosted"
+                        };
+                        exportedInstances.Add(exportedInstance);
+                    }
+                }
+            }
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = "D365FO instances - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode))
+                    {
+                        var csv = new CsvWriter(sw);
+                        csv.WriteRecords(exportedInstances);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            SetLcsProjectText();
+            RefreshChe(false);
+            RefreshSaas(false);
         }
     }
 
