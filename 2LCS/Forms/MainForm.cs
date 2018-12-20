@@ -320,6 +320,109 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
+
+        private void cheExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_cheInstancesList == null) return;
+            Cursor = Cursors.WaitCursor;
+            var sb = new StringBuilder();
+            sb.Append(
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ArrayOfConnection>");
+
+            foreach (var instance in _cheInstancesList)
+            {
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                foreach (var rdpEntry in rdpList)
+                {
+                    
+                    sb.Append($@"
+    <Connection>
+        <RDP>
+            <KeyboardLayoutText>Default</KeyboardLayoutText>
+            <NetworkLevelAuthentication>true</NetworkLevelAuthentication>
+            <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
+        </RDP>
+        <ConnectionType>RDPConfigured</ConnectionType>
+        <ID>{Guid.NewGuid().ToString()}</ID>
+        <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
+        <OpenEmbedded>true</OpenEmbedded>    
+        <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>    
+        <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
+    </Connection>");
+                }
+            }
+
+            sb.Append(
+                @"
+    </ArrayOfConnection>");
+            
+            var savefile = new SaveFileDialog
+            {
+                FileName = "CHE-Exported.rdm",
+                Filter = "RDM file (*.rdm)|*.rdm|All files (*.*)|*.*",
+                DefaultExt = "rdm",
+                AddExtension = true
+            };
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(savefile.FileName))
+                    sw.Write(sb);
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void saasExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_saasInstancesList == null) return;
+            Cursor = Cursors.WaitCursor;
+            var sb = new StringBuilder();
+            sb.Append(
+                @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ArrayOfConnection>");
+
+            foreach (var saasInstance in _saasInstancesList)
+            {
+                var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                foreach (var rdpEntry in rdpList)
+                {
+                    sb.Append($@"
+    <Connection>
+        <RDP>
+            <KeyboardLayoutText>Default</KeyboardLayoutText>
+            <NetworkLevelAuthentication>true</NetworkLevelAuthentication>
+            <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
+        </RDP>
+        <ConnectionType>RDPConfigured</ConnectionType>
+        <ID>{Guid.NewGuid().ToString()}</ID>
+        <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
+        <OpenEmbedded>true</OpenEmbedded>    
+        <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>    
+        <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
+    </Connection>");
+                }
+            }
+
+            sb.Append(
+                @"
+    </ArrayOfConnection>");
+
+            var savefile = new SaveFileDialog
+            {
+                FileName = "SAAS-Exported.rdm",
+                Filter = "RDM file (*.rdm)|*.rdm|All files (*.*)|*.*",
+                DefaultExt = "rdm",
+                AddExtension = true
+            };
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(savefile.FileName))
+                    sw.Write(sb);
+            }
+            Cursor = Cursors.Default;
+        }
+
         private void SaasExportRDCManConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_saasInstancesList == null) return;
