@@ -142,6 +142,7 @@
             this.projectDescriptionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cheShowPasswordsPowershellMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasExportRDMConnectionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).BeginInit();
             this.cheInstanceContextMenu.SuspendLayout();
@@ -314,7 +315,7 @@
             this.cheLcsInstanceLinksToolStripMenuItem,
             this.cheLcsProjectLinksToolStripMenuItem});
             this.cheInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.cheInstanceContextMenu.Size = new System.Drawing.Size(238, 172);
+            this.cheInstanceContextMenu.Size = new System.Drawing.Size(238, 200);
             this.cheInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // cheLogonToAppToolStripMenuItem
@@ -374,6 +375,7 @@
             // 
             this.cheRdpAndPasswordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cheShowPasswordsMenuItem,
+            this.cheShowPasswordsPowershellMenuItem,
             this.cheShowRDPDetailsToolStripMenuItem,
             this.cheExportRDCManConnectionsMenuItem,
             this.cheExportRDMConnectionsToolStripMenuItem});
@@ -384,21 +386,21 @@
             // cheShowPasswordsMenuItem
             // 
             this.cheShowPasswordsMenuItem.Name = "cheShowPasswordsMenuItem";
-            this.cheShowPasswordsMenuItem.Size = new System.Drawing.Size(272, 26);
+            this.cheShowPasswordsMenuItem.Size = new System.Drawing.Size(279, 26);
             this.cheShowPasswordsMenuItem.Text = "Show passwords";
             this.cheShowPasswordsMenuItem.Click += new System.EventHandler(this.CheShowPasswordsMenuItem_Click);
             // 
             // cheShowRDPDetailsToolStripMenuItem
             // 
             this.cheShowRDPDetailsToolStripMenuItem.Name = "cheShowRDPDetailsToolStripMenuItem";
-            this.cheShowRDPDetailsToolStripMenuItem.Size = new System.Drawing.Size(272, 26);
+            this.cheShowRDPDetailsToolStripMenuItem.Size = new System.Drawing.Size(279, 26);
             this.cheShowRDPDetailsToolStripMenuItem.Text = "Show RDP details";
             this.cheShowRDPDetailsToolStripMenuItem.Click += new System.EventHandler(this.ShowRDPDetailsToolStripMenuItem_Click);
             // 
             // cheExportRDCManConnectionsMenuItem
             // 
             this.cheExportRDCManConnectionsMenuItem.Name = "cheExportRDCManConnectionsMenuItem";
-            this.cheExportRDCManConnectionsMenuItem.Size = new System.Drawing.Size(272, 26);
+            this.cheExportRDCManConnectionsMenuItem.Size = new System.Drawing.Size(279, 26);
             this.cheExportRDCManConnectionsMenuItem.Text = "Export RDCMan connections";
             this.cheExportRDCManConnectionsMenuItem.ToolTipText = "Export all RDP connections to Remote Desktop Connection Manager import file";
             this.cheExportRDCManConnectionsMenuItem.Click += new System.EventHandler(this.CheExportRDCManConnectionsMenuItem_Click);
@@ -677,7 +679,7 @@
             this.saasTabPage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.saasTabPage.Name = "saasTabPage";
             this.saasTabPage.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.saasTabPage.Size = new System.Drawing.Size(1306, 594);
+            this.saasTabPage.Size = new System.Drawing.Size(1306, 597);
             this.saasTabPage.TabIndex = 1;
             this.saasTabPage.Text = "MS-hosted environments";
             this.saasTabPage.UseVisualStyleBackColor = true;
@@ -713,7 +715,7 @@
             this.saasDataGridView.Name = "saasDataGridView";
             this.saasDataGridView.ReadOnly = true;
             this.saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.saasDataGridView.Size = new System.Drawing.Size(1300, 590);
+            this.saasDataGridView.Size = new System.Drawing.Size(1300, 593);
             this.saasDataGridView.TabIndex = 1;
             this.saasDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SaasDataGridView_ColumnHeaderMouseClick);
             this.saasDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView_MouseDown);
@@ -841,7 +843,7 @@
             this.saasLcsProjectLinksToolStripMenuItem1,
             this.saasLcsInstanceLinksToolStripMenuItem1});
             this.saasInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.saasInstanceContextMenu.Size = new System.Drawing.Size(238, 176);
+            this.saasInstanceContextMenu.Size = new System.Drawing.Size(238, 148);
             this.saasInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // saasLogonToApplicationToolStripMenuItem
@@ -1136,6 +1138,12 @@
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
             // 
+            // cheShowPasswordsPowershellMenuItem
+            // 
+            this.cheShowPasswordsPowershellMenuItem.Name = "cheShowPasswordsPowershellMenuItem";
+            this.cheShowPasswordsPowershellMenuItem.Size = new System.Drawing.Size(279, 26);
+            this.cheShowPasswordsPowershellMenuItem.Text = "Show passwords (powershell)";
+            this.cheShowPasswordsPowershellMenuItem.Click += new System.EventHandler(this.cheShowPasswordsPowershellMenuItem_Click);
             // saasExportRDMConnectionsToolStripMenuItem
             // 
             this.saasExportRDMConnectionsToolStripMenuItem.Name = "saasExportRDMConnectionsToolStripMenuItem";
@@ -1290,6 +1298,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportProjectDataToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem exportListOfInstancesForAllProjectsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cheShowPasswordsPowershellMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheExportRDMConnectionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasExportRDMConnectionsToolStripMenuItem;
     }
