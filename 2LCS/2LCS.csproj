@@ -102,6 +102,12 @@
     <Compile Include="Forms\AvailableKBs.Designer.cs">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PowerShell.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PowerShell.Designer.cs">
+      <DependentUpon>PowerShell.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\RDPDetails.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,9 @@
     <Compile Include="WebBrowserHelper.cs" />
     <EmbeddedResource Include="Forms\AvailableKBs.resx">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PowerShell.resx">
+      <DependentUpon>PowerShell.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RDPDetails.resx">
       <DependentUpon>RDPDetails.cs</DependentUpon>

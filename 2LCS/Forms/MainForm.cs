@@ -1469,6 +1469,21 @@ namespace LCS.Forms
             RefreshChe(false);
             RefreshSaas(false);
         }
+
+        private void cheShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = cheDataGridView.SelectedRows[0];
+            var instance = (CloudHostedInstance)row.DataBoundItem;
+            foreach (var vm in instance.Instances)
+            {
+                var form = new PowerShell
+                {
+                    CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName),
+                    Caption = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
+                };
+                form.Show();
+            }
+        }
     }
 
     public enum HotfixesType
