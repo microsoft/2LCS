@@ -1587,6 +1587,32 @@ namespace LCS.Forms
                 form.Show();
             }
         }
+
+        private void saasShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
+            {
+                var credentials = new Dictionary<string, string>();
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                foreach (var vm in instance.Instances)
+                {
+                    var creds = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
+                    credentials = credentials.Concat(creds).GroupBy(d => d.Key).ToDictionary(d => d.Key, d => d.First().Value);
+
+                }
+                foreach (var cred in instance.SqlAzureCredentials.Select(x => x.DeploymentItemName).Distinct())
+                {
+                    var creds = _httpClientHelper.GetCredentials(instance.EnvironmentId, cred);
+                    credentials = credentials.Concat(creds).GroupBy(d => d.Key).ToDictionary(d => d.Key, d => d.First().Value);
+                }
+                var form = new PowerShell
+                {
+                    Caption = $"Instance: {instance.InstanceId}",
+                    CredentialsDict = credentials
+                };
+                form.Show();
+            }            
+        }
     }
 
     public enum HotfixesType
