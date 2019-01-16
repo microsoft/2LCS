@@ -14,6 +14,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using Xceed.Words.NET;
 using CsvHelper;
+using System.Drawing;
 
 namespace LCS.Forms
 {
@@ -951,23 +952,26 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails((CloudHostedInstance)row.DataBoundItem);
-                if(rdpList.Count > 1)
+                RDPConnectionDetails rdpEntry;
+                if (rdpList.Count > 1)
                 {
-                    ChooseRdpLogonUser(rdpList);
+                    rdpEntry = ChooseRdpLogonUser(rdpList);
                 }
-
-
-                foreach (var rdpEntry in rdpList.OrderByDescending(x => x.Username)) //Admin user will be the last
+                else
+                {
+                    rdpEntry = rdpList.First();
+                }
+                if (rdpEntry != null)
                 {
                     using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
                     {
                         var rdcProcess = new Process
                         {
                             StartInfo =
-                            {
-                                FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
-                                Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
-                            }
+                        {
+                            FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
+                            Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
+                        }
                         };
                         rdcProcess.Start();
                     }
@@ -1151,40 +1155,52 @@ namespace LCS.Forms
             loginToLcsMenuItem.Enabled = true;
         }
 
-        public static string ChooseRdpLogonUser(List<RDPConnectionDetails> rdpList)
+        public static RDPConnectionDetails ChooseRdpLogonUser(List<RDPConnectionDetails> rdpList)
         {
             Form form = new Form();
-            Button button_1 = new Button();
-            Button button_2 = new Button();
-            button_1.DialogResult = DialogResult.OK;
-            button_2.DialogResult = DialogResult.Cancel;
-            FlowLayoutPanel pnl = new FlowLayoutPanel();
-            pnl.Dock = DockStyle.Fill;
+            Button button_OK = new Button() { Text = "OK", Location = new Point(60, 30) };
+            Button button_Cancel = new Button() { Text = "Cancel", Location = new Point(140, 30) };
+            button_OK.DialogResult = DialogResult.OK;
+            button_Cancel.DialogResult = DialogResult.Cancel;
+            FlowLayoutPanel panel = new FlowLayoutPanel();
+            panel.Dock = DockStyle.Fill;
 
             form.Text = "Choose user";
-
-            form.ClientSize = new System.Drawing.Size(396, 107);
-            form.ClientSize = new System.Drawing.Size(Math.Max(300, 200), form.ClientSize.Height);
+            form.ClientSize = new Size(280, 60);
             form.FormBorderStyle = FormBorderStyle.FixedDialog;
             form.StartPosition = FormStartPosition.CenterScreen;
-            form.AcceptButton = button_1;
-            form.CancelButton = button_2;
+            form.AcceptButton = button_OK;
+            form.CancelButton = button_Cancel;
             form.MinimizeBox = false;
             form.MaximizeBox = false;
+            form.ControlBox = false;
 
-            form.Controls.AddRange(new Control[] { button_1, button_2 });
+            form.Controls.AddRange(new Control[] { button_OK, button_Cancel });
+            var i = 1;
             foreach (var rdpEntry in rdpList.OrderBy(x => x.Username))
             {
-                pnl.Controls.Add(new RadioButton() { Text = rdpEntry.Username });
+                if (i == 1)
+                {
+                    panel.Controls.Add(new RadioButton() { Text = rdpEntry.Username, Checked = true });
+                }
+                else
+                {
+                    panel.Controls.Add(new RadioButton() { Text = rdpEntry.Username });
+                }
+                i++;
             }
-
-            form.Controls.Add(pnl);
+            form.Controls.Add(panel);
 
             DialogResult dialogResult = form.ShowDialog();
-            RadioButton rbSelected = pnl.Controls
+
+            if (dialogResult == DialogResult.Cancel)
+                return null;
+
+            RadioButton rbSelected = panel.Controls
                          .OfType<RadioButton>()
                          .FirstOrDefault(r => r.Checked);
-            return rbSelected.Text;
+
+            return rdpList.FirstOrDefault(x => x.Username.Equals(rbSelected.Text));
         }
 
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
