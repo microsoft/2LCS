@@ -275,5 +275,29 @@ namespace LCS.JsonObjects
         public string DeploymentStatus { get; set; }
         public string HostingType { get; set; }
     }
+    public class BuildInfoTreeView
+    {
+        public string Id { get; set; }
+        public string ParentId { get; set; }
+        public string ModelName { get; set; }
+        public string InstalledDate { get; set; }
+        public string Version { get; set; }
+        public string ModuleName { get; set; }
+        public string Layer { get; set; }
+        public string InstallationInfoType { get; set; }
+        public string Description { get; set; }
+    }
 
+    public class BuildInfoDetails
+    {
+        public List<BuildInfoTreeView> BuildInfoTreeView { get; set; }
+        public string InstalledPlatformBuild { get; set; }
+        public string BuildVersion { get; set; }
+    }
+
+    public class BuildInfoEnvironment
+    {
+        public string Label { get; set; }
+        public int Value { get; set; }
+    }
 }

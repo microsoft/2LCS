@@ -27,6 +27,7 @@ namespace LCS.Forms
         private CookieContainer _cookies;
         private static string _lcsUrl = "https://lcs.dynamics.com";
         private static string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
+        private static string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
 
         private List<ProjectInstance> Instances;
         private List<LcsProject> Projects;
@@ -81,11 +82,13 @@ namespace LCS.Forms
             {
                 _cookies = new CookieContainer();
                 _cookies.SetCookies(new Uri(_lcsUrl), Properties.Settings.Default.cookie);
-                _cookies.SetCookies(new Uri (_lcsUpdateUrl), Properties.Settings.Default.cookie);
+                _cookies.SetCookies(new Uri(_lcsUpdateUrl), Properties.Settings.Default.cookie);
+                _cookies.SetCookies(new Uri(_lcsDiagUrl), Properties.Settings.Default.cookie);
                 _httpClientHelper = new HttpClientHelper(_cookies)
                 {
                     LcsUrl = _lcsUrl,
-                    LcsUpdateUrl = _lcsUpdateUrl
+                    LcsUpdateUrl = _lcsUpdateUrl,
+                    LcsDiagUrl = _lcsDiagUrl
                 };
 
                 changeProjectMenuItem.Enabled = true;
@@ -93,7 +96,7 @@ namespace LCS.Forms
                 saasInstanceContextMenu.Enabled = true;
                 loginToLcsMenuItem.Enabled = false;
                 logoutToolStripMenuItem.Enabled = true;
-                
+
                 _selectedProject = GetLcsProjectFromCookie();
                 if (_selectedProject != null)
                 {
@@ -104,11 +107,11 @@ namespace LCS.Forms
                     var projectInstance = Instances.FirstOrDefault(x => x.LcsProjectId.Equals(_selectedProject.Id));
                     if (projectInstance != null)
                     {
-                        if(projectInstance.CheInstances != null)
+                        if (projectInstance.CheInstances != null)
                         {
                             _cheInstancesSource.DataSource = _cheInstancesList = projectInstance.CheInstances;
                         }
-                        if(projectInstance.SaasInstances != null)
+                        if (projectInstance.SaasInstances != null)
                         {
                             _saasInstancesSource.DataSource = _saasInstancesList = projectInstance.SaasInstances;
                         }
@@ -128,7 +131,7 @@ namespace LCS.Forms
             var cookies = _cookies.GetCookies(new Uri(_lcsUrl));
             foreach (Cookie cookie in cookies)
             {
-                if(cookie.Name == "lcspid")
+                if (cookie.Name == "lcspid")
                 {
                     return Projects.FirstOrDefault(x => x.Id.Equals(int.Parse(cookie.Value)));
                 }
@@ -242,7 +245,7 @@ namespace LCS.Forms
 
                     Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
                     Properties.Settings.Default.Save();
-                }                
+                }
             }
             else
             {
@@ -336,7 +339,7 @@ namespace LCS.Forms
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
                 foreach (var rdpEntry in rdpList)
                 {
-                    
+
                     sb.Append($@"
     <Connection>
         <RDP>
@@ -357,7 +360,7 @@ namespace LCS.Forms
             sb.Append(
                 @"
     </ArrayOfConnection>");
-            
+
             var savefile = new SaveFileDialog
             {
                 FileName = "CHE-Exported.rdm",
@@ -536,6 +539,7 @@ namespace LCS.Forms
                 Properties.Settings.Default.Save();
                 cookies.SetCookies(new Uri(_lcsUrl), Properties.Settings.Default.cookie);
                 cookies.SetCookies(new Uri(_lcsUpdateUrl), Properties.Settings.Default.cookie);
+                cookies.SetCookies(new Uri(_lcsDiagUrl), Properties.Settings.Default.cookie);
             }
             return cookies;
         }
@@ -550,7 +554,7 @@ namespace LCS.Forms
                 var tasks = new List<Task>();
                 foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.AddNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule.FirstOrDefault().Key, form.Rule.FirstOrDefault().Value)));
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.AddNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule.FirstOrDefault().Key, form.Rule.FirstOrDefault().Value)));
                 }
                 Task.WhenAll(tasks).Wait();
                 Cursor = Cursors.Default;
@@ -575,7 +579,7 @@ namespace LCS.Forms
                         _saasInstancesSource.ResetBindings(false);
                         _selectedProject = form.LcsProject;
 
-                        if(!Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                        if (!Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
                         {
                             var instance = new ProjectInstance()
                             {
@@ -607,7 +611,7 @@ namespace LCS.Forms
                 var tasks = new List<Task>();
                 foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.DeleteNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule)));
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.DeleteNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule)));
                 }
                 Task.WhenAll(tasks).Wait();
                 Cursor = Cursors.Default;
@@ -620,7 +624,7 @@ namespace LCS.Forms
             var tasks = new List<Task>();
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
-                tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.StartStopDeployment((CloudHostedInstance)row.DataBoundItem, "start")));
+                tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.StartStopDeployment((CloudHostedInstance)row.DataBoundItem, "start")));
             }
             Task.WhenAll(tasks).Wait();
             Cursor = Cursors.Default;
@@ -632,7 +636,7 @@ namespace LCS.Forms
             var tasks = new List<Task>();
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
-                tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.StartStopDeployment((CloudHostedInstance)row.DataBoundItem, "stop")));
+                tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.StartStopDeployment((CloudHostedInstance)row.DataBoundItem, "stop")));
             }
             Task.WhenAll(tasks).Wait();
             Cursor = Cursors.Default;
@@ -647,7 +651,7 @@ namespace LCS.Forms
                 var instance = (CloudHostedInstance)row.DataBoundItem;
                 if (MessageBox.Show($"Deallocation is the step before deletion. Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies){LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.StartStopDeployment(instance, "deallocate")));
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.StartStopDeployment(instance, "deallocate")));
                 }
             }
             Task.WhenAll(tasks).Wait();
@@ -663,7 +667,7 @@ namespace LCS.Forms
                 var instance = (CloudHostedInstance)row.DataBoundItem;
                 if (MessageBox.Show($"Deletion cannot be cancelled or rolled back. Do you really want to delete {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) {LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsProjectId = _selectedProject.Id.ToString()}.DeleteEnvironment(instance)));
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.DeleteEnvironment(instance)));
                 }
             }
             Task.WhenAll(tasks).Wait();
@@ -801,7 +805,7 @@ namespace LCS.Forms
             {
                 var value = "";
                 var val = prop.GetValue(instance, null);
-                if(val != null)
+                if (val != null)
                 {
                     value = val.ToString();
                 }
@@ -990,7 +994,7 @@ namespace LCS.Forms
                 var details = new StringBuilder();
                 foreach (var rdpEntry in rdpList)
                 {
-                    if(details.Length != 0)
+                    if (details.Length != 0)
                     {
                         details.AppendLine();
                         details.AppendLine();
@@ -1012,7 +1016,7 @@ namespace LCS.Forms
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            if(WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
+            if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
             {
                 if (IsOverlapped(this))
                 {
@@ -1024,7 +1028,7 @@ namespace LCS.Forms
                     WindowState = FormWindowState.Minimized;
                 }
             }
-            else if(WindowState == FormWindowState.Minimized)
+            else if (WindowState == FormWindowState.Minimized)
             {
                 WindowState = _previousState;
             }
@@ -1042,7 +1046,8 @@ namespace LCS.Forms
                 _httpClientHelper = new HttpClientHelper(_cookies)
                 {
                     LcsUrl = _lcsUrl,
-                    LcsUpdateUrl = _lcsUpdateUrl
+                    LcsUpdateUrl = _lcsUpdateUrl,
+                    LcsDiagUrl = _lcsDiagUrl
                 };
                 if (_selectedProject != null)
                 {
@@ -1081,7 +1086,7 @@ namespace LCS.Forms
                     label = "platform binary hotfixes";
                     break;
                 default:
-                //case "saasCriticalMetadataHotfixesToolStripMenuItem":
+                    //case "saasCriticalMetadataHotfixesToolStripMenuItem":
                     hotfixesType = HotfixesType.CriticalMetadata;
                     label = "critical metadata hotfixes";
                     break;
@@ -1089,7 +1094,7 @@ namespace LCS.Forms
 
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
-                var diagId = _httpClientHelper.GetDiagEnvironmentId((CloudHostedInstance)row.DataBoundItem); 
+                var diagId = _httpClientHelper.GetDiagEnvironmentId((CloudHostedInstance)row.DataBoundItem);
                 var kbs = _httpClientHelper.GetAvailableHotfixes(diagId, (int)hotfixesType);
                 if (kbs == null)
                 {
@@ -1501,7 +1506,7 @@ namespace LCS.Forms
             Cursor = Cursors.WaitCursor;
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
-            
+
             Projects = _httpClientHelper.GetAllProjects();
             foreach (var _project in Projects)
             {
@@ -1589,7 +1594,7 @@ namespace LCS.Forms
             RefreshSaas(false);
         }
 
-        private void cheShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
+        private void CheShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
         {
             DataGridViewRow row = cheDataGridView.SelectedRows[0];
             var instance = (CloudHostedInstance)row.DataBoundItem;
@@ -1604,7 +1609,7 @@ namespace LCS.Forms
             }
         }
 
-        private void saasShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
+        private void SaasShowPasswordsPowershellMenuItem_Click(object sender, EventArgs e)
         {
             foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
             {
@@ -1627,7 +1632,31 @@ namespace LCS.Forms
                     CredentialsDict = credentials
                 };
                 form.Show();
-            }            
+            }
+        }
+
+        private void DetailedBuildInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                var environmentId = _httpClientHelper.GetBuildInfoEnvironmentId(instance);
+                var buildInfo = _httpClientHelper.GetEnvironmentBuildInfoDetails(instance, environmentId.ToString());
+                if (buildInfo == null || buildInfo.BuildInfoTreeView.Count == 0)
+                {
+                    MessageBox.Show($"Request to get build info details. Please try again later.");
+                    continue;
+                }
+                using (var form = new BuildInfoDetailsForm())
+                {
+                    form.BuildInfo = buildInfo;
+                    form.Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}";
+                    form.ShowDialog();
+                }
+            }
+            Cursor = Cursors.Default;
         }
     }
 

@@ -18,6 +18,7 @@ namespace LCS
         private readonly HttpClient _httpClient;
         public string LcsUrl { private get; set; }
         public string LcsUpdateUrl { private get; set; }
+        public string LcsDiagUrl { private get; set; }
 
         public CookieContainer CookieContainer { get; }
         public string LcsProjectId { private get; set; }
@@ -438,6 +439,44 @@ namespace LCS
             return allProjects;
         }
 
+        internal string GetEnvironmentBuildInfoDetailsUrl(CloudHostedInstance instance, string environmentId)
+        {
+            return $"{LcsDiagUrl}/BuildInfo/GetEnvironmentBuildInfoDetails/{LcsProjectId}?lcsEnvironmentId={instance.EnvironmentId}&environmentId={environmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}";
+        }
+
+        internal string GetEnvironmentBuildInfoIdUrl(CloudHostedInstance instance)
+        {
+            return $"{LcsDiagUrl}/BuildInfo/GetEnvironments/{LcsProjectId}?lcsEnvironmentId={instance.EnvironmentId}&environmentId=0&_={DateTimeOffset.Now.ToUnixTimeSeconds()}";
+        }
+
+        internal int GetBuildInfoEnvironmentId(CloudHostedInstance instance)
+        {
+            var result = _httpClient.GetAsync(GetEnvironmentBuildInfoIdUrl(instance)).Result;
+            result.EnsureSuccessStatusCode();
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var environments = JsonConvert.DeserializeObject<List<BuildInfoEnvironment>>(responseBody);
+            if (environments != null && environments.Count > 0)
+            {
+                return environments.First().Value;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        internal BuildInfoDetails GetEnvironmentBuildInfoDetails(CloudHostedInstance instance, string environmentId)
+        {
+            var result = _httpClient.GetAsync(GetEnvironmentBuildInfoDetailsUrl(instance, environmentId.ToString())).Result;
+            result.EnsureSuccessStatusCode();
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var response = JsonConvert.DeserializeObject<BuildInfoDetails>(responseBody);
+            if (response != null)
+            {
+                response.BuildInfoTreeView.RemoveAll(x => x.ParentId == null);
+            }
+            return response;
+        }
         /// <summary>
         /// Dispose
         /// </summary>
