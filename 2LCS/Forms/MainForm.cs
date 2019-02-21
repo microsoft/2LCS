@@ -76,6 +76,12 @@ namespace LCS.Forms
         public MainForm()
         {
             InitializeComponent();
+
+            bwCHE.DoWork += new DoWorkEventHandler(bw_RefreshChe);
+            bwCHE.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshChe_Completed);
+
+            bwSaas.DoWork += new DoWorkEventHandler(bw_RefreshSaas);
+            bwSaas.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshSaas_Completed);
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -195,14 +201,15 @@ namespace LCS.Forms
             panelCHE.Visible = true;
             panelSaas.Visible = true;
 
-            bwCHE.DoWork += new DoWorkEventHandler(bw_RefreshChe);
-            bwCHE.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshChe_Completed);
-            bwCHE.RunWorkerAsync();
+            if (!bwCHE.IsBusy)
+            {
+                bwCHE.RunWorkerAsync();
+            }
 
-            bwSaas.DoWork += new DoWorkEventHandler(bw_RefreshSaas);
-            bwSaas.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshSaas_Completed);
-            bwSaas.RunWorkerAsync();
-
+            if(!bwSaas.IsBusy)
+            {
+                bwSaas.RunWorkerAsync();
+            }
         }
 
 
