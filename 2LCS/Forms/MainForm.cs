@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using Xceed.Words.NET;
 using CsvHelper;
 using System.Drawing;
+using System.ComponentModel;
 
 namespace LCS.Forms
 {
@@ -55,6 +56,13 @@ namespace LCS.Forms
         private static extern bool IsWindowVisible(IntPtr hWnd);
 
         private const int GW_HWNDPREV = 3;
+
+        private bool fetchingCHE = false;
+        private bool fetchingSaaS = false;
+
+
+        BackgroundWorker bwCHE = new BackgroundWorker();
+        BackgroundWorker bwSaas = new BackgroundWorker();
 
         [StructLayout(LayoutKind.Sequential)]
         private struct RECT
@@ -184,16 +192,85 @@ namespace LCS.Forms
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
-            if (tabControl.SelectedTab == tabControl.TabPages["cheTabPage"])
+            panelCHE.Visible = true;
+            panelSaas.Visible = true;
+
+            bwCHE.DoWork += new DoWorkEventHandler(bw_RefreshChe);
+            bwCHE.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshChe_Completed);
+            bwCHE.RunWorkerAsync();
+
+            bwSaas.DoWork += new DoWorkEventHandler(bw_RefreshSaas);
+            bwSaas.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RefreshSaas_Completed);
+            bwSaas.RunWorkerAsync();
+
+        }
+
+
+
+        private void bw_RefreshChe(object sender, DoWorkEventArgs e)
+        {
+            var res = _httpClientHelper.GetCheInstances();
+
+            if (_cheInstancesList != null)
             {
-                RefreshChe();
-                RefreshSaas();
+                e.Result = res;                
             }
-            else if (tabControl.SelectedTab == tabControl.TabPages["saasTabPage"])
+        }
+
+        private void bw_RefreshChe_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null && e.Result is List<CloudHostedInstance>)
             {
-                RefreshSaas();
-                RefreshChe();
+                _cheInstancesList = (List<CloudHostedInstance>)e.Result;
+
+                _cheInstancesSource.DataSource = _cheInstancesList;
+
+                if (Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                {
+                    Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
+                        .Select(x => { x.CheInstances = _cheInstancesList; return x; })
+                            .ToList();
+                }
+
+                Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                Properties.Settings.Default.Save();
+                _cheInstancesSource.ResetBindings(false);
             }
+
+            panelCHE.Visible = false;
+        }
+
+        private void bw_RefreshSaas(object sender, DoWorkEventArgs e)
+        {
+            _saasInstancesList = _httpClientHelper.GetSaasInstances();
+
+            if (_saasInstancesList != null)
+            {
+                e.Result = _saasInstancesList;
+            }
+        }
+
+        private void bw_RefreshSaas_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Result != null && e.Result is List<CloudHostedInstance>)
+            {
+                _saasInstancesList = (List<CloudHostedInstance>)e.Result;
+
+                _saasInstancesSource.DataSource = _saasInstancesList;
+
+                if (Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                {
+                    Instances.Where(x => x.LcsProjectId == _selectedProject.Id)
+                        .Select(x => { x.SaasInstances = _saasInstancesList; return x; })
+                            .ToList();
+                }
+
+                Properties.Settings.Default.instances = JsonConvert.SerializeObject(Instances, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                Properties.Settings.Default.Save();
+                _saasInstancesSource.ResetBindings(false);
+            }
+
+            panelSaas.Visible = false;
         }
 
         private void RefreshSaas(bool reloadFromLcs = true)
