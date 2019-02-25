@@ -169,6 +169,44 @@ namespace LCS.Forms
             cheDataGridView.ClearSelection();
         }
 
+        private void CheDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            var selectedRow = SelectedDataGridView.SelectedCells[0].RowIndex;
+            var row = SelectedDataGridView.Rows[selectedRow];
+
+            if (row.DataBoundItem != null)
+            {
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails((CloudHostedInstance)row.DataBoundItem);
+                RDPConnectionDetails rdpEntry;
+                if (rdpList.Count > 1)
+                {
+                    rdpEntry = ChooseRdpLogonUser(rdpList);
+                }
+                else
+                {
+                    rdpEntry = rdpList.First();
+                }
+                if (rdpEntry != null)
+                {
+                    using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
+                    {
+                        var rdcProcess = new Process
+                        {
+                            StartInfo =
+                        {
+                            FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
+                            Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
+                        }
+                        };
+                        rdcProcess.Start();
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
         private void SaasDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (saasDataGridView.DataSource == null || _saasInstancesList == null) return;

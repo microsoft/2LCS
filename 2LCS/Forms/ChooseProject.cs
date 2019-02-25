@@ -80,6 +80,21 @@ namespace LCS.Forms
             _sortAscending = !_sortAscending;
         }
 
+        private void DataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+            Properties.Settings.Default.Save();
+            if (projectsDataGridView.SelectedRows.Count > 0)
+            {
+                LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
+            }
+            else
+            {
+                Cancelled = true;
+            }
+            Close();
+        }
+
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
