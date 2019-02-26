@@ -90,6 +90,7 @@
             this.projectsDataGridView.Size = new System.Drawing.Size(1194, 380);
             this.projectsDataGridView.TabIndex = 0;
             this.projectsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_ColumnHeaderMouseClick);
+            this.projectsDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDoubleClick);
             // 
             // Favorite
             // 
