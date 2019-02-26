@@ -181,7 +181,7 @@ namespace LCS
             //check RDP availability
             foreach (var vm in instance.Instances)
             {
-                var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=false&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+                var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=true&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 var rdpPresentResponse = JsonConvert.DeserializeObject<Response>(responseBody);
@@ -191,7 +191,7 @@ namespace LCS
                 _httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
                 _httpClient.DefaultRequestHeaders.Add("Upgrade-Insecure-Requests", "1");
 
-                result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=false&_={DateTimeOffset.Now.ToUnixTimeSeconds()}&isDownloadEnabled=True").Result;
+                result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/IsRdpResourceAvailable/{LcsProjectId}/?topologyInstanceId={instance.InstanceId}&virtualMachineInstanceName={vm.MachineName}&deploymentItemName={vm.ItemName}&azureSubscriptionId={instance.AzureSubscriptionId}&group=0&isARMTopology={instance.IsARMTopology}&nsgWarningDisplayed=true&_={DateTimeOffset.Now.ToUnixTimeSeconds()}&isDownloadEnabled=True").Result;
                 result.EnsureSuccessStatusCode();
                 responseBody = result.Content.ReadAsStringAsync().Result;
                 var line1 = responseBody.Split('\r', '\n').FirstOrDefault();
