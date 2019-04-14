@@ -64,8 +64,8 @@
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.12.1.2\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack, Version=1.9.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlAgilityPack.1.9.0\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    <Reference Include="HtmlAgilityPack, Version=1.11.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -107,6 +107,18 @@
     </Compile>
     <Compile Include="Forms\AvailableKBs.Designer.cs">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChoosePackage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChoosePackage.Designer.cs">
+      <DependentUpon>ChoosePackage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LogDisplay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LogDisplay.Designer.cs">
+      <DependentUpon>LogDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\PowerShell.cs">
       <SubType>Form</SubType>
@@ -173,6 +185,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AvailableKBs.resx">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChoosePackage.resx">
+      <DependentUpon>ChoosePackage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LogDisplay.resx">
+      <DependentUpon>LogDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PowerShell.resx">
       <DependentUpon>PowerShell.cs</DependentUpon>

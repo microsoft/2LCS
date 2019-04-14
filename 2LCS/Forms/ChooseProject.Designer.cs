@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.OkButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.projectsDataGridView = new System.Windows.Forms.DataGridView();
             this.Favorite = new System.Windows.Forms.DataGridViewCheckBoxColumn();
@@ -41,16 +41,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.projectsDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // OkButton
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(398, 399);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(182, 33);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.OkButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.OkButton.Location = new System.Drawing.Point(398, 399);
+            this.OkButton.Name = "OkButton";
+            this.OkButton.Size = new System.Drawing.Size(182, 33);
+            this.OkButton.TabIndex = 1;
+            this.OkButton.Text = "OK";
+            this.OkButton.UseVisualStyleBackColor = true;
+            this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
             // cancelButton
             // 
@@ -85,17 +85,19 @@
             this.projectsDataGridView.MultiSelect = false;
             this.projectsDataGridView.Name = "projectsDataGridView";
             this.projectsDataGridView.RowHeadersVisible = false;
+            this.projectsDataGridView.RowHeadersWidth = 62;
             this.projectsDataGridView.RowTemplate.Height = 28;
             this.projectsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.projectsDataGridView.Size = new System.Drawing.Size(1194, 380);
             this.projectsDataGridView.TabIndex = 0;
-            this.projectsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_ColumnHeaderMouseClick);
-            this.projectsDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_CellMouseDoubleClick);
+            this.projectsDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ProjectsDataGridView_CellMouseDoubleClick);
+            this.projectsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ProjectsDataGridView_ColumnHeaderMouseClick);
             // 
             // Favorite
             // 
             this.Favorite.DataPropertyName = "Favorite";
             this.Favorite.HeaderText = "Favorite";
+            this.Favorite.MinimumWidth = 8;
             this.Favorite.Name = "Favorite";
             this.Favorite.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.Favorite.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
@@ -104,6 +106,7 @@
             // 
             this.Id.DataPropertyName = "Id";
             this.Id.HeaderText = "Project Id";
+            this.Id.MinimumWidth = 8;
             this.Id.Name = "Id";
             this.Id.ReadOnly = true;
             // 
@@ -111,6 +114,7 @@
             // 
             this.ProjectName.DataPropertyName = "Name";
             this.ProjectName.HeaderText = "Project Name";
+            this.ProjectName.MinimumWidth = 8;
             this.ProjectName.Name = "ProjectName";
             this.ProjectName.ReadOnly = true;
             // 
@@ -118,6 +122,7 @@
             // 
             this.Description.DataPropertyName = "Description";
             this.Description.HeaderText = "Description";
+            this.Description.MinimumWidth = 8;
             this.Description.Name = "Description";
             this.Description.ReadOnly = true;
             // 
@@ -125,6 +130,7 @@
             // 
             this.OrganizationName.DataPropertyName = "OrganizationName";
             this.OrganizationName.HeaderText = "Organization Name";
+            this.OrganizationName.MinimumWidth = 8;
             this.OrganizationName.Name = "OrganizationName";
             this.OrganizationName.ReadOnly = true;
             // 
@@ -132,6 +138,7 @@
             // 
             this.CreatedByUserName.DataPropertyName = "CreatedByUserName";
             this.CreatedByUserName.HeaderText = "Created By";
+            this.CreatedByUserName.MinimumWidth = 8;
             this.CreatedByUserName.Name = "CreatedByUserName";
             this.CreatedByUserName.ReadOnly = true;
             // 
@@ -155,7 +162,7 @@
             this.Controls.Add(this.refreshButton);
             this.Controls.Add(this.projectsDataGridView);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.OkButton);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(780, 400);
@@ -170,7 +177,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button OkButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.DataGridView projectsDataGridView;
         private System.Windows.Forms.Button refreshButton;

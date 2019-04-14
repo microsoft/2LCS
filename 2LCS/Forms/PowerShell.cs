@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -23,8 +18,8 @@ namespace LCS.Forms
         private void PowerShell_Load(object sender, EventArgs e)
         {
             Text = Caption;
-            StringBuilder sbv1 = new StringBuilder();
-            StringBuilder sbv2 = new StringBuilder();
+            var sbv1 = new StringBuilder();
+            var sbv2 = new StringBuilder();
 
             sbv1.AppendLine("$params = @{}");
             sbv2.AppendLine("$params = @{");
@@ -36,9 +31,9 @@ namespace LCS.Forms
                     continue;
                 }
 
-                int splitIndex = item.Key.ToString().LastIndexOf("-") +1 ;
-                string name = item.Key.ToString().Substring(splitIndex , item.Key.ToString().Length - splitIndex);
-                string value = item.Value;
+                var splitIndex = item.Key.ToString().LastIndexOf("-") +1 ;
+                var name = item.Key.ToString().Substring(splitIndex , item.Key.ToString().Length - splitIndex);
+                var value = item.Value;
 
                 sbv1.AppendLine($"$params.{name} = \"{value}\"");
                 sbv2.AppendLine($"{name} = \"{value}\";");
@@ -47,7 +42,6 @@ namespace LCS.Forms
             sbv2.AppendLine("}");
 
             textBox1.Text = sbv1.ToString();
-
             textBox1.Text += "\r\n\r\n#Or like this\r\n\r\n";
             textBox1.Text += sbv2.ToString();
         }

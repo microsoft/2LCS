@@ -25,9 +25,9 @@ namespace LCS.Forms
         private bool _cheSortAscending = true;
         private bool _saasSortAscending = true;
         private CookieContainer _cookies;
-        private static string _lcsUrl = "https://lcs.dynamics.com";
-        private static string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
-        private static string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
+        private static readonly string _lcsUrl = "https://lcs.dynamics.com";
+        private static readonly string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
+        private static readonly string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
 
         private List<ProjectInstance> Instances;
         private List<LcsProject> Projects;
@@ -90,6 +90,7 @@ namespace LCS.Forms
                     LcsUpdateUrl = _lcsUpdateUrl,
                     LcsDiagUrl = _lcsDiagUrl
                 };
+                _httpClientHelper.SetRequestVerificationToken($"{_lcsUrl}/V2");
 
                 changeProjectMenuItem.Enabled = true;
                 cheInstanceContextMenu.Enabled = true;
@@ -363,7 +364,7 @@ namespace LCS.Forms
         }
 
 
-        private void cheExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CheExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_cheInstancesList == null) return;
             Cursor = Cursors.WaitCursor;
@@ -414,7 +415,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void saasExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaasExportRDMConnectionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_saasInstancesList == null) return;
             Cursor = Cursors.WaitCursor;
@@ -1105,7 +1106,7 @@ namespace LCS.Forms
             Cursor = Cursors.WaitCursor;
             var menuItem = (sender as ToolStripMenuItem);
             HotfixesType hotfixesType;
-            var label = "";
+            string label;
             switch (menuItem.Name)
             {
                 case "cheMetadataHotfixesToolStripMenuItem":
@@ -1693,6 +1694,60 @@ namespace LCS.Forms
                     form.Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}";
                     form.ShowDialog();
                 }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void DeployPackageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            DeployablePackage package = null;
+            StringBuilder log = new StringBuilder();
+            var tasks = new List<Task<string>>();
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                if (package == null)
+                {
+                    var packages = _httpClientHelper.GetPagedDeployablePackageList(instance);
+                    using (var form = new ChoosePackage())
+                    {
+                        form.HttpClientHelper = _httpClientHelper;
+                        form.Packages = packages;
+                        form.ShowDialog();
+                        if (!form.Cancelled && (form.DeployablePackage != null))
+                        {
+                            package = form.DeployablePackage;
+                            log.AppendLine($"Chosen package name: {package.Name}");
+                            log.AppendLine($"Chosen package description: {package.Description}");
+                            log.AppendLine($"Chosen package platform version: {package.PlatformVersion}");
+                            log.AppendLine();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                if (package != null)
+                {
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.ApplyPackage(instance, package)));
+                }
+            }
+            Task.WhenAll(tasks).Wait();
+            var logEntries = tasks.Select(x => x.Result).ToList();
+            foreach (var entry in logEntries)
+            {
+                log.AppendLine(entry);
+            }
+            if (log.Length != 0)
+            {
+                var form = new LogDisplay
+                {
+                    LogEntries = log.ToString(),
+                    Caption = $"Deployment log for package: {package.Name}"
+                };
+                form.Show();
             }
             Cursor = Cursors.Default;
         }

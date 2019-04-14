@@ -30,12 +30,12 @@ namespace LCS.Forms
             get
             {
                 var myCp = base.CreateParams;
-                myCp.ClassStyle = myCp.ClassStyle | CpNocloseButton;
+                myCp.ClassStyle |= CpNocloseButton;
                 return myCp;
             }
         }
 
-        private void Button1_Click(object sender, EventArgs e)
+        private void OkButton_Click(object sender, EventArgs e)
         {
             Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
             Properties.Settings.Default.Save();
@@ -73,14 +73,14 @@ namespace LCS.Forms
             }
         }
 
-        private void DataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void ProjectsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (projectsDataGridView.DataSource == null) return;
             _projectsSource.DataSource = _sortAscending ? Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
 
-        private void DataGridView1_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void ProjectsDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
             Properties.Settings.Default.Save();
