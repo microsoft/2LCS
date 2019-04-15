@@ -29,6 +29,7 @@ namespace LCS.Forms
                 var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 if (pi != null) pi.SetValue(buildInfoDetailsDataGridView, true, null);
             }
+            buildInfoDetailsDataGridView.Columns["InstalledDate"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
             buildInfoDetailsDataGridView.DataSource = _buildInfoSource;
             _buildInfoSource.DataSource = BuildInfo.BuildInfoTreeView.OrderBy(f => f.ParentId).ThenBy(i => i.ModelName);
         }

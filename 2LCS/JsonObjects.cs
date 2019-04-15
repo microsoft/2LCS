@@ -57,7 +57,7 @@ namespace LCS.JsonObjects
         public string EnvironmentAdmin { get; set; }
         public string BuildNumber { get; set; }
         public string BuildInfo { get; set; }
-        public string DeployedOn { get; set; }
+        public DateTime DeployedOn { get; set; }
         public string LicenseLink { get; set; }
         public bool CanStart { get; set; }
         public bool IsMaintainVisible { get; set; }
@@ -280,7 +280,7 @@ namespace LCS.JsonObjects
         public string Id { get; set; }
         public string ParentId { get; set; }
         public string ModelName { get; set; }
-        public string InstalledDate { get; set; }
+        public DateTime InstalledDate { get; set; }
         public string Version { get; set; }
         public string ModuleName { get; set; }
         public string Layer { get; set; }

@@ -158,6 +158,8 @@ namespace LCS.Forms
                 pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 if (pi != null) pi.SetValue(saasDataGridView, true, null);
             }
+            cheDataGridView.Columns["cheDeployedOn"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
+            saasDataGridView.Columns["saasDeployedOn"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
             cheDataGridView.DataSource = _cheInstancesSource;
             saasDataGridView.DataSource = _saasInstancesSource;
         }
@@ -1304,7 +1306,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(saasInstance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn);
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(saasInstance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
@@ -1424,7 +1426,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(instance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn);
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(instance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");

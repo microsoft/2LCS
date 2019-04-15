@@ -29,6 +29,7 @@ namespace LCS.Forms
                 var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 if (pi != null) pi.SetValue(availableKBsDataGridView, true, null);
             }
+            availableKBsDataGridView.Columns["ReleasedDate"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
             availableKBsDataGridView.DataSource = _hotfixesSource;
             _hotfixesSource.DataSource = Hotfixes.OrderBy(f => f.ReleasedDate).ThenBy(i => i.KBNumber).Reverse();
         }
