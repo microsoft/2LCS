@@ -520,40 +520,40 @@ namespace LCS
             return $"{LcsUrl}/Environment/GetPagedDeployablePackageList/{LcsProjectId}?lcsEnvironmentActionId=2&lcsEnvironmentId={instance.EnvironmentId}";
         }
 
-        internal async Task<Response> ValidateSandboxServicing(DeployablePackage package)
+        internal Response ValidateSandboxServicing(DeployablePackage package)
         {
-            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}& package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}";
+            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
-                var result = await _httpClient.PostAsync($"{LcsUrl}/Environment/ValidateSandboxServicing/{LcsProjectId}", _stringContent);
+                var result = _httpClient.PostAsync($"{LcsUrl}/Environment/ValidateSandboxServicing/{LcsProjectId}", _stringContent).Result;
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<Response>(responseBody);
             }
         }
-        internal async Task<Response> StartSandboxServicing(DeployablePackage package, string platformVersion)
+        internal Response StartSandboxServicing(DeployablePackage package, string platformVersion)
         {
-            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}& package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&platformReleaseName={platformVersion}";
+            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&platformReleaseName={platformVersion}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
-                var result = await _httpClient.PostAsync($"{LcsUrl}/Environment/StartSandboxServicing/{LcsProjectId}", _stringContent);
+                var result = _httpClient.PostAsync($"{LcsUrl}/Environment/StartSandboxServicing/{LcsProjectId}", _stringContent).Result;
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<Response>(responseBody);
             }
         }
 
-        internal async Task<string> ApplyPackage(CloudHostedInstance instance, DeployablePackage package)
+        internal string ApplyPackage(CloudHostedInstance instance, DeployablePackage package)
         {
             StringBuilder log = new StringBuilder();
             package.LcsEnvironmentId = instance.EnvironmentId;
-            var validationResponse = await ValidateSandboxServicing(package);
+            var validationResponse = ValidateSandboxServicing(package);
             if (validationResponse.Success && !string.IsNullOrEmpty(validationResponse.Data.ToString()))
             {
                 log.AppendLine($"{instance.DisplayName}: Package deployment validation successful.");
-                var deploymentResponse = await StartSandboxServicing(package, validationResponse.Data.ToString());
+                var deploymentResponse = StartSandboxServicing(package, validationResponse.Data.ToString());
                 log.AppendLine($"{instance.DisplayName}: {deploymentResponse.Message}");
                 log.AppendLine();
             }

@@ -1733,14 +1733,9 @@ namespace LCS.Forms
                 }
                 if (package != null)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.ApplyPackage(instance, package)));
+                    var applyLog = _httpClientHelper.ApplyPackage(instance, package);
+                    log.AppendLine(applyLog);
                 }
-            }
-            Task.WhenAll(tasks).Wait();
-            var logEntries = tasks.Select(x => x.Result).ToList();
-            foreach (var entry in logEntries)
-            {
-                log.AppendLine(entry);
             }
             if (log.Length != 0)
             {
