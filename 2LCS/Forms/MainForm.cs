@@ -644,19 +644,54 @@ namespace LCS.Forms
 
         private void SaasDeleteNsgRule_Click(object sender, EventArgs e)
         {
-            using (var form = new DeleteNsg())
+            Cursor = Cursors.WaitCursor;
+            NSGRule nsgRule = null;
+            StringBuilder log = new StringBuilder();
+            var tasks = new List<Task<string>>();
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
-                form.ShowDialog();
-                if (form.Cancelled || (String.IsNullOrEmpty(form.Rule))) return;
-                Cursor = Cursors.WaitCursor;
-                var tasks = new List<Task>();
-                foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                if (nsgRule == null)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.DeleteNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule)));
+                    var networkSecurityGroup = _httpClientHelper.GetNetworkSecurityGroup(instance);
+                    using (var form = new ChooseNSG())
+                    {
+                        form.NetworkSecurityGroup = networkSecurityGroup;
+                        form.Text = $"Choose firewall rule to delete";
+                        form.ShowDialog();
+                        if (!form.Cancelled && (form.NSGRule != null))
+                        {
+                            nsgRule = form.NSGRule;
+                            log.AppendLine($"Firewall rule to be deleted: {nsgRule.Name}, IP: {nsgRule.IpOrCidr}");
+                            log.AppendLine();
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
                 }
-                Task.WhenAll(tasks).Wait();
-                Cursor = Cursors.Default;
+                if (nsgRule != null)
+                {
+                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.DeleteNsgRule(instance, nsgRule.Name)));
+                }
             }
+            Task.WhenAll(tasks).Wait();
+            var logEntries = tasks.Select(x => x.Result).ToList();
+            foreach (var entry in logEntries)
+            {
+                log.AppendLine(entry);
+            }
+            if (log.Length != 0)
+            {
+                var form = new LogDisplay
+                {
+                    LogEntries = log.ToString(),
+                    Text = $"Log for deletion of firewall rule: {nsgRule.Name}"
+                };
+                form.Show();
+            }
+            Cursor = Cursors.Default;
         }
 
         private void StartInstanceMenuItem_Click(object sender, EventArgs e)
@@ -1705,7 +1740,6 @@ namespace LCS.Forms
             Cursor = Cursors.WaitCursor;
             DeployablePackage package = null;
             StringBuilder log = new StringBuilder();
-            var tasks = new List<Task<string>>();
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
@@ -1742,9 +1776,42 @@ namespace LCS.Forms
                 var form = new LogDisplay
                 {
                     LogEntries = log.ToString(),
-                    Caption = $"Deployment log for package: {package.Name}"
+                    Text = $"Deployment log for package: {package.Name}"
                 };
                 form.Show();
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void SaasOpenRdpConnectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                var form = new ChooseMachine
+                {
+                    Text = $"Choose machine to connect to. Instance: {instance.DisplayName}",
+                    RDPConnections = rdpList
+                };
+                form.ShowDialog();
+                if (!form.Cancelled && (form.RDPConnection != null))
+                {
+                    var rdpEntry = form.RDPConnection;
+                    using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
+                    {
+                        var rdcProcess = new Process
+                        {
+                            StartInfo =
+                        {
+                            FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
+                            Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
+                        }
+                        };
+                        rdcProcess.Start();
+                    }
+                }
             }
             Cursor = Cursors.Default;
         }

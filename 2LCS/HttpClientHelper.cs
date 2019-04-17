@@ -240,7 +240,7 @@ namespace LCS
             return list;
         }
 
-        internal async Task<bool> DeleteNsgRule(CloudHostedInstance instance, string rule)
+        internal async Task<string> DeleteNsgRule(CloudHostedInstance instance, string rule)
         {
             var parameters =  $"lcsEnvironmentId={instance.EnvironmentId}&rulesToDelete%5B%5D={rule}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
@@ -250,7 +250,14 @@ namespace LCS
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 var response = JsonConvert.DeserializeObject<Response>(responseBody);
-                return response.Success;
+                if (response.Success)
+                {
+                    return $"Successfully deleted firewall rule {rule} for instance {instance.DisplayName}";
+                }
+                else
+                {
+                    return $"Could not delete firewall rule {rule} for instance {instance.DisplayName}";
+                }
             }
         }
 
@@ -565,6 +572,30 @@ namespace LCS
             }
             return log.ToString();
         }
+
+        internal NetworkSecurityGroup GetNetworkSecurityGroup(CloudHostedInstance instance)
+        {
+            try
+            {
+                var result = _httpClient.GetAsync($"{LcsUrl}/Environment/GetNetworkSecurityGroup/{LcsProjectId}?lcsEnvironmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+                result.EnsureSuccessStatusCode();
+                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                if (!response.Success || response.Data == null) return null;
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+                var NSG = JsonConvert.DeserializeObject<NetworkSecurityGroup>(response.Data.ToString(), settings);
+                return NSG;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Dispose
         /// </summary>

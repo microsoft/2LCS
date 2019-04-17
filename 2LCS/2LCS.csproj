@@ -108,6 +108,18 @@
     <Compile Include="Forms\AvailableKBs.Designer.cs">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ChooseNSG.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseNSG.Designer.cs">
+      <DependentUpon>ChooseNSG.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChooseMachine.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ChooseMachine.Designer.cs">
+      <DependentUpon>ChooseMachine.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ChoosePackage.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,12 +155,6 @@
     </Compile>
     <Compile Include="Forms\Credentials.Designer.cs">
       <DependentUpon>Credentials.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\DeleteNSG.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\DeleteNSG.Designer.cs">
-      <DependentUpon>DeleteNSG.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ChooseProject.cs">
       <SubType>Form</SubType>
@@ -186,6 +192,12 @@
     <EmbeddedResource Include="Forms\AvailableKBs.resx">
       <DependentUpon>AvailableKBs.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseNSG.resx">
+      <DependentUpon>ChooseNSG.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ChooseMachine.resx">
+      <DependentUpon>ChooseMachine.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChoosePackage.resx">
       <DependentUpon>ChoosePackage.cs</DependentUpon>
     </EmbeddedResource>
@@ -203,9 +215,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Credentials.resx">
       <DependentUpon>Credentials.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\DeleteNSG.resx">
-      <DependentUpon>DeleteNSG.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChooseProject.resx">
       <DependentUpon>ChooseProject.cs</DependentUpon>

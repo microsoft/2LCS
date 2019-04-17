@@ -323,4 +323,18 @@ namespace LCS.JsonObjects
         public string PlatformVersion { get; set; }
         public string Publisher { get; set; }
     }
+
+    public class NSGRule
+    {
+        public DateTime Expiration { get; set; }
+        public string IpOrCidr { get; set; }
+        public string Name { get; set; }
+        public string Service { get; set; }
+    }
+
+    public class NetworkSecurityGroup
+    {
+        public string Name { get; set; }
+        public List<NSGRule> Rules { get; set; }
+    }
 }

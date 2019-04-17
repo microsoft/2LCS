@@ -6,8 +6,6 @@ namespace LCS.Forms
     public partial class LogDisplay : Form
     {
         public string LogEntries { get; set; }
-        public string Caption { get; set; }
-
         public LogDisplay()
         {
             InitializeComponent();
@@ -15,7 +13,6 @@ namespace LCS.Forms
 
         private void PowerShell_Load(object sender, EventArgs e)
         {
-            Text = Caption;
             logTextBox.Text = LogEntries;
             logTextBox.Select(0, 0);
         }
