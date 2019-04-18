@@ -62,7 +62,7 @@
             this.availableKBsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
             this.availableKBsDataGridView.Size = new System.Drawing.Size(1194, 380);
             this.availableKBsDataGridView.TabIndex = 0;
-            this.availableKBsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.DataGridView1_ColumnHeaderMouseClick);
+            this.availableKBsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AvailableKBsDataGridView_ColumnHeaderMouseClick);
             // 
             // KBNumber
             // 

@@ -138,12 +138,6 @@
     <Compile Include="Forms\PowerShell.Designer.cs">
       <DependentUpon>PowerShell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\RDPDetails.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\RDPDetails.Designer.cs">
-      <DependentUpon>RDPDetails.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\CustomLinks.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,9 +200,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PowerShell.resx">
       <DependentUpon>PowerShell.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\RDPDetails.resx">
-      <DependentUpon>RDPDetails.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CustomLinks.resx">
       <DependentUpon>CustomLinks.cs</DependentUpon>

@@ -1,6 +1,5 @@
 ﻿using LCS.JsonObjects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Windows.Forms;
@@ -10,8 +9,6 @@ namespace LCS.Forms
     public partial class BuildInfoDetailsForm : Form
     {
         public BuildInfoDetails BuildInfo;
-        internal HttpClientHelper HttpClientHelper { get; set; }
-
         private bool _sortAscending;
         readonly BindingSource _buildInfoSource = new BindingSource();
 

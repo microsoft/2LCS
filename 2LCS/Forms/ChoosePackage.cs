@@ -12,8 +12,6 @@ namespace LCS.Forms
         internal bool Cancelled { get; private set; }
         public List<DeployablePackage> Packages;
         internal DeployablePackage DeployablePackage { get; private set; }
-        internal HttpClientHelper HttpClientHelper { get; set; }
-
         private bool _sortAscending;
         readonly BindingSource _packagesSource = new BindingSource();
 

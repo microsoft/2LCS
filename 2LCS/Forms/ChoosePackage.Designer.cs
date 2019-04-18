@@ -105,6 +105,7 @@
             // PackageName
             // 
             this.PackageName.DataPropertyName = "Name";
+            this.PackageName.FillWeight = 20F;
             this.PackageName.HeaderText = "Name";
             this.PackageName.MinimumWidth = 8;
             this.PackageName.Name = "PackageName";
@@ -113,6 +114,7 @@
             // Description
             // 
             this.Description.DataPropertyName = "Description";
+            this.Description.FillWeight = 20F;
             this.Description.HeaderText = "Description";
             this.Description.MinimumWidth = 8;
             this.Description.Name = "Description";
@@ -121,6 +123,7 @@
             // ModifiedBy
             // 
             this.ModifiedBy.DataPropertyName = "ModifiedBy";
+            this.ModifiedBy.FillWeight = 15F;
             this.ModifiedBy.HeaderText = "Modified by";
             this.ModifiedBy.MinimumWidth = 8;
             this.ModifiedBy.Name = "ModifiedBy";
@@ -129,6 +132,7 @@
             // ModifiedDate
             // 
             this.ModifiedDate.DataPropertyName = "ModifiedDate";
+            this.ModifiedDate.FillWeight = 15F;
             this.ModifiedDate.HeaderText = "Modified date";
             this.ModifiedDate.MinimumWidth = 8;
             this.ModifiedDate.Name = "ModifiedDate";
@@ -137,6 +141,7 @@
             // PackageType
             // 
             this.PackageType.DataPropertyName = "PackageType";
+            this.PackageType.FillWeight = 15F;
             this.PackageType.HeaderText = "Package type";
             this.PackageType.MinimumWidth = 8;
             this.PackageType.Name = "PackageType";
@@ -145,6 +150,7 @@
             // PlatformVersion
             // 
             this.PlatformVersion.DataPropertyName = "PlatformVersion";
+            this.PlatformVersion.FillWeight = 15F;
             this.PlatformVersion.HeaderText = "Platform version";
             this.PlatformVersion.MinimumWidth = 8;
             this.PlatformVersion.Name = "PlatformVersion";
@@ -153,6 +159,7 @@
             // Publisher
             // 
             this.Publisher.DataPropertyName = "Publisher";
+            this.Publisher.FillWeight = 15F;
             this.Publisher.HeaderText = "Publisher";
             this.Publisher.MinimumWidth = 8;
             this.Publisher.Name = "Publisher";

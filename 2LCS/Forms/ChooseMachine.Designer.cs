@@ -95,6 +95,7 @@
             // Machine
             // 
             this.Machine.DataPropertyName = "Machine";
+            this.Machine.FillWeight = 15F;
             this.Machine.HeaderText = "Machine";
             this.Machine.MinimumWidth = 8;
             this.Machine.Name = "Machine";
@@ -103,6 +104,7 @@
             // Address
             // 
             this.Address.DataPropertyName = "Address";
+            this.Address.FillWeight = 30F;
             this.Address.HeaderText = "Address";
             this.Address.MinimumWidth = 8;
             this.Address.Name = "Address";
@@ -111,6 +113,7 @@
             // Port
             // 
             this.Port.DataPropertyName = "Port";
+            this.Port.FillWeight = 10F;
             this.Port.HeaderText = "Port";
             this.Port.MinimumWidth = 8;
             this.Port.Name = "Port";
@@ -119,6 +122,7 @@
             // Domain
             // 
             this.Domain.DataPropertyName = "Domain";
+            this.Domain.FillWeight = 15F;
             this.Domain.HeaderText = "Domain";
             this.Domain.MinimumWidth = 8;
             this.Domain.Name = "Domain";
@@ -127,6 +131,7 @@
             // Username
             // 
             this.Username.DataPropertyName = "Username";
+            this.Username.FillWeight = 15F;
             this.Username.HeaderText = "Username";
             this.Username.MinimumWidth = 8;
             this.Username.Name = "Username";
@@ -135,6 +140,7 @@
             // Password
             // 
             this.Password.DataPropertyName = "Password";
+            this.Password.FillWeight = 15F;
             this.Password.HeaderText = "Password";
             this.Password.MinimumWidth = 8;
             this.Password.Name = "Password";

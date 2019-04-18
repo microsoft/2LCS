@@ -10,8 +10,6 @@ namespace LCS.Forms
     public partial class AvailableKBs : Form
     {
         public List<Hotfix> Hotfixes;
-        internal HttpClientHelper HttpClientHelper { get; set; }
-
         private bool _sortAscending;
         readonly BindingSource _hotfixesSource = new BindingSource();
 
@@ -34,7 +32,7 @@ namespace LCS.Forms
             _hotfixesSource.DataSource = Hotfixes.OrderBy(f => f.ReleasedDate).ThenBy(i => i.KBNumber).Reverse();
         }
 
-        private void DataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void AvailableKBsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (availableKBsDataGridView.DataSource == null) return;
             _hotfixesSource.DataSource = _sortAscending ? Hotfixes.OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Hotfixes.OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();

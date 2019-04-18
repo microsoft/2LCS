@@ -14,7 +14,6 @@ namespace LCS.Forms
         public List<LcsProject> Projects;
         internal LcsProject LcsProject { get; private set; }
         internal HttpClientHelper HttpClientHelper { get; set; }
-
         private bool _sortAscending;
         readonly BindingSource _projectsSource = new BindingSource();
 

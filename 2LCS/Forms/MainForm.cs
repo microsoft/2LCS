@@ -90,7 +90,6 @@ namespace LCS.Forms
                     LcsUpdateUrl = _lcsUpdateUrl,
                     LcsDiagUrl = _lcsDiagUrl
                 };
-                _httpClientHelper.SetRequestVerificationToken($"{_lcsUrl}/V2");
 
                 changeProjectMenuItem.Enabled = true;
                 cheInstanceContextMenu.Enabled = true;
@@ -769,7 +768,7 @@ namespace LCS.Forms
                     var form = new Credentials
                     {
                         CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName),
-                        Caption = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
+                        Text = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
                     };
                     form.Show();
                 }
@@ -795,7 +794,7 @@ namespace LCS.Forms
                 }
                 var form = new Credentials
                 {
-                    Caption = $"Instance: {instance.InstanceId}",
+                    Text = $"Instance: {instance.InstanceId}",
                     CredentialsDict = credentials
                 };
                 form.Show();
@@ -1080,10 +1079,10 @@ namespace LCS.Forms
                     details.AppendLine($"Username: {rdpEntry.Domain}\\{rdpEntry.Username}");
                     details.Append($"Password: {rdpEntry.Password}");
                 }
-                var form = new RdpDetails
+                var form = new LogDisplay
                 {
                     Text = $"RDP connection details for {instance.DisplayName}",
-                    Details = details.ToString()
+                    LogEntries = details.ToString()
                 };
                 form.Show();
             }
@@ -1679,7 +1678,7 @@ namespace LCS.Forms
                 var form = new PowerShell
                 {
                     CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName),
-                    Caption = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
+                    Text = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
                 };
                 form.Show();
             }
@@ -1704,7 +1703,7 @@ namespace LCS.Forms
                 }
                 var form = new PowerShell
                 {
-                    Caption = $"Instance: {instance.InstanceId}",
+                    Text = $"Instance: {instance.InstanceId}",
                     CredentialsDict = credentials
                 };
                 form.Show();
@@ -1748,7 +1747,6 @@ namespace LCS.Forms
                     var packages = _httpClientHelper.GetPagedDeployablePackageList(instance);
                     using (var form = new ChoosePackage())
                     {
-                        form.HttpClientHelper = _httpClientHelper;
                         form.Packages = packages;
                         form.ShowDialog();
                         if (!form.Cancelled && (form.DeployablePackage != null))

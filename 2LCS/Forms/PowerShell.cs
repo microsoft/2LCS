@@ -8,7 +8,6 @@ namespace LCS.Forms
     public partial class PowerShell : Form
     {
         public Dictionary<string, string> CredentialsDict { get; set; }
-        public string Caption { get; set; }
 
         public PowerShell()
         {
@@ -17,7 +16,6 @@ namespace LCS.Forms
 
         private void PowerShell_Load(object sender, EventArgs e)
         {
-            Text = Caption;
             var sbv1 = new StringBuilder();
             var sbv2 = new StringBuilder();
 
