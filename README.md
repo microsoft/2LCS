@@ -8,7 +8,7 @@ To download latest version go to [Releases section](https://github.com/Microsoft
 * Second step is to refresh list of projects you can access in LCS.
 * Third one is to refresh the list of D365 instances for chosen project.
 
-You can access most of the functionality of the by right-clicking instance row on the grid. It is possible to execute most of the commands on multiple instances at once. To do that you need to select them first using row header on the left side of the grid. Similar to Excel.
+You can access most of the functionality by right-clicking instance row on the grid. It is possible to execute most of the commands on multiple instances at once. To do that you need to select them first using row header on the left side of the grid. Similar to Excel.
 
 During logon 2LCS intercepts and saves the cookie to use it for later authentication. This cookie will expire after some time. You will be notified in the app. Then you need to repeat initial steps again.
 
