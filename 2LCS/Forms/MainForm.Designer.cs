@@ -89,6 +89,7 @@
             this.exportProjectDataToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.exportListOfInstancesForAllProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cookieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.cheTabPage = new System.Windows.Forms.TabPage();
             this.saasTabPage = new System.Windows.Forms.TabPage();
@@ -192,7 +193,7 @@
             this.cheDataGridView.Name = "cheDataGridView";
             this.cheDataGridView.ReadOnly = true;
             this.cheDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.cheDataGridView.Size = new System.Drawing.Size(1464, 740);
+            this.cheDataGridView.Size = new System.Drawing.Size(1464, 743);
             this.cheDataGridView.TabIndex = 0;
             this.cheDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_CellMouseDoubleClick);
             this.cheDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_ColumnHeaderMouseClick);
@@ -623,17 +624,18 @@
             this.refreshMenuItem,
             this.customLinksToolStripMenuItem,
             this.exportToolStripMenuItem,
-            this.logoutToolStripMenuItem});
+            this.logoutToolStripMenuItem,
+            this.cookieToolStripMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
-            this.mainMenuStrip.Size = new System.Drawing.Size(1478, 36);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1478, 33);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
             // loginToLcsMenuItem
             // 
             this.loginToLcsMenuItem.Name = "loginToLcsMenuItem";
-            this.loginToLcsMenuItem.Size = new System.Drawing.Size(127, 30);
+            this.loginToLcsMenuItem.Size = new System.Drawing.Size(127, 29);
             this.loginToLcsMenuItem.Text = "&Login to LCS";
             this.loginToLcsMenuItem.Click += new System.EventHandler(this.LoginToLCSMenuItem_Click);
             // 
@@ -641,7 +643,7 @@
             // 
             this.changeProjectMenuItem.Enabled = false;
             this.changeProjectMenuItem.Name = "changeProjectMenuItem";
-            this.changeProjectMenuItem.Size = new System.Drawing.Size(211, 30);
+            this.changeProjectMenuItem.Size = new System.Drawing.Size(211, 29);
             this.changeProjectMenuItem.Text = "&Change project context";
             this.changeProjectMenuItem.Click += new System.EventHandler(this.ChangeProjectMenuItem_Click);
             // 
@@ -649,14 +651,14 @@
             // 
             this.refreshMenuItem.Enabled = false;
             this.refreshMenuItem.Name = "refreshMenuItem";
-            this.refreshMenuItem.Size = new System.Drawing.Size(251, 30);
+            this.refreshMenuItem.Size = new System.Drawing.Size(251, 29);
             this.refreshMenuItem.Text = "&Refresh instances for project";
             this.refreshMenuItem.Click += new System.EventHandler(this.RefreshMenuItem_Click);
             // 
             // customLinksToolStripMenuItem
             // 
             this.customLinksToolStripMenuItem.Name = "customLinksToolStripMenuItem";
-            this.customLinksToolStripMenuItem.Size = new System.Drawing.Size(183, 30);
+            this.customLinksToolStripMenuItem.Size = new System.Drawing.Size(183, 29);
             this.customLinksToolStripMenuItem.Text = "Define c&ustom links";
             this.customLinksToolStripMenuItem.Click += new System.EventHandler(this.CustomLinksToolStripMenuItem_Click);
             // 
@@ -667,7 +669,7 @@
             this.exportListOfInstancesForAllProjectsToolStripMenuItem});
             this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(79, 30);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(79, 29);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // exportProjectDataToolStripMenuItem1
@@ -688,20 +690,27 @@
             // 
             this.logoutToolStripMenuItem.Enabled = false;
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(85, 30);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(85, 29);
             this.logoutToolStripMenuItem.Text = "Logout";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
+            // 
+            // cookieToolStripMenuItem
+            // 
+            this.cookieToolStripMenuItem.Name = "cookieToolStripMenuItem";
+            this.cookieToolStripMenuItem.Size = new System.Drawing.Size(83, 29);
+            this.cookieToolStripMenuItem.Text = "Cookie";
+            this.cookieToolStripMenuItem.Click += new System.EventHandler(this.CookieToolStripMenuItem_Click);
             // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.cheTabPage);
             this.tabControl.Controls.Add(this.saasTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 36);
+            this.tabControl.Location = new System.Drawing.Point(0, 33);
             this.tabControl.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1478, 777);
+            this.tabControl.Size = new System.Drawing.Size(1478, 780);
             this.tabControl.TabIndex = 1;
             // 
             // cheTabPage
@@ -711,7 +720,7 @@
             this.cheTabPage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cheTabPage.Name = "cheTabPage";
             this.cheTabPage.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.cheTabPage.Size = new System.Drawing.Size(1470, 744);
+            this.cheTabPage.Size = new System.Drawing.Size(1470, 747);
             this.cheTabPage.TabIndex = 0;
             this.cheTabPage.Text = "Cloud-hosted instances";
             this.cheTabPage.UseVisualStyleBackColor = true;
@@ -904,7 +913,7 @@
             this.saasLcsInstanceLinksToolStripMenuItem1,
             this.saasDeployPackageToolStripMenuItem});
             this.saasInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.saasInstanceContextMenu.Size = new System.Drawing.Size(273, 325);
+            this.saasInstanceContextMenu.Size = new System.Drawing.Size(273, 292);
             this.saasInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // saasLogonToApplicationToolStripMenuItem
@@ -1391,6 +1400,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn saasTopologyType;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasTopologyVersion;
         private System.Windows.Forms.ToolStripMenuItem saasOpenRdpConnectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cookieToolStripMenuItem;
     }
 }
 

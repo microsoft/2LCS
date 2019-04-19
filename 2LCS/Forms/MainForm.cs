@@ -603,7 +603,6 @@ namespace LCS.Forms
 
         private void ChangeProjectMenuItem_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
             using (var form = new ChooseProject())
             {
                 form.HttpClientHelper = _httpClientHelper;
@@ -638,7 +637,6 @@ namespace LCS.Forms
                     RefreshSaas(false);
                 }
             }
-            Cursor = Cursors.Default;
         }
 
         private void SaasDeleteNsgRule_Click(object sender, EventArgs e)
@@ -1802,16 +1800,32 @@ namespace LCS.Forms
                         var rdcProcess = new Process
                         {
                             StartInfo =
-                        {
-                            FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
-                            Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
-                        }
+                            {
+                                FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
+                                Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
+                            }
                         };
                         rdcProcess.Start();
                     }
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void CookieToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new CookieEdit())
+            {
+                form.ShowDialog();
+                if (form.Cancelled || string.IsNullOrEmpty(form.Cookie)) return;
+                if (form.Cookie == Properties.Settings.Default.cookie) return;
+                Properties.Settings.Default.cookie = form.Cookie;
+                Properties.Settings.Default.projects = "";
+                Properties.Settings.Default.instances = "";
+                Properties.Settings.Default.Save();
+                MessageBox.Show("Application will now restart", "Message", MessageBoxButtons.OK);
+                Application.Restart();
+            }
         }
     }
 

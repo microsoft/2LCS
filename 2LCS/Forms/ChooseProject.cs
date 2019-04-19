@@ -96,7 +96,6 @@ namespace LCS.Forms
 
         private void RefreshButton_Click(object sender, EventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
             var favoritesSaved = new List<LcsProject>();
             if(Projects != null)
             {
@@ -111,7 +110,6 @@ namespace LCS.Forms
             }
             _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             _projectsSource.ResetBindings(false);
-            Cursor = Cursors.Default;
         }
     }
 }

@@ -14,8 +14,7 @@ namespace LCS
         static void Main()
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
-            //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-            
+
             // Copy user settings from previous application version if necessary
             if (Properties.Settings.Default.update)
             {
@@ -40,7 +39,7 @@ namespace LCS
             switch (e.Exception.Source)
             {
                 case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
-                    MessageBox.Show("Please login to LCS again. Your cookie probably expired.");
+                    MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
                     mainForm.SetLoginButtonEnabled();
@@ -48,12 +47,6 @@ namespace LCS
                 default:
                     throw e.Exception;
             }
-        }
-
-        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            // Log the exception, display it, etc
-            //Debug.WriteLine((e.ExceptionObject as Exception).Message);
         }
     }
 }
