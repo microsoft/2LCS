@@ -633,8 +633,8 @@ namespace LCS.Forms
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
                     SetLcsProjectText();
-                    RefreshChe();
-                    RefreshSaas();
+                    RefreshChe(Properties.Settings.Default.autorefresh);
+                    RefreshSaas(Properties.Settings.Default.autorefresh);
                 }
             }
         }
@@ -1825,6 +1825,15 @@ namespace LCS.Forms
                 Properties.Settings.Default.Save();
                 MessageBox.Show("Application will now restart", "Message", MessageBoxButtons.OK);
                 Application.Restart();
+            }
+        }
+
+
+        private void ParametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (var form = new Parameters())
+            {
+                form.ShowDialog();
             }
         }
     }
