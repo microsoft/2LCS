@@ -633,8 +633,8 @@ namespace LCS.Forms
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
                     SetLcsProjectText();
-                    RefreshChe(false);
-                    RefreshSaas(false);
+                    RefreshChe();
+                    RefreshSaas();
                 }
             }
         }
