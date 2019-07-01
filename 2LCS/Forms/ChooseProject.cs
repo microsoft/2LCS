@@ -41,6 +41,11 @@ namespace LCS.Forms
             if (projectsDataGridView.SelectedRows.Count > 0)
             {
                 LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
+                if(LcsProject.RequestPending == true)
+                {
+                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
+                    return;
+                }
             }
             else
             {

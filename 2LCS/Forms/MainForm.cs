@@ -1583,6 +1583,7 @@ namespace LCS.Forms
             Projects = _httpClientHelper.GetAllProjects();
             foreach (var _project in Projects)
             {
+                if (_project.RequestPending == true) continue;
                 _selectedProject = _project;
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 SetLcsProjectText();
