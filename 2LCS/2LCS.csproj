@@ -138,6 +138,12 @@
     <Compile Include="Forms\LogDisplay.Designer.cs">
       <DependentUpon>LogDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Parameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Parameters.Designer.cs">
+      <DependentUpon>Parameters.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\PowerShell.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -206,6 +212,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\LogDisplay.resx">
       <DependentUpon>LogDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Parameters.resx">
+      <DependentUpon>Parameters.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\PowerShell.resx">
       <DependentUpon>PowerShell.cs</DependentUpon>
