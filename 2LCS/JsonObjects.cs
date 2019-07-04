@@ -337,4 +337,99 @@ namespace LCS.JsonObjects
         public string Name { get; set; }
         public List<NSGRule> Rules { get; set; }
     }
+
+    public class Organization
+    {
+        public int OrgId { get; set; }
+        public string Name { get; set; }
+        public int ExternalId { get; set; }
+        public string ADTenantId { get; set; }
+        public int Type { get; set; }
+        public bool IsTemporary { get; set; }
+        public object LicenseSerialNumber { get; set; }
+        public string TelemetryId { get; set; }
+    }
+
+    public class UserProfile
+    {
+        public int UserProfileId { get; set; }
+        public int UserId { get; set; }
+        public string ADUserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public int Role { get; set; }
+        public object RoleDisplayText { get; set; }
+        public bool HasPscs { get; set; }
+        public string Email { get; set; }
+        public string AlternateEmails { get; set; }
+        public int LanguagePreference { get; set; }
+        public string Puid { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public Organization Organization { get; set; }
+        public bool IsDefaultProfile { get; set; }
+        public object ADOauthCode { get; set; }
+        public string DisplayName { get; set; }
+        public List<string> AllEmails { get; set; }
+    }
+
+    public class InvitedBy
+    {
+        public int UserProfileId { get; set; }
+        public int UserId { get; set; }
+        public string ADUserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public int Role { get; set; }
+        public object RoleDisplayText { get; set; }
+        public bool HasPscs { get; set; }
+        public string Email { get; set; }
+        public string AlternateEmails { get; set; }
+        public int LanguagePreference { get; set; }
+        public string Puid { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int CreatedBy { get; set; }
+        public Organization Organization { get; set; }
+        public bool IsDefaultProfile { get; set; }
+        public object ADOauthCode { get; set; }
+        public string DisplayName { get; set; }
+        public List<string> AllEmails { get; set; }
+    }
+
+    public class ProjectUser
+    {
+        public int ProjectUserId { get; set; }
+        public int ProjectId { get; set; }
+        public int UserProfileId { get; set; }
+        public bool IsOwner { get; set; }
+        public int? FunctionalRole { get; set; }
+        public bool? AllowContactByMicrosoft { get; set; }
+        public UserProfile UserProfile { get; set; }
+        public InvitedBy InvitedBy { get; set; }
+        public DateTime UserLastAccess { get; set; }
+        public string InvitationEmail { get; set; }
+        public int InvitationStatus { get; set; }
+        public int UserRole { get; set; }
+        public string UserRoleDisplayText { get; set; }
+        public string InvitationStatusDisplayText { get; set; }
+        public string FunctionalRoleDisplayText { get; set; }
+        public object UserRoleTypeDisplayText { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public int? ModifiedBy { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string LocalCreatedDate { get; set; }
+        public string LocalModifiedDate { get; set; }
+    }
+
+    public class ProjectUsersData
+    {
+        public int StartIndex { get; set; }
+        public int PagingType { get; set; }
+        public int TotalCount { get; set; }
+        public List<ProjectUser> Results { get; set; }
+    }
+
 }

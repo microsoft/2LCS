@@ -596,6 +596,49 @@ namespace LCS
             }
         }
 
+        internal List<ProjectUser> GetAllProjectUsers()
+        {
+            const int numberOfUsersRequested = 50;
+            int numberOfUsersReturned;
+            var allUsers = new List<ProjectUser>();
+            var pageNumber = 0;
+            SetRequestVerificationToken($"{LcsUrl}/V2");
+            do
+            {
+                pageNumber++;
+                var pagingParams = new ProjectsPaging()
+                {
+                    DynamicPaging = new DynamicPaging()
+                    {
+                        StartPosition = pageNumber * numberOfUsersRequested - numberOfUsersRequested,
+                        ItemsRequested = numberOfUsersRequested
+                    }
+                };
+                var pagingParamsJson = JsonConvert.SerializeObject(pagingParams, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+
+                using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
+                {
+                    var result = _httpClient.PostAsync($"{LcsUrl}/RainierProjectUser/RetrieveProjectUsers/{LcsProjectId}", _stringContent).Result;
+                    result.EnsureSuccessStatusCode();
+
+                    var responseBody = result.Content.ReadAsStringAsync().Result;
+                    var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                    if (response.Success && response.Data != null)
+                    {
+                        var users = JsonConvert.DeserializeObject<ProjectUsersData>(response.Data.ToString()).Results;
+                        numberOfUsersReturned = users.Count;
+                        allUsers.AddRange(users);
+                    }
+                    else
+                    {
+                        numberOfUsersReturned = 0;
+                    }
+                }
+            }
+            while (numberOfUsersReturned == numberOfUsersRequested);
+            return allUsers;
+        }
+
         /// <summary>
         /// Dispose
         /// </summary>

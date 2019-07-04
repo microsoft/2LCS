@@ -1284,6 +1284,7 @@ namespace LCS.Forms
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
         {
             RefreshMenuItem_Click(null, null);
+            var projectUsers = _httpClientHelper.GetAllProjectUsers();
 
             notifyIcon.BalloonTipText = $"Exporting data for {_selectedProject.Name} project. Please wait...";
             notifyIcon.BalloonTipTitle = "Exporting LCS project data";
@@ -1291,6 +1292,7 @@ namespace LCS.Forms
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
             Cursor = Cursors.WaitCursor;
+
             using (var document = DocX.Create(_selectedProject.Name + " - 2LCS generated.docx"))
             {
                 document.InsertParagraph(_selectedProject.Name).CapsStyle(CapsStyle.caps).FontSize(40d).SpacingBefore(50d).SpacingAfter(20d);
@@ -1314,6 +1316,46 @@ namespace LCS.Forms
                 var tocParagraph = document.InsertParagraph();
                 tocParagraph.InsertPageBreakAfterSelf();
 
+                if (projectUsers != null && projectUsers.Count > 0)
+                {
+                    var projectUsersHeader = document.InsertParagraph("Project users").Heading(HeadingType.Heading1).FontSize(20d);
+                    projectUsersHeader.SpacingAfter(40d);
+                    //users table
+                    var usersColumnWidths = new float[] { 40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f };
+                    var usersDetailsTable = document.AddTable(1, usersColumnWidths.Length);
+                    usersDetailsTable.SetWidths(usersColumnWidths);
+                    usersDetailsTable.Design = TableDesign.LightListAccent3;
+                    usersDetailsTable.Alignment = Alignment.left;
+                    usersDetailsTable.AutoFit = AutoFit.Contents;
+                    //headers
+                    usersDetailsTable.Rows[0].Cells[0].Paragraphs[0].Append("Name");
+                    usersDetailsTable.Rows[0].Cells[1].Paragraphs[0].Append("Email");
+                    usersDetailsTable.Rows[0].Cells[2].Paragraphs[0].Append("Organization");
+                    usersDetailsTable.Rows[0].Cells[3].Paragraphs[0].Append("Project role");
+                    usersDetailsTable.Rows[0].Cells[4].Paragraphs[0].Append("User role");
+                    usersDetailsTable.Rows[0].Cells[5].Paragraphs[0].Append("Allow service provider to contact");
+                    usersDetailsTable.Rows[0].Cells[6].Paragraphs[0].Append("Added by");
+                    usersDetailsTable.Rows[0].Cells[7].Paragraphs[0].Append("Added by organization");
+                    usersDetailsTable.Rows[0].Cells[8].Paragraphs[0].Append("Created date");
+                    usersDetailsTable.Rows[0].Cells[9].Paragraphs[0].Append("Status");
+
+                    foreach (var user in projectUsers)
+                    {
+                        var row = usersDetailsTable.InsertRow();
+                        row.Cells[0].Paragraphs[0].Append(user.UserProfile.DisplayName);
+                        row.Cells[1].Paragraphs[0].Append(user.UserProfile.Email);
+                        row.Cells[2].Paragraphs[0].Append(user.UserProfile.Organization.Name);
+                        row.Cells[3].Paragraphs[0].Append(user.UserRoleDisplayText);
+                        row.Cells[4].Paragraphs[0].Append(user.FunctionalRoleDisplayText);
+                        row.Cells[5].Paragraphs[0].Append(user.AllowContactByMicrosoft.ToString());
+                        row.Cells[6].Paragraphs[0].Append(user.InvitedBy.DisplayName);
+                        row.Cells[7].Paragraphs[0].Append(user.InvitedBy.Organization.Name);
+                        row.Cells[8].Paragraphs[0].Append(user.CreatedDate.ToString("yyyy-MM-dd H:mm"));
+                        row.Cells[9].Paragraphs[0].Append(user.InvitationStatusDisplayText);
+                    }
+                    projectUsersHeader.InsertTableAfterSelf(usersDetailsTable);
+                    document.InsertParagraph().InsertPageBreakAfterSelf();
+                }
                 if (_saasInstancesList != null && _saasInstancesList.Count > 0)
                 {
                     var instancesHeader = document.InsertParagraph("Microsoft managed instances").Heading(HeadingType.Heading1).FontSize(20d);
