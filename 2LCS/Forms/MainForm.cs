@@ -1342,9 +1342,16 @@ namespace LCS.Forms
                     foreach (var user in projectUsers)
                     {
                         var row = usersDetailsTable.InsertRow();
-                        row.Cells[0].Paragraphs[0].Append(user.UserProfile.DisplayName);
-                        row.Cells[1].Paragraphs[0].Append(user.UserProfile.Email);
-                        row.Cells[2].Paragraphs[0].Append(user.UserProfile.Organization.Name);
+                        if(user.UserProfile != null)
+                        {
+                            row.Cells[0].Paragraphs[0].Append(user.UserProfile.DisplayName);
+                            row.Cells[1].Paragraphs[0].Append(user.UserProfile.Email);
+                            row.Cells[2].Paragraphs[0].Append(user.UserProfile.Organization.Name);
+                        }
+                        else
+                        {
+                            row.Cells[1].Paragraphs[0].Append(user.InvitationEmail);
+                        }
                         row.Cells[3].Paragraphs[0].Append(user.UserRoleDisplayText);
                         row.Cells[4].Paragraphs[0].Append(user.FunctionalRoleDisplayText);
                         row.Cells[5].Paragraphs[0].Append(user.AllowContactByMicrosoft.ToString());
