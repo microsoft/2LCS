@@ -466,7 +466,7 @@ namespace LCS.Forms
 
         private void CreateProjectLinksMenuItems()
         {
-            if(_selectedProject.SharepointSite != null)
+            if(_selectedProject != null && _selectedProject.SharepointSite != null)
             {
                 var cheSharepointSiteMenuItem = new ToolStripMenuItem("Sharepoint site")
                 {
@@ -484,7 +484,7 @@ namespace LCS.Forms
                 (saasInstanceContextMenu.Items["saasLcsProjectLinksToolStripMenuItem"] as ToolStripMenuItem).DropDownItems.Add(saasSharepointSiteMenuItem);
             }
 
-            if (_selectedProject.TfsServerSite != null)
+            if (_selectedProject != null && _selectedProject.TfsServerSite != null)
             {
                 var cheDevOpsSiteMenuItem = new ToolStripMenuItem("Azure DevOps site")
                 {
@@ -861,7 +861,7 @@ namespace LCS.Forms
                         row.Cells[5].Paragraphs[0].Append(user.AllowContactByMicrosoft.ToString());
                         row.Cells[6].Paragraphs[0].Append(user.InvitedBy.DisplayName);
                         row.Cells[7].Paragraphs[0].Append(user.InvitedBy.Organization.Name);
-                        row.Cells[8].Paragraphs[0].Append(user.CreatedDate.ToString("yyyy-MM-dd H:mm"));
+                        row.Cells[8].Paragraphs[0].Append(user.CreatedDate?.ToString("yyyy-MM-dd H:mm"));
                         row.Cells[9].Paragraphs[0].Append(user.InvitationStatusDisplayText);
                     }
                     projectUsersHeader.InsertTableAfterSelf(usersDetailsTable);
@@ -891,7 +891,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(saasInstance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn.ToString("yyyy-MM-dd H:mm"));
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn?.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(saasInstance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
@@ -1011,7 +1011,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(instance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn.ToString("yyyy-MM-dd H:mm"));
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn?.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(instance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
