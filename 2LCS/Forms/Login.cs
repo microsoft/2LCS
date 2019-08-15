@@ -20,7 +20,7 @@ namespace LCS.Forms
 
         private void WebBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            if (e.Url.ToString().StartsWith("https://lcs.dynamics.com/V2"))
+            if (e.Url.ToString().StartsWith("https://lcs.dynamics.com/v2"))
             {
                 Cancelled = false;
                 Close();
