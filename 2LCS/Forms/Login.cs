@@ -5,11 +5,12 @@ namespace LCS.Forms
 {
     public partial class Login : Form
     {
-        internal bool Cancelled { get; private set; }
         public Login()
         {
             InitializeComponent();
         }
+
+        internal bool Cancelled { get; private set; }
 
         private void Login_Load(object sender, EventArgs e)
         {
@@ -19,7 +20,7 @@ namespace LCS.Forms
 
         private void WebBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            if (e.Url.ToString().StartsWith("https://lcs.dynamics.com/v2"))
+            if (e.Url.ToString().StartsWith("https://lcs.dynamics.com/V2"))
             {
                 Cancelled = false;
                 Close();

@@ -9,18 +9,18 @@ namespace LCS.Forms
 {
     public partial class ChooseMachine : Form
     {
-        internal bool Cancelled { get; private set; }
-        public List<RDPConnectionDetails> RDPConnections;
         public RDPConnectionDetails RDPConnection;
-        private bool _sortAscending;
-        readonly BindingSource _rdpConnectionsSource = new BindingSource();
-
+        public List<RDPConnectionDetails> RDPConnections;
         private const int CpNocloseButton = 0x200;
+        private readonly BindingSource _rdpConnectionsSource = new BindingSource();
+        private bool _sortAscending;
 
         public ChooseMachine()
         {
             InitializeComponent();
         }
+
+        internal bool Cancelled { get; private set; }
 
         protected override CreateParams CreateParams
         {
@@ -29,6 +29,28 @@ namespace LCS.Forms
                 var myCp = base.CreateParams;
                 myCp.ClassStyle |= CpNocloseButton;
                 return myCp;
+            }
+        }
+
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            Cancelled = true;
+            Close();
+        }
+
+        private void ChoosePackage_Load(object sender, EventArgs e)
+        {
+            rdpConnectionsDataGridView.AutoGenerateColumns = false;
+            if (!SystemInformation.TerminalServerSession)
+            {
+                var dgvType = rdpConnectionsDataGridView.GetType();
+                var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                if (pi != null) pi.SetValue(rdpConnectionsDataGridView, true, null);
+            }
+            rdpConnectionsDataGridView.DataSource = _rdpConnectionsSource;
+            if (RDPConnections != null)
+            {
+                _rdpConnectionsSource.DataSource = RDPConnections.OrderBy(f => f.Machine);
             }
         }
 
@@ -45,35 +67,6 @@ namespace LCS.Forms
             Close();
         }
 
-        private void CancelButton_Click(object sender, EventArgs e)
-        {
-            Cancelled = true;
-            Close();
-        }
-
-        private void ChoosePackage_Load(object sender, EventArgs e)
-        { 
-            rdpConnectionsDataGridView.AutoGenerateColumns = false;
-            if (!SystemInformation.TerminalServerSession)
-            {
-                var dgvType = rdpConnectionsDataGridView.GetType();
-                var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-                if (pi != null) pi.SetValue(rdpConnectionsDataGridView, true, null);
-            }
-            rdpConnectionsDataGridView.DataSource = _rdpConnectionsSource;
-            if(RDPConnections != null)
-            {
-                _rdpConnectionsSource.DataSource = RDPConnections.OrderBy(f => f.Machine);
-            }
-        }
-
-        private void PackagesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            if (rdpConnectionsDataGridView.DataSource == null) return;
-            _rdpConnectionsSource.DataSource = _sortAscending ? RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
-            _sortAscending = !_sortAscending;
-        }
-
         private void PackagesDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (rdpConnectionsDataGridView.SelectedRows.Count > 0)
@@ -85,6 +78,13 @@ namespace LCS.Forms
                 Cancelled = true;
             }
             Close();
+        }
+
+        private void PackagesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (rdpConnectionsDataGridView.DataSource == null) return;
+            _rdpConnectionsSource.DataSource = _sortAscending ? RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _sortAscending = !_sortAscending;
         }
     }
 }

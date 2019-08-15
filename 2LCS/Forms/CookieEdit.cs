@@ -5,14 +5,15 @@ namespace LCS.Forms
 {
     public partial class CookieEdit : Form
     {
-        public bool Cancelled { get; private set; }
-        public string Cookie { get; private set; }
         private const int CpNocloseButton = 0x200;
 
         public CookieEdit()
         {
             InitializeComponent();
         }
+
+        public bool Cancelled { get; private set; }
+        public string Cookie { get; private set; }
 
         protected override CreateParams CreateParams
         {
@@ -24,12 +25,6 @@ namespace LCS.Forms
             }
         }
 
-        private void OkButton_Click(object sender, EventArgs e)
-        {
-            Cookie = cookieTextBox.Text;
-            Close();
-        }
-
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Cancelled = true;
@@ -39,6 +34,12 @@ namespace LCS.Forms
         private void CookieEdit_Load(object sender, EventArgs e)
         {
             cookieTextBox.Text = Properties.Settings.Default.cookie;
+        }
+
+        private void OkButton_Click(object sender, EventArgs e)
+        {
+            Cookie = cookieTextBox.Text;
+            Close();
         }
     }
 }

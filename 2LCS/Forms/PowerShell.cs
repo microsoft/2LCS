@@ -7,12 +7,12 @@ namespace LCS.Forms
 {
     public partial class PowerShell : Form
     {
-        public Dictionary<string, string> CredentialsDict { get; set; }
-
         public PowerShell()
         {
             InitializeComponent();
         }
+
+        public Dictionary<string, string> CredentialsDict { get; set; }
 
         private void PowerShell_Load(object sender, EventArgs e)
         {
@@ -24,13 +24,13 @@ namespace LCS.Forms
 
             foreach (var item in CredentialsDict)
             {
-                if(item.Key.ToString().Contains("\\"))
+                if (item.Key.ToString().Contains("\\"))
                 {
                     continue;
                 }
 
-                var splitIndex = item.Key.ToString().LastIndexOf("-") +1 ;
-                var name = item.Key.ToString().Substring(splitIndex , item.Key.ToString().Length - splitIndex);
+                var splitIndex = item.Key.ToString().LastIndexOf("-") + 1;
+                var name = item.Key.ToString().Substring(splitIndex, item.Key.ToString().Length - splitIndex);
                 var value = item.Value;
 
                 sbv1.AppendLine($"$params.{name} = \"{value}\"");

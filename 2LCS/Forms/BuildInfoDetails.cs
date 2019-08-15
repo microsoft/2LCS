@@ -9,8 +9,8 @@ namespace LCS.Forms
     public partial class BuildInfoDetailsForm : Form
     {
         public BuildInfoDetails BuildInfo;
+        private readonly BindingSource _buildInfoSource = new BindingSource();
         private bool _sortAscending;
-        readonly BindingSource _buildInfoSource = new BindingSource();
 
         public BuildInfoDetailsForm()
         {

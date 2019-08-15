@@ -6,11 +6,12 @@ namespace LCS.Forms
 {
     public partial class Credentials : Form
     {
-        public Dictionary<string, string>CredentialsDict { get; set; }
         public Credentials()
         {
             InitializeComponent();
         }
+
+        public Dictionary<string, string> CredentialsDict { get; set; }
 
         private void Credentials_Load(object sender, EventArgs e)
         {

@@ -5,11 +5,12 @@ namespace LCS.Forms
 {
     public partial class LogDisplay : Form
     {
-        public string LogEntries { get; set; }
         public LogDisplay()
         {
             InitializeComponent();
         }
+
+        public string LogEntries { get; set; }
 
         private void PowerShell_Load(object sender, EventArgs e)
         {

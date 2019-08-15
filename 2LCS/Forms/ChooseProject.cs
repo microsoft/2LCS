@@ -10,19 +10,19 @@ namespace LCS.Forms
 {
     public partial class ChooseProject : Form
     {
-        internal bool Cancelled { get; private set; }
         public List<LcsProject> Projects;
-        internal LcsProject LcsProject { get; private set; }
-        internal HttpClientHelper HttpClientHelper { get; set; }
-        private bool _sortAscending;
-        readonly BindingSource _projectsSource = new BindingSource();
-
         private const int CpNocloseButton = 0x200;
+        private readonly BindingSource _projectsSource = new BindingSource();
+        private bool _sortAscending;
 
         public ChooseProject()
         {
             InitializeComponent();
         }
+
+        internal bool Cancelled { get; private set; }
+        internal HttpClientHelper HttpClientHelper { get; set; }
+        internal LcsProject LcsProject { get; private set; }
 
         protected override CreateParams CreateParams
         {
@@ -32,26 +32,6 @@ namespace LCS.Forms
                 myCp.ClassStyle |= CpNocloseButton;
                 return myCp;
             }
-        }
-
-        private void OkButton_Click(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-            Properties.Settings.Default.Save();
-            if (projectsDataGridView.SelectedRows.Count > 0)
-            {
-                LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
-                if(LcsProject.RequestPending == true)
-                {
-                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
-                    return;
-                }
-            }
-            else
-            {
-                Cancelled = true;
-            }
-            Close();
         }
 
         private void CancelButton_Click(object sender, EventArgs e)
@@ -71,10 +51,48 @@ namespace LCS.Forms
             }
             projectsDataGridView.DataSource = _projectsSource;
             Projects = JsonConvert.DeserializeObject<List<LcsProject>>(Properties.Settings.Default.projects);
-            if(Projects != null)
+            if (Projects != null)
             {
                 _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             }
+        }
+
+        private void OkButton_Click(object sender, EventArgs e)
+        {
+            if (projectsDataGridView.SelectedRows.Count > 0)
+            {
+                LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
+                if (LcsProject.RequestPending == true)
+                {
+                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
+                    return;
+                }
+                UpdateProjectLinks();
+            }
+            else
+            {
+                Cancelled = true;
+            }
+            Close();
+        }
+
+        private void ProjectsDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (projectsDataGridView.SelectedRows.Count > 0)
+            {
+                LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
+                if (LcsProject.RequestPending == true)
+                {
+                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
+                    return;
+                }
+                UpdateProjectLinks();
+            }
+            else
+            {
+                Cancelled = true;
+            }
+            Close();
         }
 
         private void ProjectsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -84,37 +102,40 @@ namespace LCS.Forms
             _sortAscending = !_sortAscending;
         }
 
-        private void ProjectsDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-            Properties.Settings.Default.Save();
-            if (projectsDataGridView.SelectedRows.Count > 0)
-            {
-                LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
-            }
-            else
-            {
-                Cancelled = true;
-            }
-            Close();
-        }
-
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             var favoritesSaved = new List<LcsProject>();
-            if(Projects != null)
+            if (Projects != null)
             {
                 favoritesSaved = Projects.Where(x => x.Favorite == true).ToList();
             }
             Projects = HttpClientHelper.GetAllProjects();
-            foreach(var savedProject in favoritesSaved)
+            foreach (var savedProject in favoritesSaved)
             {
                 Projects.Where(newProject => newProject.Id == savedProject.Id)
-                    .Select(newProject => { newProject.Favorite = true; return newProject;} )
+                    .Select(newProject => { newProject.Favorite = true; return newProject; })
                         .ToList();
             }
             _projectsSource.DataSource = Projects.OrderBy(f => f.Favorite).ThenBy(i => i.Id).Reverse();
             _projectsSource.ResetBindings(false);
+        }
+
+        private void UpdateProjectLinks()
+        {
+            var projectDetails = HttpClientHelper.GetProject(LcsProject.Id.ToString());
+            if (projectDetails != null)
+            {
+                var project = Projects.FirstOrDefault(prj => prj.Id == LcsProject.Id);
+                project.SharepointSite = projectDetails.Settings.SharepointSite;
+                project.TfsServerSite = projectDetails.Settings.TfsServerSite;
+                project.TfsProjectName = projectDetails.Settings.TfsProjectName;
+                Properties.Settings.Default.projects = JsonConvert.SerializeObject(Projects, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                Properties.Settings.Default.Save();
+
+                LcsProject.SharepointSite = projectDetails.Settings.SharepointSite;
+                LcsProject.TfsServerSite = projectDetails.Settings.TfsServerSite;
+                LcsProject.TfsProjectName = projectDetails.Settings.TfsProjectName;
+            }
         }
     }
 }

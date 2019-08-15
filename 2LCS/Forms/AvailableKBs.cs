@@ -10,8 +10,8 @@ namespace LCS.Forms
     public partial class AvailableKBs : Form
     {
         public List<Hotfix> Hotfixes;
+        private readonly BindingSource _hotfixesSource = new BindingSource();
         private bool _sortAscending;
-        readonly BindingSource _hotfixesSource = new BindingSource();
 
         public AvailableKBs()
         {
