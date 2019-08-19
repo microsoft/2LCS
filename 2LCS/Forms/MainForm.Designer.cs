@@ -35,9 +35,10 @@
             this.cheDisplayName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheDeploymentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheDeploymentAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cheCurrentApplicationBuildVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cheCurrentApplicationReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheCurrentPlatformVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheCurrentPlatformReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cheCurrentApplicationReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheBuildInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheDeployedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cheDeployedOn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,6 +70,9 @@
             this.cheDetailedVersionInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cheEnvironmenChangeHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cheDataPackagesHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cheLogonToPointOfSaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cheRetailServerURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cheLcsProjectLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cheServiceRequestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cheSupportIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,20 +99,6 @@
             this.cheTabPage = new System.Windows.Forms.TabPage();
             this.saasTabPage = new System.Windows.Forms.TabPage();
             this.saasDataGridView = new System.Windows.Forms.DataGridView();
-            this.saasInstanceId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasEnvironmentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasDisplayName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasDeploymentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasDeploymentAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasCurrentPlatformVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasCurrentPlatformReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasCurrentApplicationReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasBuildInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasDeployedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasDeployedOn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasTopologyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasTopologyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.saasTopologyVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.saasInstanceContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saasLogonToApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasOpenRdpConnectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -137,6 +127,9 @@
             this.saasDetailedVersionInformationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasEnvironmentChangeHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasDataPackagesHistoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasLogonToPointOfSaleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasRetailServerURLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasLcsProjectLinksToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasServiceRequestsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasSupportIssuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -152,6 +145,21 @@
             this.projectDescriptionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.saasInstanceId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasEnvironmentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasDisplayName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasDeploymentStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasDeploymentAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasCurrentApplicationBuildVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasCurrentApplicationReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasCurrentPlatformVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasCurrentPlatformReleaseName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasBuildInfo = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasDeployedBy = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasDeployedOn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasTopologyName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasTopologyType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.saasTopologyVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).BeginInit();
             this.cheInstanceContextMenu.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
@@ -178,9 +186,10 @@
             this.cheDisplayName,
             this.cheDeploymentStatus,
             this.cheDeploymentAction,
+            this.cheCurrentApplicationBuildVersion,
+            this.cheCurrentApplicationReleaseName,
             this.cheCurrentPlatformVersion,
             this.cheCurrentPlatformReleaseName,
-            this.cheCurrentApplicationReleaseName,
             this.cheBuildInfo,
             this.cheDeployedBy,
             this.cheDeployedOn,
@@ -243,7 +252,26 @@
             this.cheDeploymentAction.MinimumWidth = 8;
             this.cheDeploymentAction.Name = "cheDeploymentAction";
             this.cheDeploymentAction.ReadOnly = true;
+            this.cheDeploymentAction.Visible = false;
             this.cheDeploymentAction.Width = 199;
+            // 
+            // cheCurrentApplicationBuildVersion
+            // 
+            this.cheCurrentApplicationBuildVersion.DataPropertyName = "CurrentApplicationBuildVersion";
+            this.cheCurrentApplicationBuildVersion.HeaderText = "Current Application Build Version";
+            this.cheCurrentApplicationBuildVersion.MinimumWidth = 9;
+            this.cheCurrentApplicationBuildVersion.Name = "cheCurrentApplicationBuildVersion";
+            this.cheCurrentApplicationBuildVersion.ReadOnly = true;
+            this.cheCurrentApplicationBuildVersion.Width = 248;
+            // 
+            // cheCurrentApplicationReleaseName
+            // 
+            this.cheCurrentApplicationReleaseName.DataPropertyName = "CurrentApplicationReleaseName";
+            this.cheCurrentApplicationReleaseName.HeaderText = "Current Application Release Name";
+            this.cheCurrentApplicationReleaseName.MinimumWidth = 8;
+            this.cheCurrentApplicationReleaseName.Name = "cheCurrentApplicationReleaseName";
+            this.cheCurrentApplicationReleaseName.ReadOnly = true;
+            this.cheCurrentApplicationReleaseName.Width = 274;
             // 
             // cheCurrentPlatformVersion
             // 
@@ -262,15 +290,6 @@
             this.cheCurrentPlatformReleaseName.Name = "cheCurrentPlatformReleaseName";
             this.cheCurrentPlatformReleaseName.ReadOnly = true;
             this.cheCurrentPlatformReleaseName.Width = 251;
-            // 
-            // cheCurrentApplicationReleaseName
-            // 
-            this.cheCurrentApplicationReleaseName.DataPropertyName = "CurrentApplicationReleaseName";
-            this.cheCurrentApplicationReleaseName.HeaderText = "Current Application Release Name";
-            this.cheCurrentApplicationReleaseName.MinimumWidth = 8;
-            this.cheCurrentApplicationReleaseName.Name = "cheCurrentApplicationReleaseName";
-            this.cheCurrentApplicationReleaseName.ReadOnly = true;
-            this.cheCurrentApplicationReleaseName.Width = 274;
             // 
             // cheBuildInfo
             // 
@@ -489,7 +508,10 @@
             this.cheEnvironmentMonitoringToolStripMenuItem,
             this.cheDetailedVersionInformationToolStripMenuItem,
             this.cheEnvironmenChangeHistoryToolStripMenuItem,
-            this.cheDataPackagesHistoryToolStripMenuItem});
+            this.cheDataPackagesHistoryToolStripMenuItem,
+            this.cheLogonToPointOfSaleToolStripMenuItem,
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem,
+            this.cheRetailServerURLToolStripMenuItem});
             this.cheLcsInstanceLinksToolStripMenuItem.Name = "cheLcsInstanceLinksToolStripMenuItem";
             this.cheLcsInstanceLinksToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
             this.cheLcsInstanceLinksToolStripMenuItem.Text = "LCS instance links";
@@ -497,37 +519,58 @@
             // cheInstanceDetailsToolStripMenuItem
             // 
             this.cheInstanceDetailsToolStripMenuItem.Name = "cheInstanceDetailsToolStripMenuItem";
-            this.cheInstanceDetailsToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.cheInstanceDetailsToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.cheInstanceDetailsToolStripMenuItem.Text = "Instance details";
             this.cheInstanceDetailsToolStripMenuItem.Click += new System.EventHandler(this.InstanceDetailsToolStripMenuItem_Click);
             // 
             // cheEnvironmentMonitoringToolStripMenuItem
             // 
             this.cheEnvironmentMonitoringToolStripMenuItem.Name = "cheEnvironmentMonitoringToolStripMenuItem";
-            this.cheEnvironmentMonitoringToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.cheEnvironmentMonitoringToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.cheEnvironmentMonitoringToolStripMenuItem.Text = "Environment monitoring";
             this.cheEnvironmentMonitoringToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentMonitoringToolStripMenuItem_Click);
             // 
             // cheDetailedVersionInformationToolStripMenuItem
             // 
             this.cheDetailedVersionInformationToolStripMenuItem.Name = "cheDetailedVersionInformationToolStripMenuItem";
-            this.cheDetailedVersionInformationToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.cheDetailedVersionInformationToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.cheDetailedVersionInformationToolStripMenuItem.Text = "Detailed version information";
             this.cheDetailedVersionInformationToolStripMenuItem.Click += new System.EventHandler(this.DetailedVersionInformationToolStripMenuItem_Click);
             // 
             // cheEnvironmenChangeHistoryToolStripMenuItem
             // 
             this.cheEnvironmenChangeHistoryToolStripMenuItem.Name = "cheEnvironmenChangeHistoryToolStripMenuItem";
-            this.cheEnvironmenChangeHistoryToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.cheEnvironmenChangeHistoryToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.cheEnvironmenChangeHistoryToolStripMenuItem.Text = "Environment change history";
             this.cheEnvironmenChangeHistoryToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentChangeHistoryToolStripMenuItem_Click);
             // 
             // cheDataPackagesHistoryToolStripMenuItem
             // 
             this.cheDataPackagesHistoryToolStripMenuItem.Name = "cheDataPackagesHistoryToolStripMenuItem";
-            this.cheDataPackagesHistoryToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.cheDataPackagesHistoryToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.cheDataPackagesHistoryToolStripMenuItem.Text = "Data packages history";
             this.cheDataPackagesHistoryToolStripMenuItem.Click += new System.EventHandler(this.DataPackagesHistoryToolStripMenuItem_Click);
+            // 
+            // cheLogonToPointOfSaleToolStripMenuItem
+            // 
+            this.cheLogonToPointOfSaleToolStripMenuItem.Name = "cheLogonToPointOfSaleToolStripMenuItem";
+            this.cheLogonToPointOfSaleToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.cheLogonToPointOfSaleToolStripMenuItem.Text = "Logon to Point of Sale";
+            this.cheLogonToPointOfSaleToolStripMenuItem.Click += new System.EventHandler(this.LogonToPointOfSaleToolStripMenuItem_Click);
+            // 
+            // cheLaunchDynamicsRetailStorefrontToolStripMenuItem
+            // 
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem.Name = "cheLaunchDynamicsRetailStorefrontToolStripMenuItem";
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem.Text = "Launch Dynamics Retail Storefront";
+            this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem.Click += new System.EventHandler(this.LaunchDynamicsRetailStorefrontToolStripMenuItem_Click);
+            // 
+            // cheRetailServerURLToolStripMenuItem
+            // 
+            this.cheRetailServerURLToolStripMenuItem.Name = "cheRetailServerURLToolStripMenuItem";
+            this.cheRetailServerURLToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.cheRetailServerURLToolStripMenuItem.Text = "Retail Server URL";
+            this.cheRetailServerURLToolStripMenuItem.Click += new System.EventHandler(this.RetailServerURLToolStripMenuItem_Click);
             // 
             // cheLcsProjectLinksToolStripMenuItem
             // 
@@ -742,7 +785,7 @@
             this.saasTabPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.saasTabPage.Name = "saasTabPage";
             this.saasTabPage.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.saasTabPage.Size = new System.Drawing.Size(1799, 896);
+            this.saasTabPage.Size = new System.Drawing.Size(1799, 898);
             this.saasTabPage.TabIndex = 1;
             this.saasTabPage.Text = "MS-hosted environments";
             this.saasTabPage.UseVisualStyleBackColor = true;
@@ -762,9 +805,10 @@
             this.saasDisplayName,
             this.saasDeploymentStatus,
             this.saasDeploymentAction,
+            this.saasCurrentApplicationBuildVersion,
+            this.saasCurrentApplicationReleaseName,
             this.saasCurrentPlatformVersion,
             this.saasCurrentPlatformReleaseName,
-            this.saasCurrentApplicationReleaseName,
             this.saasBuildInfo,
             this.saasDeployedBy,
             this.saasDeployedOn,
@@ -778,136 +822,10 @@
             this.saasDataGridView.Name = "saasDataGridView";
             this.saasDataGridView.ReadOnly = true;
             this.saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.saasDataGridView.Size = new System.Drawing.Size(1791, 890);
+            this.saasDataGridView.Size = new System.Drawing.Size(1791, 892);
             this.saasDataGridView.TabIndex = 1;
             this.saasDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SaasDataGridView_ColumnHeaderMouseClick);
             this.saasDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView_MouseDown);
-            // 
-            // saasInstanceId
-            // 
-            this.saasInstanceId.DataPropertyName = "InstanceId";
-            this.saasInstanceId.HeaderText = "Instance Id";
-            this.saasInstanceId.MinimumWidth = 8;
-            this.saasInstanceId.Name = "saasInstanceId";
-            this.saasInstanceId.ReadOnly = true;
-            this.saasInstanceId.Width = 137;
-            // 
-            // saasEnvironmentId
-            // 
-            this.saasEnvironmentId.DataPropertyName = "EnvironmentId";
-            this.saasEnvironmentId.HeaderText = "Environment Id";
-            this.saasEnvironmentId.MinimumWidth = 8;
-            this.saasEnvironmentId.Name = "saasEnvironmentId";
-            this.saasEnvironmentId.ReadOnly = true;
-            this.saasEnvironmentId.Width = 168;
-            // 
-            // saasDisplayName
-            // 
-            this.saasDisplayName.DataPropertyName = "DisplayName";
-            this.saasDisplayName.HeaderText = "Display Name";
-            this.saasDisplayName.MinimumWidth = 8;
-            this.saasDisplayName.Name = "saasDisplayName";
-            this.saasDisplayName.ReadOnly = true;
-            this.saasDisplayName.Width = 160;
-            // 
-            // saasDeploymentStatus
-            // 
-            this.saasDeploymentStatus.DataPropertyName = "DeploymentStatus";
-            this.saasDeploymentStatus.HeaderText = "Deployment Status";
-            this.saasDeploymentStatus.MinimumWidth = 8;
-            this.saasDeploymentStatus.Name = "saasDeploymentStatus";
-            this.saasDeploymentStatus.ReadOnly = true;
-            this.saasDeploymentStatus.Width = 200;
-            // 
-            // saasDeploymentAction
-            // 
-            this.saasDeploymentAction.DataPropertyName = "DeploymentAction";
-            this.saasDeploymentAction.HeaderText = "Deployment Action";
-            this.saasDeploymentAction.MinimumWidth = 8;
-            this.saasDeploymentAction.Name = "saasDeploymentAction";
-            this.saasDeploymentAction.ReadOnly = true;
-            this.saasDeploymentAction.Width = 199;
-            // 
-            // saasCurrentPlatformVersion
-            // 
-            this.saasCurrentPlatformVersion.DataPropertyName = "CurrentPlatformVersion";
-            this.saasCurrentPlatformVersion.HeaderText = "Current Platform Version";
-            this.saasCurrentPlatformVersion.MinimumWidth = 8;
-            this.saasCurrentPlatformVersion.Name = "saasCurrentPlatformVersion";
-            this.saasCurrentPlatformVersion.ReadOnly = true;
-            this.saasCurrentPlatformVersion.Width = 243;
-            // 
-            // saasCurrentPlatformReleaseName
-            // 
-            this.saasCurrentPlatformReleaseName.DataPropertyName = "CurrentPlatformReleaseName";
-            this.saasCurrentPlatformReleaseName.HeaderText = "Current Platform Release Name";
-            this.saasCurrentPlatformReleaseName.MinimumWidth = 8;
-            this.saasCurrentPlatformReleaseName.Name = "saasCurrentPlatformReleaseName";
-            this.saasCurrentPlatformReleaseName.ReadOnly = true;
-            this.saasCurrentPlatformReleaseName.Width = 251;
-            // 
-            // saasCurrentApplicationReleaseName
-            // 
-            this.saasCurrentApplicationReleaseName.DataPropertyName = "CurrentApplicationReleaseName";
-            this.saasCurrentApplicationReleaseName.HeaderText = "Current Application Release Name";
-            this.saasCurrentApplicationReleaseName.MinimumWidth = 8;
-            this.saasCurrentApplicationReleaseName.Name = "saasCurrentApplicationReleaseName";
-            this.saasCurrentApplicationReleaseName.ReadOnly = true;
-            this.saasCurrentApplicationReleaseName.Width = 274;
-            // 
-            // saasBuildInfo
-            // 
-            this.saasBuildInfo.DataPropertyName = "BuildInfo";
-            this.saasBuildInfo.HeaderText = "Build Info";
-            this.saasBuildInfo.MinimumWidth = 8;
-            this.saasBuildInfo.Name = "saasBuildInfo";
-            this.saasBuildInfo.ReadOnly = true;
-            this.saasBuildInfo.Width = 123;
-            // 
-            // saasDeployedBy
-            // 
-            this.saasDeployedBy.DataPropertyName = "DeployedBy";
-            this.saasDeployedBy.HeaderText = "Deployed By";
-            this.saasDeployedBy.MinimumWidth = 8;
-            this.saasDeployedBy.Name = "saasDeployedBy";
-            this.saasDeployedBy.ReadOnly = true;
-            this.saasDeployedBy.Width = 151;
-            // 
-            // saasDeployedOn
-            // 
-            this.saasDeployedOn.DataPropertyName = "DeployedOn";
-            this.saasDeployedOn.HeaderText = "Deployed On";
-            this.saasDeployedOn.MinimumWidth = 8;
-            this.saasDeployedOn.Name = "saasDeployedOn";
-            this.saasDeployedOn.ReadOnly = true;
-            this.saasDeployedOn.Width = 155;
-            // 
-            // saasTopologyName
-            // 
-            this.saasTopologyName.DataPropertyName = "TopologyName";
-            this.saasTopologyName.HeaderText = "Topology Name";
-            this.saasTopologyName.MinimumWidth = 8;
-            this.saasTopologyName.Name = "saasTopologyName";
-            this.saasTopologyName.ReadOnly = true;
-            this.saasTopologyName.Width = 176;
-            // 
-            // saasTopologyType
-            // 
-            this.saasTopologyType.DataPropertyName = "TopologyType";
-            this.saasTopologyType.HeaderText = "Topology Type";
-            this.saasTopologyType.MinimumWidth = 8;
-            this.saasTopologyType.Name = "saasTopologyType";
-            this.saasTopologyType.ReadOnly = true;
-            this.saasTopologyType.Width = 170;
-            // 
-            // saasTopologyVersion
-            // 
-            this.saasTopologyVersion.DataPropertyName = "TopologyVersion";
-            this.saasTopologyVersion.HeaderText = "Topology Version";
-            this.saasTopologyVersion.MinimumWidth = 8;
-            this.saasTopologyVersion.Name = "saasTopologyVersion";
-            this.saasTopologyVersion.ReadOnly = true;
-            this.saasTopologyVersion.Width = 190;
             // 
             // saasInstanceContextMenu
             // 
@@ -1096,7 +1014,10 @@
             this.saasEnvironmentMonitoringToolStripMenuItem,
             this.saasDetailedVersionInformationToolStripMenuItem,
             this.saasEnvironmentChangeHistoryToolStripMenuItem,
-            this.saasDataPackagesHistoryToolStripMenuItem});
+            this.saasDataPackagesHistoryToolStripMenuItem,
+            this.saasLogonToPointOfSaleToolStripMenuItem,
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem,
+            this.saasRetailServerURLToolStripMenuItem});
             this.saasLcsInstanceLinksToolStripMenuItem1.Name = "saasLcsInstanceLinksToolStripMenuItem1";
             this.saasLcsInstanceLinksToolStripMenuItem1.Size = new System.Drawing.Size(310, 36);
             this.saasLcsInstanceLinksToolStripMenuItem1.Text = "LCS instance links";
@@ -1104,37 +1025,58 @@
             // saasInstanceDetailsToolStripMenuItem
             // 
             this.saasInstanceDetailsToolStripMenuItem.Name = "saasInstanceDetailsToolStripMenuItem";
-            this.saasInstanceDetailsToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.saasInstanceDetailsToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.saasInstanceDetailsToolStripMenuItem.Text = "Instance details";
             this.saasInstanceDetailsToolStripMenuItem.Click += new System.EventHandler(this.InstanceDetailsToolStripMenuItem_Click);
             // 
             // saasEnvironmentMonitoringToolStripMenuItem
             // 
             this.saasEnvironmentMonitoringToolStripMenuItem.Name = "saasEnvironmentMonitoringToolStripMenuItem";
-            this.saasEnvironmentMonitoringToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.saasEnvironmentMonitoringToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.saasEnvironmentMonitoringToolStripMenuItem.Text = "Environment monitoring";
             this.saasEnvironmentMonitoringToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentMonitoringToolStripMenuItem_Click);
             // 
             // saasDetailedVersionInformationToolStripMenuItem
             // 
             this.saasDetailedVersionInformationToolStripMenuItem.Name = "saasDetailedVersionInformationToolStripMenuItem";
-            this.saasDetailedVersionInformationToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.saasDetailedVersionInformationToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.saasDetailedVersionInformationToolStripMenuItem.Text = "Detailed version information";
             this.saasDetailedVersionInformationToolStripMenuItem.Click += new System.EventHandler(this.DetailedVersionInformationToolStripMenuItem_Click);
             // 
             // saasEnvironmentChangeHistoryToolStripMenuItem
             // 
             this.saasEnvironmentChangeHistoryToolStripMenuItem.Name = "saasEnvironmentChangeHistoryToolStripMenuItem";
-            this.saasEnvironmentChangeHistoryToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.saasEnvironmentChangeHistoryToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.saasEnvironmentChangeHistoryToolStripMenuItem.Text = "Environment change history";
             this.saasEnvironmentChangeHistoryToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentChangeHistoryToolStripMenuItem_Click);
             // 
             // saasDataPackagesHistoryToolStripMenuItem
             // 
             this.saasDataPackagesHistoryToolStripMenuItem.Name = "saasDataPackagesHistoryToolStripMenuItem";
-            this.saasDataPackagesHistoryToolStripMenuItem.Size = new System.Drawing.Size(394, 40);
+            this.saasDataPackagesHistoryToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
             this.saasDataPackagesHistoryToolStripMenuItem.Text = "Data packages history";
             this.saasDataPackagesHistoryToolStripMenuItem.Click += new System.EventHandler(this.DataPackagesHistoryToolStripMenuItem_Click);
+            // 
+            // saasLogonToPointOfSaleToolStripMenuItem
+            // 
+            this.saasLogonToPointOfSaleToolStripMenuItem.Name = "saasLogonToPointOfSaleToolStripMenuItem";
+            this.saasLogonToPointOfSaleToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.saasLogonToPointOfSaleToolStripMenuItem.Text = "Logon to Point of Sale";
+            this.saasLogonToPointOfSaleToolStripMenuItem.Click += new System.EventHandler(this.LogonToPointOfSaleToolStripMenuItem_Click);
+            // 
+            // saasLaunchDynamicsRetailStorefrontToolStripMenuItem
+            // 
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem.Name = "saasLaunchDynamicsRetailStorefrontToolStripMenuItem";
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem.Text = "Launch Dynamics Retail Storefront";
+            this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem.Click += new System.EventHandler(this.LaunchDynamicsRetailStorefrontToolStripMenuItem_Click);
+            // 
+            // saasRetailServerURLToolStripMenuItem
+            // 
+            this.saasRetailServerURLToolStripMenuItem.Name = "saasRetailServerURLToolStripMenuItem";
+            this.saasRetailServerURLToolStripMenuItem.Size = new System.Drawing.Size(449, 40);
+            this.saasRetailServerURLToolStripMenuItem.Text = "Retail Server URL";
+            this.saasRetailServerURLToolStripMenuItem.Click += new System.EventHandler(this.RetailServerURLToolStripMenuItem_Click);
             // 
             // saasLcsProjectLinksToolStripMenuItem
             // 
@@ -1253,6 +1195,142 @@
             this.notifyIcon.Text = "2LCS - Lightweight LCS";
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
+            // 
+            // saasInstanceId
+            // 
+            this.saasInstanceId.DataPropertyName = "InstanceId";
+            this.saasInstanceId.HeaderText = "Instance Id";
+            this.saasInstanceId.MinimumWidth = 8;
+            this.saasInstanceId.Name = "saasInstanceId";
+            this.saasInstanceId.ReadOnly = true;
+            this.saasInstanceId.Width = 148;
+            // 
+            // saasEnvironmentId
+            // 
+            this.saasEnvironmentId.DataPropertyName = "EnvironmentId";
+            this.saasEnvironmentId.HeaderText = "Environment Id";
+            this.saasEnvironmentId.MinimumWidth = 8;
+            this.saasEnvironmentId.Name = "saasEnvironmentId";
+            this.saasEnvironmentId.ReadOnly = true;
+            this.saasEnvironmentId.Width = 183;
+            // 
+            // saasDisplayName
+            // 
+            this.saasDisplayName.DataPropertyName = "DisplayName";
+            this.saasDisplayName.HeaderText = "Display Name";
+            this.saasDisplayName.MinimumWidth = 8;
+            this.saasDisplayName.Name = "saasDisplayName";
+            this.saasDisplayName.ReadOnly = true;
+            this.saasDisplayName.Width = 174;
+            // 
+            // saasDeploymentStatus
+            // 
+            this.saasDeploymentStatus.DataPropertyName = "DeploymentStatus";
+            this.saasDeploymentStatus.HeaderText = "Deployment Status";
+            this.saasDeploymentStatus.MinimumWidth = 8;
+            this.saasDeploymentStatus.Name = "saasDeploymentStatus";
+            this.saasDeploymentStatus.ReadOnly = true;
+            this.saasDeploymentStatus.Width = 200;
+            // 
+            // saasDeploymentAction
+            // 
+            this.saasDeploymentAction.DataPropertyName = "DeploymentAction";
+            this.saasDeploymentAction.HeaderText = "Deployment Action";
+            this.saasDeploymentAction.MinimumWidth = 8;
+            this.saasDeploymentAction.Name = "saasDeploymentAction";
+            this.saasDeploymentAction.ReadOnly = true;
+            this.saasDeploymentAction.Visible = false;
+            this.saasDeploymentAction.Width = 199;
+            // 
+            // saasCurrentApplicationBuildVersion
+            // 
+            this.saasCurrentApplicationBuildVersion.DataPropertyName = "CurrentApplicationBuildVersion";
+            this.saasCurrentApplicationBuildVersion.HeaderText = "Current Application Build Version";
+            this.saasCurrentApplicationBuildVersion.MinimumWidth = 9;
+            this.saasCurrentApplicationBuildVersion.Name = "saasCurrentApplicationBuildVersion";
+            this.saasCurrentApplicationBuildVersion.ReadOnly = true;
+            this.saasCurrentApplicationBuildVersion.Width = 248;
+            // 
+            // saasCurrentApplicationReleaseName
+            // 
+            this.saasCurrentApplicationReleaseName.DataPropertyName = "CurrentApplicationReleaseName";
+            this.saasCurrentApplicationReleaseName.HeaderText = "Current Application Release Name";
+            this.saasCurrentApplicationReleaseName.MinimumWidth = 8;
+            this.saasCurrentApplicationReleaseName.Name = "saasCurrentApplicationReleaseName";
+            this.saasCurrentApplicationReleaseName.ReadOnly = true;
+            this.saasCurrentApplicationReleaseName.Width = 274;
+            // 
+            // saasCurrentPlatformVersion
+            // 
+            this.saasCurrentPlatformVersion.DataPropertyName = "CurrentPlatformVersion";
+            this.saasCurrentPlatformVersion.HeaderText = "Current Platform Version";
+            this.saasCurrentPlatformVersion.MinimumWidth = 8;
+            this.saasCurrentPlatformVersion.Name = "saasCurrentPlatformVersion";
+            this.saasCurrentPlatformVersion.ReadOnly = true;
+            this.saasCurrentPlatformVersion.Width = 243;
+            // 
+            // saasCurrentPlatformReleaseName
+            // 
+            this.saasCurrentPlatformReleaseName.DataPropertyName = "CurrentPlatformReleaseName";
+            this.saasCurrentPlatformReleaseName.HeaderText = "Current Platform Release Name";
+            this.saasCurrentPlatformReleaseName.MinimumWidth = 8;
+            this.saasCurrentPlatformReleaseName.Name = "saasCurrentPlatformReleaseName";
+            this.saasCurrentPlatformReleaseName.ReadOnly = true;
+            this.saasCurrentPlatformReleaseName.Width = 251;
+            // 
+            // saasBuildInfo
+            // 
+            this.saasBuildInfo.DataPropertyName = "BuildInfo";
+            this.saasBuildInfo.HeaderText = "Build Info";
+            this.saasBuildInfo.MinimumWidth = 8;
+            this.saasBuildInfo.Name = "saasBuildInfo";
+            this.saasBuildInfo.ReadOnly = true;
+            this.saasBuildInfo.Width = 123;
+            // 
+            // saasDeployedBy
+            // 
+            this.saasDeployedBy.DataPropertyName = "DeployedBy";
+            this.saasDeployedBy.HeaderText = "Deployed By";
+            this.saasDeployedBy.MinimumWidth = 8;
+            this.saasDeployedBy.Name = "saasDeployedBy";
+            this.saasDeployedBy.ReadOnly = true;
+            this.saasDeployedBy.Width = 151;
+            // 
+            // saasDeployedOn
+            // 
+            this.saasDeployedOn.DataPropertyName = "DeployedOn";
+            this.saasDeployedOn.HeaderText = "Deployed On";
+            this.saasDeployedOn.MinimumWidth = 8;
+            this.saasDeployedOn.Name = "saasDeployedOn";
+            this.saasDeployedOn.ReadOnly = true;
+            this.saasDeployedOn.Width = 155;
+            // 
+            // saasTopologyName
+            // 
+            this.saasTopologyName.DataPropertyName = "TopologyName";
+            this.saasTopologyName.HeaderText = "Topology Name";
+            this.saasTopologyName.MinimumWidth = 8;
+            this.saasTopologyName.Name = "saasTopologyName";
+            this.saasTopologyName.ReadOnly = true;
+            this.saasTopologyName.Width = 176;
+            // 
+            // saasTopologyType
+            // 
+            this.saasTopologyType.DataPropertyName = "TopologyType";
+            this.saasTopologyType.HeaderText = "Topology Type";
+            this.saasTopologyType.MinimumWidth = 8;
+            this.saasTopologyType.Name = "saasTopologyType";
+            this.saasTopologyType.ReadOnly = true;
+            this.saasTopologyType.Width = 170;
+            // 
+            // saasTopologyVersion
+            // 
+            this.saasTopologyVersion.DataPropertyName = "TopologyVersion";
+            this.saasTopologyVersion.HeaderText = "Topology Version";
+            this.saasTopologyVersion.MinimumWidth = 8;
+            this.saasTopologyVersion.Name = "saasTopologyVersion";
+            this.saasTopologyVersion.ReadOnly = true;
+            this.saasTopologyVersion.Width = 190;
             // 
             // MainForm
             // 
@@ -1381,14 +1459,24 @@
         private System.Windows.Forms.ToolStripMenuItem saasDetailedBuildInfoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheDeployPackageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasDeployPackageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saasOpenRdpConnectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cookieToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem parametersToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cheLogonToPointOfSaleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cheLaunchDynamicsRetailStorefrontToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cheRetailServerURLToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saasLogonToPointOfSaleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saasLaunchDynamicsRetailStorefrontToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saasRetailServerURLToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheInstanceId;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheEnvironmentId;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheDisplayName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheDeploymentStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheDeploymentAction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cheCurrentApplicationBuildVersion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn cheCurrentApplicationReleaseName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheCurrentPlatformVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheCurrentPlatformReleaseName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cheCurrentApplicationReleaseName;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheBuildInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheDeployedBy;
         private System.Windows.Forms.DataGridViewTextBoxColumn cheDeployedOn;
@@ -1400,18 +1488,16 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDisplayName;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeploymentStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeploymentAction;
+        private System.Windows.Forms.DataGridViewTextBoxColumn saasCurrentApplicationBuildVersion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn saasCurrentApplicationReleaseName;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasCurrentPlatformVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasCurrentPlatformReleaseName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn saasCurrentApplicationReleaseName;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasBuildInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeployedBy;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasDeployedOn;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasTopologyName;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasTopologyType;
         private System.Windows.Forms.DataGridViewTextBoxColumn saasTopologyVersion;
-        private System.Windows.Forms.ToolStripMenuItem saasOpenRdpConnectionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem cookieToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem parametersToolStripMenuItem;
     }
 }
 

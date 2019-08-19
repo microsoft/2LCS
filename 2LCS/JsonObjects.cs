@@ -79,7 +79,7 @@ namespace LCS.JsonObjects
         public string DisasterRecoveryLocationLabel { get; set; }
         public string DisplayName { get; set; }
         public string EnvironmentAdmin { get; set; }
-        public string EnvironmentCDSDetails { get; set; }
+        public object EnvironmentCDSDetails { get; set; }
         public string EnvironmentId { get; set; }
         public string EnvironmentName { get; set; }
         public object Errors { get; set; }
@@ -193,6 +193,7 @@ namespace LCS.JsonObjects
     public class ExportedInstance
     {
         public string BuildInfo { get; set; }
+        public string CurrentApplicationBuildVersion { get; set; }
         public string CurrentApplicationReleaseName { get; set; }
         public string CurrentPlatformReleaseName { get; set; }
         public string CurrentPlatformVersion { get; set; }

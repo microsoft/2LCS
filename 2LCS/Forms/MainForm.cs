@@ -718,6 +718,7 @@ namespace LCS.Forms
                             Organization = _project.OrganizationName,
                             InstanceName = _instance.DisplayName,
                             EnvironmentId = _instance.EnvironmentId,
+                            CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
                             CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
                             CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
                             CurrentPlatformVersion = _instance.CurrentPlatformVersion,
@@ -743,6 +744,7 @@ namespace LCS.Forms
                             Organization = _project.OrganizationName,
                             InstanceName = _instance.DisplayName,
                             EnvironmentId = _instance.EnvironmentId,
+                            CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
                             CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
                             CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
                             CurrentPlatformVersion = _instance.CurrentPlatformVersion,
@@ -880,7 +882,7 @@ namespace LCS.Forms
 
                         //instance table
                         var instanceColumnWidths = new float[] { 200f, 400f };
-                        var instanceDetailsTable = document.AddTable(10, instanceColumnWidths.Length);
+                        var instanceDetailsTable = document.AddTable(11, instanceColumnWidths.Length);
                         instanceDetailsTable.SetWidths(instanceColumnWidths);
                         instanceDetailsTable.Design = TableDesign.LightListAccent2;
                         instanceDetailsTable.Alignment = Alignment.left;
@@ -896,14 +898,16 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(saasInstance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
                         instanceDetailsTable.Rows[5].Cells[1].Paragraphs[0].Append(saasInstance.EnvironmentAdmin);
-                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application release name");
-                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(saasInstance.CurrentApplicationReleaseName);
-                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current platform release name");
-                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformReleaseName);
-                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform version");
-                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformVersion);
-                        instanceDetailsTable.Rows[9].Cells[0].Paragraphs[0].Append("Number of virtual machines");
-                        instanceDetailsTable.Rows[9].Cells[1].Paragraphs[0].Append(saasInstance.VirtualMachineCount.ToString());
+                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application build version");
+                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(saasInstance.CurrentApplicationBuildVersion);
+                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current application release name");
+                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(saasInstance.CurrentApplicationReleaseName);
+                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform release name");
+                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformReleaseName);
+                        instanceDetailsTable.Rows[9].Cells[0].Paragraphs[0].Append("Current platform version");
+                        instanceDetailsTable.Rows[9].Cells[1].Paragraphs[0].Append(saasInstance.CurrentPlatformVersion);
+                        instanceDetailsTable.Rows[10].Cells[0].Paragraphs[0].Append("Number of virtual machines");
+                        instanceDetailsTable.Rows[10].Cells[1].Paragraphs[0].Append(saasInstance.VirtualMachineCount.ToString());
                         //Navigation links
                         foreach (var link in saasInstance.NavigationLinks)
                         {
@@ -1000,7 +1004,7 @@ namespace LCS.Forms
 
                         //instance table
                         var instanceColumnWidths = new float[] { 200f, 400f };
-                        var instanceDetailsTable = document.AddTable(9, instanceColumnWidths.Length);
+                        var instanceDetailsTable = document.AddTable(10, instanceColumnWidths.Length);
                         instanceDetailsTable.SetWidths(instanceColumnWidths);
                         instanceDetailsTable.Design = TableDesign.LightListAccent2;
                         instanceDetailsTable.Alignment = Alignment.left;
@@ -1016,12 +1020,14 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(instance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
                         instanceDetailsTable.Rows[5].Cells[1].Paragraphs[0].Append(instance.EnvironmentAdmin);
-                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application release name");
-                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(instance.CurrentApplicationReleaseName);
-                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current platform release name");
-                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformReleaseName);
-                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform version");
-                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformVersion);
+                        instanceDetailsTable.Rows[6].Cells[0].Paragraphs[0].Append("Current application build version");
+                        instanceDetailsTable.Rows[6].Cells[1].Paragraphs[0].Append(instance.CurrentApplicationBuildVersion);
+                        instanceDetailsTable.Rows[7].Cells[0].Paragraphs[0].Append("Current application release name");
+                        instanceDetailsTable.Rows[7].Cells[1].Paragraphs[0].Append(instance.CurrentApplicationReleaseName);
+                        instanceDetailsTable.Rows[8].Cells[0].Paragraphs[0].Append("Current platform release name");
+                        instanceDetailsTable.Rows[8].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformReleaseName);
+                        instanceDetailsTable.Rows[9].Cells[0].Paragraphs[0].Append("Current platform version");
+                        instanceDetailsTable.Rows[9].Cells[1].Paragraphs[0].Append(instance.CurrentPlatformVersion);
                         //Navigation links
                         foreach (var link in instance.NavigationLinks)
                         {
@@ -1935,6 +1941,60 @@ namespace LCS.Forms
             public int top;
             public int right;
             public int bottom;
+        }
+
+        private void LogonToPointOfSaleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var item = (CloudHostedInstance)row.DataBoundItem;
+                foreach (var link in item.NavigationLinks)
+                {
+                    if (link.DisplayName == "Log on to Cloud Point of Sale")
+                    {
+                        Process.Start(link.NavigationUri);
+                        break;
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void LaunchDynamicsRetailStorefrontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var item = (CloudHostedInstance)row.DataBoundItem;
+                foreach (var link in item.NavigationLinks)
+                {
+                    if (link.DisplayName == "Launch Dynamics Retail Storefront")
+                    {
+                        Process.Start(link.NavigationUri);
+                        break;
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+        }
+
+        private void RetailServerURLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var item = (CloudHostedInstance)row.DataBoundItem;
+                foreach (var link in item.NavigationLinks)
+                {
+                    if (link.DisplayName == "Retail Server URL")
+                    {
+                        Process.Start(link.NavigationUri);
+                        break;
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
         }
     }
 
