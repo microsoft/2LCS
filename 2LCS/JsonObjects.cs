@@ -21,7 +21,7 @@ namespace LCS.JsonObjects
         public string Description { get; set; }
         public string Id { get; set; }
         public string InstallationInfoType { get; set; }
-        public DateTime? InstalledDate { get; set; }
+        public string InstalledDate { get; set; }//Todo
         public string Layer { get; set; }
         public string ModelName { get; set; }
         public string ModuleName { get; set; }
@@ -68,7 +68,7 @@ namespace LCS.JsonObjects
         public string CurrentPlatformReleaseName { get; set; }
         public string CurrentPlatformVersion { get; set; }
         public string DeployedBy { get; set; }
-        public DateTime? DeployedOn { get; set; }
+        public string DeployedOn { get; set; }//Todo
         public string DeploymentAction { get; set; }
         public int DeploymentErrorCode { get; set; }
         public string DeploymentId { get; set; }
@@ -132,7 +132,7 @@ namespace LCS.JsonObjects
         public Credentials[] SqlAzureCredentials { get; set; }
         public string StagingActivityId { get; set; }
         public string StagingDeployedBy { get; set; }
-        public DateTime? StagingDeployedOn { get; set; }
+        public string StagingDeployedOn { get; set; }//Todo
         public string StagingEnvironmentAdministrator { get; set; }
         public string StagingEnvironmentId { get; set; }
         public string StagingPrimaryRegion { get; set; }
@@ -176,7 +176,7 @@ namespace LCS.JsonObjects
         public int LcsEnvironmentActionId { get; set; }
         public string LcsEnvironmentId { get; set; }
         public string ModifiedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public string ModifiedDate { get; set; }//Todo
         public string Name { get; set; }
         public string PackageId { get; set; }
         public string PackageType { get; set; }
@@ -226,7 +226,7 @@ namespace LCS.JsonObjects
         public string Modules { get; set; }
         public string PageType { get; set; }
         public string Problem { get; set; }
-        public DateTime? ReleasedDate { get; set; }
+        public string ReleasedDate { get; set; }//Todo
         public string SearchContext { get; set; }
         public string Solution { get; set; }
         public string Substatus { get; set; }
@@ -253,7 +253,7 @@ namespace LCS.JsonObjects
         public List<string> AllEmails { get; set; }
         public string AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
@@ -304,7 +304,7 @@ namespace LCS.JsonObjects
 
     public class NSGRule
     {
-        public DateTime? Expiration { get; set; }
+        public string Expiration { get; set; }//Todo
         public string IpOrCidr { get; set; }
         public string Name { get; set; }
         public string Service { get; set; }
@@ -341,7 +341,7 @@ namespace LCS.JsonObjects
     public class ProjectData
     {
         public UserCapabilities Capabilities { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public string CreatedDate { get; set; }//Todo
         public object CurrentPhase { get; set; }
         public int CurrentPhaseId { get; set; }
         public string Description { get; set; }
@@ -395,7 +395,7 @@ namespace LCS.JsonObjects
     {
         public bool? AllowContactByMicrosoft { get; set; }
         public int? CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public string CreatedDate { get; set; }//Todo
         public int? FunctionalRole { get; set; }
         public string FunctionalRoleDisplayText { get; set; }
         public string InvitationEmail { get; set; }
@@ -406,10 +406,10 @@ namespace LCS.JsonObjects
         public string LocalCreatedDate { get; set; }
         public string LocalModifiedDate { get; set; }
         public int? ModifiedBy { get; set; }
-        public DateTime? ModifiedDate { get; set; }
+        public string ModifiedDate { get; set; }//Todo
         public int ProjectId { get; set; }
         public int ProjectUserId { get; set; }
-        public DateTime? UserLastAccess { get; set; }
+        public string UserLastAccess { get; set; }//Todo
         public UserProfile UserProfile { get; set; }
         public int UserProfileId { get; set; }
         public int UserRole { get; set; }
@@ -504,7 +504,7 @@ namespace LCS.JsonObjects
         public List<string> AllEmails { get; set; }
         public string AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
-        public DateTime? CreatedDate { get; set; }
+        public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }

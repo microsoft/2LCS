@@ -212,6 +212,7 @@ namespace LCS.Forms
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
                     SetLcsProjectText();
+                    CreateProjectLinksMenuItems();
                     RefreshChe(Properties.Settings.Default.autorefresh);
                     RefreshSaas(Properties.Settings.Default.autorefresh);
                 }
@@ -466,7 +467,24 @@ namespace LCS.Forms
 
         private void CreateProjectLinksMenuItems()
         {
-            if(_selectedProject != null && _selectedProject.SharepointSite != null)
+            foreach (var menuItem in cheLcsProjectLinksToolStripMenuItem.DropDownItems.Find("cheSharepointSiteMenuItem", false))
+            {
+                cheLcsProjectLinksToolStripMenuItem.DropDownItems.Remove(menuItem);
+            }
+            foreach (var menuItem in cheLcsProjectLinksToolStripMenuItem.DropDownItems.Find("cheDevOpsSiteMenuItem", false))
+            {
+                cheLcsProjectLinksToolStripMenuItem.DropDownItems.Remove(menuItem);
+            }
+            foreach (var menuItem in saasLcsProjectLinksToolStripMenuItem.DropDownItems.Find("saasSharepointSiteMenuItem", false))
+            {
+                saasLcsProjectLinksToolStripMenuItem.DropDownItems.Remove(menuItem);
+            }
+            foreach (var menuItem in saasLcsProjectLinksToolStripMenuItem.DropDownItems.Find("saasDevOpsSiteMenuItem", false))
+            {
+                saasLcsProjectLinksToolStripMenuItem.DropDownItems.Remove(menuItem);
+            }
+
+            if (_selectedProject != null && _selectedProject.SharepointSite != null)
             {
                 var cheSharepointSiteMenuItem = new ToolStripMenuItem("Sharepoint site")
                 {
@@ -480,8 +498,8 @@ namespace LCS.Forms
                 };
                 cheSharepointSiteMenuItem.Click += ProjectLinkClicked;
                 saasSharepointSiteMenuItem.Click += ProjectLinkClicked;
-                (cheInstanceContextMenu.Items["cheLcsProjectLinksToolStripMenuItem"] as ToolStripMenuItem).DropDownItems.Add(cheSharepointSiteMenuItem);
-                (saasInstanceContextMenu.Items["saasLcsProjectLinksToolStripMenuItem"] as ToolStripMenuItem).DropDownItems.Add(saasSharepointSiteMenuItem);
+                cheLcsProjectLinksToolStripMenuItem.DropDownItems.Add(cheSharepointSiteMenuItem);
+                saasLcsProjectLinksToolStripMenuItem.DropDownItems.Add(saasSharepointSiteMenuItem);
             }
 
             if (_selectedProject != null && _selectedProject.TfsServerSite != null)
@@ -498,8 +516,8 @@ namespace LCS.Forms
                 };
                 cheDevOpsSiteMenuItem.Click += ProjectLinkClicked;
                 saasDevOpsSiteMenuItem.Click += ProjectLinkClicked;
-                (cheInstanceContextMenu.Items["cheLcsProjectLinksToolStripMenuItem"] as ToolStripMenuItem).DropDownItems.Add(cheDevOpsSiteMenuItem);
-                (saasInstanceContextMenu.Items["saasLcsProjectLinksToolStripMenuItem"] as ToolStripMenuItem).DropDownItems.Add(saasDevOpsSiteMenuItem);
+                cheLcsProjectLinksToolStripMenuItem.DropDownItems.Add(cheDevOpsSiteMenuItem);
+                saasLcsProjectLinksToolStripMenuItem.DropDownItems.Add(saasDevOpsSiteMenuItem);
             }
         }
 
@@ -863,7 +881,7 @@ namespace LCS.Forms
                         row.Cells[5].Paragraphs[0].Append(user.AllowContactByMicrosoft.ToString());
                         row.Cells[6].Paragraphs[0].Append(user.InvitedBy.DisplayName);
                         row.Cells[7].Paragraphs[0].Append(user.InvitedBy.Organization.Name);
-                        row.Cells[8].Paragraphs[0].Append(user.CreatedDate?.ToString("yyyy-MM-dd H:mm"));
+                        row.Cells[8].Paragraphs[0].Append(user.CreatedDate); //Todo ?.ToString("yyyy-MM-dd H:mm"));
                         row.Cells[9].Paragraphs[0].Append(user.InvitationStatusDisplayText);
                     }
                     projectUsersHeader.InsertTableAfterSelf(usersDetailsTable);
@@ -893,7 +911,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(saasInstance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn?.ToString("yyyy-MM-dd H:mm"));
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(saasInstance.DeployedOn); //Todo ?.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(saasInstance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
@@ -1015,7 +1033,7 @@ namespace LCS.Forms
                         instanceDetailsTable.Rows[2].Cells[0].Paragraphs[0].Append("Topology");
                         instanceDetailsTable.Rows[2].Cells[1].Paragraphs[0].Append(instance.TopologyDisplayName);
                         instanceDetailsTable.Rows[3].Cells[0].Paragraphs[0].Append("Deployed on");
-                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn?.ToString("yyyy-MM-dd H:mm"));
+                        instanceDetailsTable.Rows[3].Cells[1].Paragraphs[0].Append(instance.DeployedOn); //Todo ?.ToString("yyyy-MM-dd H:mm"));
                         instanceDetailsTable.Rows[4].Cells[0].Paragraphs[0].Append("Deployed by");
                         instanceDetailsTable.Rows[4].Cells[1].Paragraphs[0].Append(instance.DeployedBy);
                         instanceDetailsTable.Rows[5].Cells[0].Paragraphs[0].Append("Environment admin");
