@@ -520,4 +520,21 @@ namespace LCS.JsonObjects
         public int UserId { get; set; }
         public int UserProfileId { get; set; }
     }
+
+    public class Plan
+    {
+        public string ServicePlanName { get; set; }
+        public string ServicePlanId { get; set; }
+        public string DisplayAssignedDate { get; set; }
+        public string AssignedDateTime { get; set; }
+        public int PrepaidUnitsEnabled { get; set; }
+        public string PlanStatus { get; set; }
+    }
+
+    public class PlanData
+    {
+        public string TenantName { get; set; }
+        public string TenantId { get; set; }
+        public List<Plan> Plans { get; set; }
+    }
 }

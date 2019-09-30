@@ -664,6 +664,18 @@ namespace LCS
             return result;
         }
 
+        internal PlanData RetrieveTenantPlans()
+        {
+            var result = _httpClient.GetAsync($"{LcsUrl}/RainierProject/RetrieveTenantPlans/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            result.EnsureSuccessStatusCode();
+
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var response = JsonConvert.DeserializeObject<Response>(responseBody);
+            return !response.Success
+                ? null
+                : response.Data == null ? null : JsonConvert.DeserializeObject<PlanData>(response.Data.ToString());
+        }
+
         /// <summary>
         /// Dispose
         /// </summary>

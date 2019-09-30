@@ -840,6 +840,46 @@ namespace LCS.Forms
                 var tocParagraph = document.InsertParagraph();
                 tocParagraph.InsertPageBreakAfterSelf();
 
+                //Subscriptions info
+                var plans = _httpClientHelper.RetrieveTenantPlans();
+                if (plans != null)
+                {
+                    var subsHeader = document.InsertParagraph("Subscriptions available").Heading(HeadingType.Heading1).FontSize(20d);
+                    subsHeader.SpacingAfter(40d);
+                    var tenantNameHeader = document.InsertParagraph("Tenant name: " + plans.TenantName).FontSize(14d);
+                    tenantNameHeader.SpacingAfter(10d);
+                    var tenantIdHeader = document.InsertParagraph("Tenant ID: " + plans.TenantId).FontSize(14d);
+                    tenantIdHeader.SpacingAfter(10d);
+                    if(plans.Plans.Count > 0)
+                    {
+                        //plans table
+                        var plansColumnWidths = new float[] { 200f, 200f, 60f, 40f, 40f };
+                        var plansDetailsTable = document.AddTable(1, plansColumnWidths.Length);
+                        plansDetailsTable.SetWidths(plansColumnWidths);
+                        plansDetailsTable.Design = TableDesign.LightListAccent6;
+                        plansDetailsTable.Alignment = Alignment.left;
+                        plansDetailsTable.AutoFit = AutoFit.Contents;
+                        //headers
+                        plansDetailsTable.Rows[0].Cells[0].Paragraphs[0].Append("Service plan name");
+                        plansDetailsTable.Rows[0].Cells[1].Paragraphs[0].Append("Service plan ID");
+                        plansDetailsTable.Rows[0].Cells[2].Paragraphs[0].Append("Assigned date");
+                        plansDetailsTable.Rows[0].Cells[3].Paragraphs[0].Append("Quantity");
+                        plansDetailsTable.Rows[0].Cells[4].Paragraphs[0].Append("Status");
+
+                        foreach (var plan in plans.Plans)
+                        {
+                            var row = plansDetailsTable.InsertRow();
+                            row.Cells[0].Paragraphs[0].Append(plan.ServicePlanName);
+                            row.Cells[1].Paragraphs[0].Append(plan.ServicePlanId);
+                            row.Cells[2].Paragraphs[0].Append(plan.DisplayAssignedDate);
+                            row.Cells[3].Paragraphs[0].Append(plan.PrepaidUnitsEnabled.ToString());
+                            row.Cells[4].Paragraphs[0].Append(plan.PlanStatus);
+                        }
+                        tenantIdHeader.InsertTableAfterSelf(plansDetailsTable);
+                        document.InsertParagraph().InsertPageBreakAfterSelf();
+                    }
+                }
+
                 if (projectUsers != null && projectUsers.Count > 0)
                 {
                     var projectUsersHeader = document.InsertParagraph("Project users").Heading(HeadingType.Heading1).FontSize(20d);
