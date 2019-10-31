@@ -2054,6 +2054,25 @@ namespace LCS.Forms
             }
             Cursor = Cursors.Default;
         }
+
+        private void saasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+
+            var calendar = _httpClientHelper.GetUpcomingCalendars();
+            if (calendar == null || calendar.Count == 0)
+            {
+                Cursor = Cursors.Default;
+                MessageBox.Show($"Request to get upcoming updates calendar failed. You are using learning project or you do not have access to that information.");
+                return;
+            }
+            using var form = new UpcomingUpdates();
+            form.Calendar = calendar;
+            form.Text = $"Upcoming updates for {_selectedProject.Name} project.";
+            form.ShowDialog();
+
+            Cursor = Cursors.Default;
+        }
     }
 
     public enum HotfixesType

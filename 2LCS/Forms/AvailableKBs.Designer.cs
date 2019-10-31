@@ -56,11 +56,13 @@
             this.Solution,
             this.ReleasedDate,
             this.Url});
-            this.availableKBsDataGridView.Location = new System.Drawing.Point(12, 13);
+            this.availableKBsDataGridView.Location = new System.Drawing.Point(15, 16);
+            this.availableKBsDataGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.availableKBsDataGridView.Name = "availableKBsDataGridView";
+            this.availableKBsDataGridView.RowHeadersWidth = 30;
             this.availableKBsDataGridView.RowTemplate.Height = 28;
             this.availableKBsDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-            this.availableKBsDataGridView.Size = new System.Drawing.Size(1194, 380);
+            this.availableKBsDataGridView.Size = new System.Drawing.Size(1459, 456);
             this.availableKBsDataGridView.TabIndex = 0;
             this.availableKBsDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.AvailableKBsDataGridView_ColumnHeaderMouseClick);
             // 
@@ -69,6 +71,7 @@
             this.KBNumber.DataPropertyName = "KBNumber";
             this.KBNumber.FillWeight = 10F;
             this.KBNumber.HeaderText = "KB Number";
+            this.KBNumber.MinimumWidth = 9;
             this.KBNumber.Name = "KBNumber";
             // 
             // BugNumber
@@ -76,6 +79,7 @@
             this.BugNumber.DataPropertyName = "BugNumber";
             this.BugNumber.FillWeight = 10F;
             this.BugNumber.HeaderText = "Bug Number";
+            this.BugNumber.MinimumWidth = 9;
             this.BugNumber.Name = "BugNumber";
             // 
             // Title
@@ -83,6 +87,7 @@
             this.Title.DataPropertyName = "Title";
             this.Title.FillWeight = 30F;
             this.Title.HeaderText = "Title";
+            this.Title.MinimumWidth = 9;
             this.Title.Name = "Title";
             // 
             // Solution
@@ -90,6 +95,7 @@
             this.Solution.DataPropertyName = "Solution";
             this.Solution.FillWeight = 30F;
             this.Solution.HeaderText = "Solution";
+            this.Solution.MinimumWidth = 9;
             this.Solution.Name = "Solution";
             // 
             // ReleasedDate
@@ -97,6 +103,7 @@
             this.ReleasedDate.DataPropertyName = "ReleasedDate";
             this.ReleasedDate.FillWeight = 10F;
             this.ReleasedDate.HeaderText = "Released Date";
+            this.ReleasedDate.MinimumWidth = 9;
             this.ReleasedDate.Name = "ReleasedDate";
             // 
             // Url
@@ -104,17 +111,19 @@
             this.Url.DataPropertyName = "Url";
             this.Url.FillWeight = 10F;
             this.Url.HeaderText = "Link";
+            this.Url.MinimumWidth = 9;
             this.Url.Name = "Url";
             // 
             // AvailableKBs
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1218, 444);
+            this.ClientSize = new System.Drawing.Size(1489, 533);
             this.Controls.Add(this.availableKBsDataGridView);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(780, 400);
+            this.MinimumSize = new System.Drawing.Size(948, 467);
             this.Name = "AvailableKBs";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

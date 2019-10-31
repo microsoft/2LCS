@@ -44,6 +44,7 @@ namespace LCS
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3872.0 Safari/537.36 Edg/78.0.244.0");
             _httpClient.DefaultRequestHeaders.Add("X-Requested-With", "XMLHttpRequest");
             _httpClient.DefaultRequestHeaders.Add("cache-control", "no-cache");
+            _httpClient.DefaultRequestHeaders.Add("TimezoneOffset", GetTimeZoneOffsetInMinutes());
         }
 
         public CookieContainer CookieContainer { get; }
@@ -674,6 +675,31 @@ namespace LCS
             return !response.Success
                 ? null
                 : response.Data == null ? null : JsonConvert.DeserializeObject<PlanData>(response.Data.ToString());
+        }
+
+        internal List<Datum> GetUpcomingCalendars()
+        {
+            try
+            {
+                var result = _httpClient.GetAsync($"{LcsUrl}/RainierSettings/GetUpcomingCalendars/{LcsProjectId}/?id={LcsProjectId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+                result.EnsureSuccessStatusCode();
+
+                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                return !response.Success
+                    ? null
+                    : response.Data == null ? null : JsonConvert.DeserializeObject<List<Datum>>(response.Data.ToString());
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        internal string GetTimeZoneOffsetInMinutes()
+        {
+            var offset = -TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);//reverse sign
+            return offset.TotalMinutes.ToString();
         }
 
         /// <summary>
