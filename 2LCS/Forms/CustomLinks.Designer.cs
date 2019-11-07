@@ -45,9 +45,10 @@
             // okButton
             // 
             this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.okButton.Location = new System.Drawing.Point(398, 367);
+            this.okButton.Location = new System.Drawing.Point(486, 545);
+            this.okButton.Margin = new System.Windows.Forms.Padding(4);
             this.okButton.Name = "okButton";
-            this.okButton.Size = new System.Drawing.Size(182, 33);
+            this.okButton.Size = new System.Drawing.Size(222, 40);
             this.okButton.TabIndex = 1;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
@@ -57,9 +58,10 @@
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(586, 367);
+            this.cancelButton.Location = new System.Drawing.Point(716, 545);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(172, 33);
+            this.cancelButton.Size = new System.Drawing.Size(210, 40);
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -79,12 +81,13 @@
             this.Label,
             this.Link});
             this.linksDataGridView.ContextMenuStrip = this.contextMenuStrip1;
-            this.linksDataGridView.Location = new System.Drawing.Point(12, 13);
+            this.linksDataGridView.Location = new System.Drawing.Point(15, 16);
+            this.linksDataGridView.Margin = new System.Windows.Forms.Padding(4);
             this.linksDataGridView.MultiSelect = false;
             this.linksDataGridView.Name = "linksDataGridView";
             this.linksDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.linksDataGridView.RowTemplate.Height = 28;
-            this.linksDataGridView.Size = new System.Drawing.Size(898, 348);
+            this.linksDataGridView.Size = new System.Drawing.Size(1098, 523);
             this.linksDataGridView.TabIndex = 0;
             this.linksDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.LinksDataGridView_ColumnHeaderMouseClick);
             this.linksDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.LinksDataGridView_MouseDown);
@@ -113,12 +116,12 @@
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.deleteToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(167, 34);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(185, 40);
             // 
             // deleteToolStripMenuItem
             // 
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(166, 30);
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(184, 36);
             this.deleteToolStripMenuItem.Text = "Delete link";
             this.deleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
             // 
@@ -128,26 +131,28 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(916, 13);
+            this.textBox1.Location = new System.Drawing.Point(1120, 16);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(290, 348);
+            this.textBox1.Size = new System.Drawing.Size(354, 523);
             this.textBox1.TabIndex = 3;
             this.textBox1.Text = resources.GetString("textBox1.Text");
             // 
             // CustomLinks
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(1218, 412);
+            this.ClientSize = new System.Drawing.Size(1489, 599);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.linksDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(960, 420);
+            this.MinimumSize = new System.Drawing.Size(1168, 491);
             this.Name = "CustomLinks";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

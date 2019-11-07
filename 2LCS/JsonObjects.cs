@@ -462,6 +462,7 @@ namespace LCS.JsonObjects
         public bool IsAvailableForConfiguration { get; set; }
         public bool IsDeployed { get; set; }
         public bool IsDiagnosticsEnabled { get; set; }
+        public bool IsFreeTier1Suppressed { get; set; }
         public bool IsHealthy { get; set; }
         public bool IsNotConfigured { get; set; }
         public bool IsTopologyLoadError { get; set; }

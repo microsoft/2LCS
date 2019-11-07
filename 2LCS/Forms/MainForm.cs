@@ -1477,6 +1477,11 @@ namespace LCS.Forms
                 }
                 replacements.Add(prop.Name, value);
             }
+            //Add navigation links
+            replacements.Add("AosUrl", instance.NavigationLinks[0].NavigationUri.ToString());
+            replacements.Add("PosUrl", instance.NavigationLinks[1].NavigationUri.ToString());
+            replacements.Add("RetailStorefront", instance.NavigationLinks[2].NavigationUri.ToString());
+            replacements.Add("RetailServer", instance.NavigationLinks[3].NavigationUri.ToString());
             return template.FormatPlaceholders(replacements);
         }
 
@@ -2073,6 +2078,8 @@ namespace LCS.Forms
 
             Cursor = Cursors.Default;
         }
+
+        
     }
 
     public enum HotfixesType

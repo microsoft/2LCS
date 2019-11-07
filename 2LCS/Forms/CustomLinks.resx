@@ -129,6 +129,10 @@
   <data name="textBox1.Text" xml:space="preserve">
     <value>You can add placeholders for the following variables:
 
+%%AosUrl%%
+%%PosUrl%%
+%%RetailStorefront%%
+%%RetailServer%%
 %%EnvironmentId%%
 %%AzureSubscriptionId%%
 %%InstanceId%%
