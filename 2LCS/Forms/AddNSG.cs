@@ -6,15 +6,15 @@ namespace LCS.Forms
 {
     public partial class AddNsg : Form
     {
-        public Dictionary<string, string> Rule { get; set; }
-        public bool Cancelled { get; private set; }
-
         private const int CpNocloseButton = 0x200;
 
         public AddNsg()
         {
             InitializeComponent();
         }
+
+        public bool Cancelled { get; private set; }
+        public Dictionary<string, string> Rule { get; set; }
 
         protected override CreateParams CreateParams
         {
@@ -35,6 +35,12 @@ namespace LCS.Forms
             Close();
         }
 
+        private void CancelButton_Click(object sender, EventArgs e)
+        {
+            Cancelled = true;
+            Close();
+        }
+
         private bool ValidateRule()
         {
             if (string.IsNullOrEmpty(textBox1.Text))
@@ -52,12 +58,6 @@ namespace LCS.Forms
                 { textBox1.Text, textBox2.Text}
             };
             return true;
-        }
-
-        private void CancelButton_Click(object sender, EventArgs e)
-        {
-            Cancelled = true;
-            Close();
         }
     }
 }

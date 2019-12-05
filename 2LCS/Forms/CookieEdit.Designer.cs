@@ -1,6 +1,6 @@
 ﻿namespace LCS.Forms
 {
-    partial class DeleteNsg
+    partial class CookieEdit
     {
         /// <summary>
         /// Required designer variable.
@@ -28,37 +28,38 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.cookieTextBox = new System.Windows.Forms.TextBox();
+            this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.cookieLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox1
+            // cookieTextBox
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.cookieTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 34);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(361, 26);
-            this.textBox1.TabIndex = 0;
+            this.cookieTextBox.Location = new System.Drawing.Point(12, 34);
+            this.cookieTextBox.Multiline = true;
+            this.cookieTextBox.Name = "cookieTextBox";
+            this.cookieTextBox.Size = new System.Drawing.Size(644, 101);
+            this.cookieTextBox.TabIndex = 0;
             // 
-            // button1
+            // okButton
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(16, 93);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(182, 33);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "OK";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            this.okButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.okButton.Location = new System.Drawing.Point(142, 141);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(182, 33);
+            this.okButton.TabIndex = 2;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.OkButton_Click);
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(204, 93);
+            this.cancelButton.Location = new System.Drawing.Point(330, 141);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(172, 33);
             this.cancelButton.TabIndex = 3;
@@ -66,33 +67,35 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.Click += new System.EventHandler(this.CancelButton_Click);
             // 
-            // label1
+            // cookieLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(86, 20);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Rule name";
+            this.cookieLabel.AutoSize = true;
+            this.cookieLabel.Location = new System.Drawing.Point(13, 11);
+            this.cookieLabel.Name = "cookieLabel";
+            this.cookieLabel.Size = new System.Drawing.Size(58, 20);
+            this.cookieLabel.TabIndex = 4;
+            this.cookieLabel.Text = "Cookie";
             // 
-            // DeleteNSG
+            // CookieEdit
             // 
+            this.AcceptButton = this.okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(385, 138);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(668, 186);
+            this.Controls.Add(this.cookieLabel);
             this.Controls.Add(this.cancelButton);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.okButton);
+            this.Controls.Add(this.cookieTextBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "DeleteNsg";
+            this.Name = "CookieEdit";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Delete firewall exception";
+            this.Text = "LCS cookie";
+            this.Load += new System.EventHandler(this.CookieEdit_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -100,9 +103,9 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox cookieTextBox;
+        private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label cookieLabel;
     }
 }

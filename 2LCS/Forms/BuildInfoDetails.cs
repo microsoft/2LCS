@@ -1,6 +1,5 @@
 ﻿using LCS.JsonObjects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic;
 using System.Windows.Forms;
@@ -10,10 +9,8 @@ namespace LCS.Forms
     public partial class BuildInfoDetailsForm : Form
     {
         public BuildInfoDetails BuildInfo;
-        internal HttpClientHelper HttpClientHelper { get; set; }
-
+        private readonly BindingSource _buildInfoSource = new BindingSource();
         private bool _sortAscending;
-        readonly BindingSource _buildInfoSource = new BindingSource();
 
         public BuildInfoDetailsForm()
         {
@@ -29,6 +26,7 @@ namespace LCS.Forms
                 var pi = dgvType.GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
                 if (pi != null) pi.SetValue(buildInfoDetailsDataGridView, true, null);
             }
+            buildInfoDetailsDataGridView.Columns["InstalledDate"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
             buildInfoDetailsDataGridView.DataSource = _buildInfoSource;
             _buildInfoSource.DataSource = BuildInfo.BuildInfoTreeView.OrderBy(f => f.ParentId).ThenBy(i => i.ModelName);
         }

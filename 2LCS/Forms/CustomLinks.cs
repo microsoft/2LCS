@@ -9,16 +9,17 @@ namespace LCS.Forms
 {
     public partial class CustomLinks : Form
     {
-        internal bool Cancelled { get; private set; }
-        private List<JsonObjects.CustomLink> _linksList;
-        private readonly BindingSource _linksSource = new BindingSource();
-        private bool _sortAscending = true;
         private const int CpNocloseButton = 0x200;
+        private readonly BindingSource _linksSource = new BindingSource();
+        private List<JsonObjects.CustomLink> _linksList;
+        private bool _sortAscending = true;
 
         public CustomLinks()
         {
             InitializeComponent();
         }
+
+        internal bool Cancelled { get; private set; }
 
         protected override CreateParams CreateParams
         {
@@ -58,15 +59,15 @@ namespace LCS.Forms
             linksDataGridView.DataSource = _linksSource;
         }
 
-        private void LinksDataGridView_MouseDown(object sender, MouseEventArgs e)
+        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (e.Button == MouseButtons.Right)
+            var count = linksDataGridView.SelectedRows.Count;
+            if (count <= 0) return;
+            for (var i = 0; i < count; i++)
             {
-                var hti = linksDataGridView.HitTest(e.X, e.Y);
-                if (hti.RowIndex >= 0 && linksDataGridView.Rows[hti.RowIndex].Selected != true)
+                if (!linksDataGridView.SelectedRows[0].IsNewRow)
                 {
-                    linksDataGridView.ClearSelection();
-                    linksDataGridView.Rows[hti.RowIndex].Selected = true;
+                    linksDataGridView.Rows.RemoveAt(linksDataGridView.SelectedRows[0].Index);
                 }
             }
         }
@@ -79,15 +80,15 @@ namespace LCS.Forms
             linksDataGridView.ClearSelection();
         }
 
-        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void LinksDataGridView_MouseDown(object sender, MouseEventArgs e)
         {
-            var count = linksDataGridView.SelectedRows.Count;
-            if (count <= 0) return;
-            for (var i = 0; i < count; i++)
+            if (e.Button == MouseButtons.Right)
             {
-                if (!linksDataGridView.SelectedRows[0].IsNewRow)
+                var hti = linksDataGridView.HitTest(e.X, e.Y);
+                if (hti.RowIndex >= 0 && linksDataGridView.Rows[hti.RowIndex].Selected != true)
                 {
-                    linksDataGridView.Rows.RemoveAt(linksDataGridView.SelectedRows[0].Index);
+                    linksDataGridView.ClearSelection();
+                    linksDataGridView.Rows[hti.RowIndex].Selected = true;
                 }
             }
         }

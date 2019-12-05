@@ -6,6 +6,26 @@ namespace LCS
 {
     public static class WebBrowserHelper
     {
+        public static void FixBrowserVersion()
+        {
+            var appName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            FixBrowserVersion(appName);
+        }
+
+        public static void FixBrowserVersion(string appName)
+        {
+            FixBrowserVersion(appName, GetEmbVersion());
+        }
+
+        // FixBrowserVersion("<YourAppName>", 9000);
+        public static void FixBrowserVersion(string appName, int ieVer)
+        {
+            FixBrowserVersion_Internal("HKEY_LOCAL_MACHINE", appName + ".exe", ieVer);
+            FixBrowserVersion_Internal("HKEY_CURRENT_USER", appName + ".exe", ieVer);
+            FixBrowserVersion_Internal("HKEY_LOCAL_MACHINE", appName + ".vshost.exe", ieVer);
+            FixBrowserVersion_Internal("HKEY_CURRENT_USER", appName + ".vshost.exe", ieVer);
+        }
+
         public static int GetEmbVersion()
         {
             var ieVer = GetBrowserVersion();
@@ -19,44 +39,26 @@ namespace LCS
             return 7000;
         } // End Function GetEmbVersion
 
-        public static void FixBrowserVersion()
-        {
-            var appName = System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            FixBrowserVersion(appName);
-        }
+          // End Sub FixBrowserVersion
 
-        public static void FixBrowserVersion(string appName)
-        {
-            FixBrowserVersion(appName, GetEmbVersion());
-        } // End Sub FixBrowserVersion
-
-        // FixBrowserVersion("<YourAppName>", 9000);
-        public static void FixBrowserVersion(string appName, int ieVer)
-        {
-            FixBrowserVersion_Internal("HKEY_LOCAL_MACHINE", appName + ".exe", ieVer);
-            FixBrowserVersion_Internal("HKEY_CURRENT_USER", appName + ".exe", ieVer);
-            FixBrowserVersion_Internal("HKEY_LOCAL_MACHINE", appName + ".vshost.exe", ieVer);
-            FixBrowserVersion_Internal("HKEY_CURRENT_USER", appName + ".vshost.exe", ieVer);
-        } // End Sub FixBrowserVersion 
+        // End Sub FixBrowserVersion
 
         private static void FixBrowserVersion_Internal(string root, string appName, int ieVer)
         {
             try
             {
-                //For 64 bit Machine 
+                //For 64 bit Machine
                 if (Environment.Is64BitOperatingSystem)
                     Microsoft.Win32.Registry.SetValue(root + @"\Software\Wow6432Node\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", appName, ieVer);
-                //For both 32 bit and 64 bit Machine 
+                //For both 32 bit and 64 bit Machine
                 Microsoft.Win32.Registry.SetValue(root + @"\Software\Microsoft\Internet Explorer\Main\FeatureControl\FEATURE_BROWSER_EMULATION", appName, ieVer);
-
-
             }
             catch (Exception)
             {
                 // some config will hit access rights exceptions
                 // this is why we try with both LOCAL_MACHINE and CURRENT_USER
             }
-        } // End Sub FixBrowserVersion_Internal 
+        } // End Sub FixBrowserVersion_Internal
 
         private static int GetBrowserVersion()
         {
@@ -78,6 +80,6 @@ namespace LCS
             }
 
             return maxVer;
-        } // End Function GetBrowserVersion 
+        } // End Function GetBrowserVersion
     }
 }

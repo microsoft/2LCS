@@ -6,8 +6,6 @@ namespace LCS
 {
     internal class RdpCredentials : IDisposable
     {
-        private string Host { get; }
-
         public RdpCredentials(string host, string userName, string password)
         {
             Host = host;
@@ -23,6 +21,17 @@ namespace LCS
             cmdkey.Start();
         }
 
+        private string Host { get; }
+
+        public void Dispose()
+        {
+            if (Host != null)
+            {
+                var task = new Thread(DeleteEntry);
+                task.Start();
+            }
+        }
+
         private void DeleteEntry()
         {
             Thread.Sleep(10000);//Give it time before deleting credentials
@@ -36,15 +45,6 @@ namespace LCS
                 }
             };
             cmdkey.Start();
-        }
-
-        public void Dispose()
-        {
-            if (Host != null)
-            {
-                var task = new Thread(DeleteEntry) ;
-                task.Start() ;
-            }
         }
     }
 }

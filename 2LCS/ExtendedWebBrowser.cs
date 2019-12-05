@@ -6,8 +6,6 @@ namespace LCS
     {
         private bool _renavigating;
 
-        public string UserAgent { get; set; }
-
         public ExtendedWebBrowser()
         {
             DocumentCompleted += SetupBrowser;
@@ -16,20 +14,9 @@ namespace LCS
             Navigate("about:blank");
         }
 
-        void SetupBrowser(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            DocumentCompleted -= SetupBrowser;
-            SHDocVw.WebBrowser xBrowser = (SHDocVw.WebBrowser)ActiveXInstance;
-            xBrowser.BeforeNavigate2 += BeforeNavigate;
-            DocumentCompleted += PageLoaded;
-        }
+        public string UserAgent { get; set; }
 
-        void PageLoaded(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-
-        }
-
-        void BeforeNavigate(object pDisp, ref object url, ref object flags, ref object targetFrameName,
+        private void BeforeNavigate(object pDisp, ref object url, ref object flags, ref object targetFrameName,
             ref object postData, ref object headers, ref bool cancel)
         {
             if (!string.IsNullOrEmpty(UserAgent))
@@ -46,6 +33,18 @@ namespace LCS
                     _renavigating = false;
                 }
             }
+        }
+
+        private void PageLoaded(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+        }
+
+        private void SetupBrowser(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            DocumentCompleted -= SetupBrowser;
+            SHDocVw.WebBrowser xBrowser = (SHDocVw.WebBrowser)ActiveXInstance;
+            xBrowser.BeforeNavigate2 += BeforeNavigate;
+            DocumentCompleted += PageLoaded;
         }
     }
 }
