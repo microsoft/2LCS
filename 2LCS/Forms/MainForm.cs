@@ -2079,7 +2079,64 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        
+        private void exportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting updates list";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
+            Cursor = Cursors.WaitCursor;
+            var previousProject = _selectedProject;
+            var exportedUpdates = new List<Datum>();
+
+            Projects = _httpClientHelper.GetAllProjects();
+            foreach (var _project in Projects)
+            {
+                if (_project.RequestPending == true) continue;
+                _selectedProject = _project;
+                _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                SetLcsProjectText();
+             
+                List<Datum> calendar = _httpClientHelper.GetUpcomingCalendars();
+                if (calendar != null || calendar.Count != 0)
+                {
+                    foreach (var _updateRow in calendar)
+                    {
+                        exportedUpdates.Add(_updateRow);
+                    }
+                }
+            }
+
+            Cursor = Cursors.Default;
+
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = "D365FO updates - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode))
+                    {
+                        var csv = new CsvWriter(sw);
+                        csv.WriteRecords(exportedUpdates);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            SetLcsProjectText();
+            RefreshChe(false);
+            RefreshSaas(false);
+        }
     }
 
     public enum HotfixesType
