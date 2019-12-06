@@ -722,6 +722,8 @@ namespace LCS.Forms
             var exportedInstances = new List<ExportedInstance>();
 
             Projects = _httpClientHelper.GetAllProjects();
+            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+
             foreach (var _project in Projects)
             {
                 if (_project.RequestPending == true) continue;
@@ -2087,6 +2089,27 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
+        private List<LcsProject> excludeProjectsForOrganisation(List<LcsProject> _projects)
+        {
+            string exclOrg = Properties.Settings.Default.projOrgExcl;
+            if (string.IsNullOrEmpty(exclOrg))
+            {
+                return _projects;
+            }
+            else
+            {
+                List<LcsProject> projectsLocal = new List<LcsProject>();
+
+                foreach (var _project in _projects)
+                {
+                    if (!_project.OrganizationName.Contains(Properties.Settings.Default.projOrgExcl))
+                        projectsLocal.Add(_project);
+                }
+
+                return projectsLocal;
+            }
+        }
+
         private void exportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
@@ -2099,6 +2122,8 @@ namespace LCS.Forms
             var exportedUpdates = new List<Datum>();
 
             Projects = _httpClientHelper.GetAllProjects();
+            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+
             foreach (var _project in Projects)
             {
                 if (_project.RequestPending == true) continue;
