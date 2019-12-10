@@ -48,10 +48,11 @@ namespace LCS
         }
 
         public CookieContainer CookieContainer { get; }
-        public string LcsDiagUrl { private get; set; }
-        public string LcsProjectId { private get; set; }
-        public string LcsUpdateUrl { private get; set; }
-        public string LcsUrl { private get; set; }
+        public string LcsDiagUrl { get; set; }
+        public string LcsProjectId { get; set; }
+        public string LcsUpdateUrl { get; set; }
+        public string LcsUrl { get; set; }
+        public ProjectType LcsProjectTypeId { get; set; }
 
         public void ChangeLcsProjectId(string value)
         {
@@ -550,9 +551,20 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<ProjectData>(response.Data.ToString());
         }
 
-        internal CloudHostedInstance GetSaasDeploymentDetail(string environmentId)
+        internal CloudHostedInstance GetHostedDeploymentDetail(string environmentId)
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/SaaSDeployment/GetDeploymentDetail/{LcsProjectId}/?environmentId={environmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            if(LcsProjectTypeId != ProjectType.ServiceFabricImplementation)
+            {
+                return GetHostedDeploymentDetail(_httpClient.GetAsync($"{LcsUrl}/SaaSDeployment/GetDeploymentDetail/{LcsProjectId}/?environmentId={environmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+            }
+            else 
+            { 
+                return GetHostedDeploymentDetail(_httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetEnvironmentDetails/{LcsProjectId}/?environmentId={environmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+            }
+        }
+
+        private CloudHostedInstance GetHostedDeploymentDetail(HttpResponseMessage result)
+        {
             result.EnsureSuccessStatusCode();
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
@@ -562,9 +574,22 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
         }
 
-        internal List<CloudHostedInstance> GetSaasInstances()
+        internal List<CloudHostedInstance> GetHostedInstances()
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/SaasDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            if (LcsProjectTypeId != ProjectType.ServiceFabricImplementation)
+            {
+                var saasInstances = GetHostedInstances(_httpClient.GetAsync($"{LcsUrl}/SaasDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return saasInstances.OrderBy(x => x.InstanceId).ToList();
+            }
+            else
+            {
+                var selfServiceInstances = GetHostedInstances(_httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return selfServiceInstances.OrderBy(x => x.InstanceId).ToList();
+            }
+        }
+
+        private List<CloudHostedInstance> GetHostedInstances(HttpResponseMessage result)
+        {
             result.EnsureSuccessStatusCode();
 
             var responseBody = result.Content.ReadAsStringAsync().Result;
@@ -585,7 +610,7 @@ namespace LCS
                     foreach (var instance in item.DeploymentInstances)
                     {
                         if (!instance.IsDeployed) continue;
-                        var details = GetSaasDeploymentDetail(instance.EnvironmentId);
+                        var details = GetHostedDeploymentDetail(instance.EnvironmentId);
                         if (details != null)
                         {
                             list.Add(details);

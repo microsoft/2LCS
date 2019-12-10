@@ -14,6 +14,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Xceed.Document.NET;
 using Xceed.Words.NET;
 
 namespace LCS.Forms
@@ -100,21 +101,21 @@ namespace LCS.Forms
                 throw new ArgumentNullException("window");
             if (window.Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Window does not yet exist");
-            if (!IsWindowVisible(window.Handle))
+            if (!NativeMethods.IsWindowVisible(window.Handle))
                 return false;
 
             IntPtr hWnd = window.Handle;
             HashSet<IntPtr> visited = new HashSet<IntPtr> { hWnd };
 
             RECT thisRect = new RECT();
-            GetWindowRect(hWnd, out thisRect);
+            NativeMethods.GetWindowRect(hWnd, out thisRect);
 
-            while ((hWnd = GetWindow(hWnd, GW_HWNDPREV)) != IntPtr.Zero && !visited.Contains(hWnd))
+            while ((hWnd = NativeMethods.GetWindow(hWnd, GW_HWNDPREV)) != IntPtr.Zero && !visited.Contains(hWnd))
             {
                 visited.Add(hWnd);
                 RECT testRect, intersection;
                 testRect = intersection = new RECT();
-                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out testRect) && IntersectRect(out intersection, ref thisRect, ref testRect))
+                if (NativeMethods.IsWindowVisible(hWnd) && NativeMethods.GetWindowRect(hWnd, out testRect) && NativeMethods.IntersectRect(out intersection, ref thisRect, ref testRect))
                 {
                     return true;
                 }
@@ -132,12 +133,12 @@ namespace LCS.Forms
             CookieContainer cookies = null;
             var datasize = 8192 * 16;
             var cookieData = new StringBuilder(datasize);
-            if (!InternetGetCookieEx(_lcsUrl, null, cookieData, ref datasize, InternetCookieHttponly, IntPtr.Zero))
+            if (!NativeMethods.InternetGetCookieEx(_lcsUrl, null, cookieData, ref datasize, InternetCookieHttponly, IntPtr.Zero))
             {
                 if (datasize < 0)
                     return null;
                 cookieData = new StringBuilder(datasize);
-                if (!InternetGetCookieEx(
+                if (!NativeMethods.InternetGetCookieEx(
                     _lcsUrl,
                     null, cookieData,
                     ref datasize,
@@ -156,24 +157,6 @@ namespace LCS.Forms
             }
             return cookies;
         }
-
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, [Out] out RECT lpRect);
-
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, Int32 dwFlags, IntPtr lpReserved);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IntersectRect([Out] out RECT lprcDst, [In] ref RECT lprcSrc1, [In] ref RECT lprcSrc2);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsWindowVisible(IntPtr hWnd);
 
         private void AssetLibraryToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -209,10 +192,12 @@ namespace LCS.Forms
                     refreshMenuItem.Enabled = true;
                     exportToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                    _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
                     _cookies = _httpClientHelper.CookieContainer;
                     GetLcsProjectFromCookie();
                     SetLcsProjectText();
                     CreateProjectLinksMenuItems();
+                    EnableDisableMenuItems();
                     RefreshChe(Properties.Settings.Default.autorefresh);
                     RefreshSaas(Properties.Settings.Default.autorefresh);
                 }
@@ -721,6 +706,7 @@ namespace LCS.Forms
                 if (_project.RequestPending == true) continue;
                 _selectedProject = _project;
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
                 SetLcsProjectText();
                 RefreshChe();
                 RefreshSaas();
@@ -800,6 +786,7 @@ namespace LCS.Forms
             }
             _selectedProject = previousProject;
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
             RefreshChe(false);
             RefreshSaas(false);
@@ -977,7 +964,7 @@ namespace LCS.Forms
 
                         instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
 
-                        var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
+                        var instance = _httpClientHelper.GetHostedDeploymentDetail(saasInstance.EnvironmentId);
                         var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
                         if (rdpList.Count > 0)
                         {
@@ -1305,6 +1292,7 @@ namespace LCS.Forms
                 if (_selectedProject != null)
                 {
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                    _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
                 }
                 changeProjectMenuItem.Enabled = true;
                 cheInstanceContextMenu.Enabled = true;
@@ -1379,6 +1367,7 @@ namespace LCS.Forms
                     refreshMenuItem.Enabled = true;
                     exportToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                    _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
                     var projectInstance = Instances.FirstOrDefault(x => x.LcsProjectId.Equals(_selectedProject.Id));
                     if (projectInstance != null)
                     {
@@ -1395,6 +1384,16 @@ namespace LCS.Forms
             }
             CreateCustomLinksMenuItems();
             CreateProjectLinksMenuItems();
+            EnableDisableMenuItems();
+        }
+
+        private void EnableDisableMenuItems()
+        {
+            if (_selectedProject != null)
+            {
+                saasOpenRdpConnectionToolStripMenuItem.Visible = (_selectedProject.ProjectTypeId != ProjectType.ServiceFabricImplementation || _selectedProject.ProjectTypeId != ProjectType.OnPremImplementation);
+                saasRdpAndPasswordsToolStripMenuItem.Visible = (_selectedProject.ProjectTypeId != ProjectType.ServiceFabricImplementation || _selectedProject.ProjectTypeId != ProjectType.OnPremImplementation);
+            }
         }
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
@@ -1559,7 +1558,7 @@ namespace LCS.Forms
             Cursor = Cursors.WaitCursor;
             if (reloadFromLcs)
             {
-                _saasInstancesList = _httpClientHelper.GetSaasInstances();
+                _saasInstancesList = _httpClientHelper.GetHostedInstances();
 
                 if (_saasInstancesList != null)
                 {
@@ -1693,7 +1692,7 @@ namespace LCS.Forms
 
             foreach (var saasInstance in _saasInstancesList)
             {
-                var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
+                var instance = _httpClientHelper.GetHostedDeploymentDetail(saasInstance.EnvironmentId);
                 sb.Append(
                     $@"
         <group>
@@ -1766,7 +1765,7 @@ namespace LCS.Forms
 
             foreach (var saasInstance in _saasInstancesList)
             {
-                var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
+                var instance = _httpClientHelper.GetHostedDeploymentDetail(saasInstance.EnvironmentId);
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
                 foreach (var rdpEntry in rdpList)
                 {
@@ -1997,15 +1996,6 @@ namespace LCS.Forms
             Process.Start($"https://diag.lcs.dynamics.com/Home/Index/{_selectedProject.Id}");
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-        }
-
         private void LogonToPointOfSaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -2079,15 +2069,14 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        
-    }
-
-    public enum HotfixesType
-    {
-        Metadata = 8,
-        PlatformBinary = 11,
-        ApplicationBinary = 9,
-        CriticalMetadata = 16
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
     }
 
     public static class StringExtension

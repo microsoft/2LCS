@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LCS.JsonObjects
 {
@@ -72,7 +71,7 @@ namespace LCS.JsonObjects
         public string DeploymentAction { get; set; }
         public int DeploymentErrorCode { get; set; }
         public string DeploymentId { get; set; }
-        public int DeploymentState { get; set; }
+        public DeploymentState DeploymentState { get; set; }
         public string DeploymentStatus { get; set; }
         public string DevTestEnvironmentType { get; set; }
         public string DisasterRecoveryLocation { get; set; }
@@ -86,7 +85,7 @@ namespace LCS.JsonObjects
         public bool HasStagingEnvironment { get; set; }
         public string InstanceId { get; set; }
         public Instance[] Instances { get; set; }
-        public int InternalDeploymentAction { get; set; }
+        public DeploymentAction InternalDeploymentAction { get; set; }
         public int InternalDeploymentStatus { get; set; }
         public bool IsARMTopology { get; set; }
         public bool IsDiagnosticsEnabledEnvironment { get; set; }
@@ -107,7 +106,7 @@ namespace LCS.JsonObjects
         public bool IsUpgradeSelfServeInProgress { get; set; }
         public bool IsUpgradeTimeExpired { get; set; }
         public object JITExpireTimeRemaining { get; set; }
-        public object[] JITOptions { get; set; }
+        public JITOptions[] JITOptions { get; set; }
         public bool JITRequestAccessEnabledState { get; set; }
         public object JITRequestActivityId { get; set; }
         public bool JITRequestShowError { get; set; }
@@ -122,9 +121,9 @@ namespace LCS.JsonObjects
         public object RdsFarmAccessRdp { get; set; }
         public object RdsWebAccessCertificate { get; set; }
         public object RdsWebAccessLink { get; set; }
-        public int RefinedEnvironmentType { get; set; }
+        public RefinedEnvironmentType RefinedEnvironmentType { get; set; }
         public string ResourceGroupName { get; set; }
-        public int SaasEnvironmentType { get; set; }
+        public SaasEnvironmentType SaasEnvironmentType { get; set; }
         public object ServiceIds { get; set; }
         public bool ShowRetailComponents { get; set; }
         public bool ShowSslCertRotateWarning { get; set; }
@@ -145,7 +144,7 @@ namespace LCS.JsonObjects
         public string TopologyName { get; set; }
         public string TopologyType { get; set; }
         public string TopologyVersion { get; set; }
-        public int UpgradeEnvironmentStatus { get; set; }
+        public UpgradeEnvironmentStatus UpgradeEnvironmentStatus { get; set; }
         public int VirtualMachineCount { get; set; }
         public object Warnings { get; set; }
     }
@@ -280,7 +279,7 @@ namespace LCS.JsonObjects
         public string OrganizationName { get; set; }
         public int ProductId { get; set; }
         public int ProductVersionId { get; set; }
-        public int ProjectTypeId { get; set; }
+        public ProjectType ProjectTypeId { get; set; }
         public string RequestEmailInvited { get; set; }
         public bool RequestPending { get; set; }
         public bool RequestSentToAlternativeEmail { get; set; }
@@ -353,9 +352,9 @@ namespace LCS.JsonObjects
         public int MethodologyStatus { get; set; }
         public string Name { get; set; }
         public string OrganizationName { get; set; }
-        public int OrgType { get; set; }
+        public OrganizationType OrgType { get; set; }
         public Product Product { get; set; }
-        public int ProjectTypeId { get; set; }
+        public ProjectType ProjectTypeId { get; set; }
         public bool RequestPending { get; set; }
         public ProjectSettings Settings { get; set; }
     }
@@ -378,7 +377,7 @@ namespace LCS.JsonObjects
     public class ProjectSettings
     {
         public bool IsOnPremTfsEnabled { get; set; }
-        public int IssueStorageType { get; set; }
+        public IssueStorage IssueStorageType { get; set; }
         public string SharepointSite { get; set; }
         public string TfsProjectId { get; set; }
         public string TfsProjectName { get; set; }
@@ -555,5 +554,11 @@ namespace LCS.JsonObjects
         public string Status { get; set; }
         public bool IsModified { get; set; }
         public int WorkflowInstanceId { get; set; }
+    }
+
+    public class JITOptions
+    {
+        public string Label { get; set; }
+        public string Value { get; set; }
     }
 }
