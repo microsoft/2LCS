@@ -2175,14 +2175,15 @@ namespace LCS.Forms
         {
             ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
         }
-    }
 
-    public enum HotfixesType
-    {
-        Metadata = 8,
-        PlatformBinary = 11,
-        ApplicationBinary = 9,
-        CriticalMetadata = 16
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+        }
     }
 
     public static class StringExtension
