@@ -703,11 +703,17 @@ namespace LCS.Forms
             }
             Cursor = Cursors.Default;
         }
-
-        private void ExportListOfInstancesForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        enum LCSEnvironments
         {
-            notifyIcon.BalloonTipText = $"Exporting list of instances for all LCS projects. Please wait...";
-            notifyIcon.BalloonTipTitle = "Exporting list of instances";
+            ALL = 0,
+            CHE = 1,
+            SAAS = 2
+        }
+
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
@@ -716,6 +722,8 @@ namespace LCS.Forms
             var exportedInstances = new List<ExportedInstance>();
 
             Projects = _httpClientHelper.GetAllProjects();
+            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+
             foreach (var _project in Projects)
             {
                 if (_project.RequestPending == true) continue;
@@ -725,6 +733,7 @@ namespace LCS.Forms
                 RefreshChe();
                 RefreshSaas();
 
+                if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)                  
                 if (_saasInstancesList != null && _saasInstancesList.Count > 0)
                 {
                     foreach (var _instance in _saasInstancesList)
@@ -751,6 +760,7 @@ namespace LCS.Forms
                     }
                 }
 
+                if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.CHE)
                 if (_cheInstancesList != null && _cheInstancesList.Count > 0)
                 {
                     foreach (var _instance in _cheInstancesList)
@@ -779,7 +789,7 @@ namespace LCS.Forms
             }
             SaveFileDialog savefile = new SaveFileDialog
             {
-                FileName = "D365FO instances - 2LCS generated.csv",
+                FileName = $"D365FO {_LCSEnvironments} instances - 2LCS generated.csv",
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
             };
 
@@ -2079,7 +2089,102 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        
+        private List<LcsProject> excludeProjectsForOrganisation(List<LcsProject> _projects)
+        {
+            string exclOrg = Properties.Settings.Default.projOrgExcl;
+            if (string.IsNullOrEmpty(exclOrg))
+            {
+                return _projects;
+            }
+            else
+            {
+                List<LcsProject> projectsLocal = new List<LcsProject>();
+
+                foreach (var _project in _projects)
+                {
+                    if (!_project.OrganizationName.Contains(Properties.Settings.Default.projOrgExcl))
+                        projectsLocal.Add(_project);
+                }
+
+                return projectsLocal;
+            }
+        }
+
+        private void exportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting updates list";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
+            Cursor = Cursors.WaitCursor;
+            var previousProject = _selectedProject;
+            var exportedUpdates = new List<Datum>();
+
+            Projects = _httpClientHelper.GetAllProjects();
+            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+
+            foreach (var _project in Projects)
+            {
+                if (_project.RequestPending == true) continue;
+                _selectedProject = _project;
+                _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                SetLcsProjectText();
+             
+                List<Datum> calendar = _httpClientHelper.GetUpcomingCalendars();
+                if (calendar != null || calendar.Count != 0)
+                {
+                    foreach (var _updateRow in calendar)
+                    {
+                        exportedUpdates.Add(_updateRow);
+                    }
+                }
+            }
+
+            Cursor = Cursors.Default;
+
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = "D365FO updates - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode))
+                    {
+                        var csv = new CsvWriter(sw);
+                        csv.WriteRecords(exportedUpdates);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            SetLcsProjectText();
+            RefreshChe(false);
+            RefreshSaas(false);
+        }
+
+        private void allInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
+        }
+
+        private void cloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
+        }
+
+        private void mSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
+        }
     }
 
     public enum HotfixesType
