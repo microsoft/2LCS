@@ -766,7 +766,7 @@
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Name = "exportUpdateScheduleForAllProjectsToolStripMenuItem";
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(487, 40);
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Text = "Export update schedule for all projects";
-            this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Click += new System.EventHandler(this.exportUpdateScheduleForAllProjectsToolStripMenuItem_Click);
+            this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Click += new System.EventHandler(this.ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -1177,7 +1177,7 @@
             this.saasUpcomingUpdatesToolStripMenuItem.Name = "saasUpcomingUpdatesToolStripMenuItem";
             this.saasUpcomingUpdatesToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
             this.saasUpcomingUpdatesToolStripMenuItem.Text = "Upcoming updates";
-            this.saasUpcomingUpdatesToolStripMenuItem.Click += new System.EventHandler(this.saasUpcomingUpdatesToolStripMenuItem_Click);
+            this.saasUpcomingUpdatesToolStripMenuItem.Click += new System.EventHandler(this.SaasUpcomingUpdatesToolStripMenuItem_Click);
             // 
             // saasDetailedBuildInfoToolStripMenuItem
             // 

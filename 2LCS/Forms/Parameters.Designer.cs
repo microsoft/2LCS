@@ -43,17 +43,17 @@
             // 
             this.AutoRefreshCheckBox.AutoSize = true;
             this.AutoRefreshCheckBox.Location = new System.Drawing.Point(7, 29);
-            this.AutoRefreshCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.AutoRefreshCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.AutoRefreshCheckBox.Name = "AutoRefreshCheckBox";
-            this.AutoRefreshCheckBox.Size = new System.Drawing.Size(146, 29);
+            this.AutoRefreshCheckBox.Size = new System.Drawing.Size(474, 29);
             this.AutoRefreshCheckBox.TabIndex = 0;
-            this.AutoRefreshCheckBox.Text = "Auto-refresh";
+            this.AutoRefreshCheckBox.Text = "Auto-refresh list of instances after switching project";
             this.AutoRefreshCheckBox.UseVisualStyleBackColor = true;
             // 
             // closeButton
             // 
             this.closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.closeButton.Location = new System.Drawing.Point(431, 224);
+            this.closeButton.Location = new System.Drawing.Point(424, 224);
             this.closeButton.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(223, 39);
@@ -68,25 +68,24 @@
             this.groupBoxExportConfig.Controls.Add(this.textBoxProjectExcl);
             this.groupBoxExportConfig.Location = new System.Drawing.Point(16, 110);
             this.groupBoxExportConfig.Name = "groupBoxExportConfig";
-            this.groupBoxExportConfig.Size = new System.Drawing.Size(637, 85);
+            this.groupBoxExportConfig.Size = new System.Drawing.Size(637, 108);
             this.groupBoxExportConfig.TabIndex = 5;
             this.groupBoxExportConfig.TabStop = false;
             this.groupBoxExportConfig.Text = "Export instances/updates";
             // 
             // labelOrgNameExcl
             // 
-            this.labelOrgNameExcl.AutoSize = true;
-            this.labelOrgNameExcl.Location = new System.Drawing.Point(6, 38);
+            this.labelOrgNameExcl.Location = new System.Drawing.Point(6, 36);
             this.labelOrgNameExcl.Name = "labelOrgNameExcl";
-            this.labelOrgNameExcl.Size = new System.Drawing.Size(293, 25);
+            this.labelOrgNameExcl.Size = new System.Drawing.Size(332, 52);
             this.labelOrgNameExcl.TabIndex = 1;
-            this.labelOrgNameExcl.Text = "Exclude projects for organisation";
+            this.labelOrgNameExcl.Text = "Exclude projects for all organizations containing the following string\r\n\r\n";
             // 
             // textBoxProjectExcl
             // 
-            this.textBoxProjectExcl.Location = new System.Drawing.Point(318, 38);
+            this.textBoxProjectExcl.Location = new System.Drawing.Point(344, 59);
             this.textBoxProjectExcl.Name = "textBoxProjectExcl";
-            this.textBoxProjectExcl.Size = new System.Drawing.Size(307, 29);
+            this.textBoxProjectExcl.Size = new System.Drawing.Size(287, 29);
             this.textBoxProjectExcl.TabIndex = 0;
             // 
             // groupBoxUIConfig
@@ -103,12 +102,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(667, 275);
+            this.ClientSize = new System.Drawing.Size(669, 275);
             this.Controls.Add(this.groupBoxUIConfig);
             this.Controls.Add(this.groupBoxExportConfig);
             this.Controls.Add(this.closeButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimizeBox = false;
             this.Name = "Parameters";
             this.ShowInTaskbar = false;

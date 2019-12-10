@@ -707,7 +707,7 @@ namespace LCS.Forms
             var exportedInstances = new List<ExportedInstance>();
 
             Projects = _httpClientHelper.GetAllProjects();
-            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
             {
@@ -2060,7 +2060,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void saasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -2068,18 +2068,18 @@ namespace LCS.Forms
             if (calendar == null || calendar.Count == 0)
             {
                 Cursor = Cursors.Default;
-                MessageBox.Show($"Request to get upcoming updates calendar failed. You are using learning project or you do not have access to that information.");
+                MessageBox.Show($"Request to get upcoming service updates calendar failed. You are using learning project or you do not have access to that information.");
                 return;
             }
             using var form = new UpcomingUpdates();
             form.Calendar = calendar;
-            form.Text = $"Upcoming updates for {_selectedProject.Name} project.";
+            form.Text = $"Upcoming service updates for {_selectedProject.Name} project.";
             form.ShowDialog();
 
             Cursor = Cursors.Default;
         }
 
-        private List<LcsProject> excludeProjectsForOrganisation(List<LcsProject> _projects)
+        private List<LcsProject> ExcludeProjectsForOrganization(List<LcsProject> _projects)
         {
             string exclOrg = Properties.Settings.Default.projOrgExcl;
             if (string.IsNullOrEmpty(exclOrg))
@@ -2100,10 +2100,10 @@ namespace LCS.Forms
             }
         }
 
-        private void exportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
-            notifyIcon.BalloonTipTitle = "Exporting updates list";
+            notifyIcon.BalloonTipText = $"Exporting updates schedule for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting updates schedule list";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
@@ -2112,7 +2112,7 @@ namespace LCS.Forms
             var exportedUpdates = new List<Datum>();
 
             Projects = _httpClientHelper.GetAllProjects();
-            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
             {
