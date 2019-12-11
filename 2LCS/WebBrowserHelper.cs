@@ -39,7 +39,7 @@ namespace LCS
             return 7000;
         } // End Function GetEmbVersion
 
-          // End Sub FixBrowserVersion
+        // End Sub FixBrowserVersion
 
         // End Sub FixBrowserVersion
 

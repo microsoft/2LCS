@@ -128,6 +128,7 @@
             this.saasDeleteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasAddNsgRule = new System.Windows.Forms.ToolStripMenuItem();
             this.saasDeleteNsgRule = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasRestartService = new System.Windows.Forms.ToolStripMenuItem();
             this.saasRdpAndPasswordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasShowPasswordsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasShowPasswordsPowershellMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -208,7 +209,7 @@
             this.cheDataGridView.Name = "cheDataGridView";
             this.cheDataGridView.ReadOnly = true;
             this.cheDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.cheDataGridView.Size = new System.Drawing.Size(1791, 890);
+            this.cheDataGridView.Size = new System.Drawing.Size(3146, 1534);
             this.cheDataGridView.TabIndex = 0;
             this.cheDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_CellMouseDoubleClick);
             this.cheDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_ColumnHeaderMouseClick);
@@ -363,20 +364,20 @@
             this.cheLcsProjectLinksToolStripMenuItem,
             this.cheDeployPackageToolStripMenuItem});
             this.cheInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.cheInstanceContextMenu.Size = new System.Drawing.Size(311, 328);
+            this.cheInstanceContextMenu.Size = new System.Drawing.Size(293, 328);
             this.cheInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // cheLogonToAppToolStripMenuItem
             // 
             this.cheLogonToAppToolStripMenuItem.Name = "cheLogonToAppToolStripMenuItem";
-            this.cheLogonToAppToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheLogonToAppToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheLogonToAppToolStripMenuItem.Text = "Logon to application";
             this.cheLogonToAppToolStripMenuItem.Click += new System.EventHandler(this.LogonToApplicationToolStripMenuItem_Click);
             // 
             // cheOpenRDPConnectionToolStripMenuItem
             // 
             this.cheOpenRDPConnectionToolStripMenuItem.Name = "cheOpenRDPConnectionToolStripMenuItem";
-            this.cheOpenRDPConnectionToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheOpenRDPConnectionToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheOpenRDPConnectionToolStripMenuItem.Text = "Open RDP connection";
             this.cheOpenRDPConnectionToolStripMenuItem.Click += new System.EventHandler(this.OpenRDPConnectionToolStripMenuItem_Click);
             // 
@@ -388,8 +389,8 @@
             this.cheDeallocateMenuItem,
             this.cheDeleteMenuItem});
             this.cheManageVirtualMachineToolStripMenuItem.Name = "cheManageVirtualMachineToolStripMenuItem";
-            this.cheManageVirtualMachineToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
-            this.cheManageVirtualMachineToolStripMenuItem.Text = "Manage virtual machine";
+            this.cheManageVirtualMachineToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
+            this.cheManageVirtualMachineToolStripMenuItem.Text = "Manage instance";
             // 
             // cheStartInstanceMenuItem
             // 
@@ -428,7 +429,7 @@
             this.cheExportRDCManConnectionsMenuItem,
             this.cheExportRDMConnectionsToolStripMenuItem});
             this.cheRdpAndPasswordsToolStripMenuItem.Name = "cheRdpAndPasswordsToolStripMenuItem";
-            this.cheRdpAndPasswordsToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheRdpAndPasswordsToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheRdpAndPasswordsToolStripMenuItem.Text = "RDP and passwords";
             // 
             // cheShowPasswordsMenuItem
@@ -474,7 +475,7 @@
             this.cheApplicationBinaryHotfixesToolStripMenuItem,
             this.chePlatformHotfixesToolStripMenuItem});
             this.cheAvailableHotfixesToolStripMenuItem.Name = "cheAvailableHotfixesToolStripMenuItem";
-            this.cheAvailableHotfixesToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheAvailableHotfixesToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheAvailableHotfixesToolStripMenuItem.Text = "Available hotfixes";
             // 
             // cheMetadataHotfixesToolStripMenuItem
@@ -501,7 +502,7 @@
             // cheDetailedBuildInfoToolStripMenuItem
             // 
             this.cheDetailedBuildInfoToolStripMenuItem.Name = "cheDetailedBuildInfoToolStripMenuItem";
-            this.cheDetailedBuildInfoToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheDetailedBuildInfoToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheDetailedBuildInfoToolStripMenuItem.Text = "Detailed build info";
             this.cheDetailedBuildInfoToolStripMenuItem.Click += new System.EventHandler(this.DetailedBuildInfoToolStripMenuItem_Click);
             // 
@@ -517,7 +518,7 @@
             this.cheLaunchDynamicsRetailStorefrontToolStripMenuItem,
             this.cheRetailServerURLToolStripMenuItem});
             this.cheLcsInstanceLinksToolStripMenuItem.Name = "cheLcsInstanceLinksToolStripMenuItem";
-            this.cheLcsInstanceLinksToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheLcsInstanceLinksToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheLcsInstanceLinksToolStripMenuItem.Text = "LCS instance links";
             // 
             // cheInstanceDetailsToolStripMenuItem
@@ -589,7 +590,7 @@
             this.cheProjectSettingsToolStripMenuItem,
             this.cheProjectUsersToolStripMenuItem});
             this.cheLcsProjectLinksToolStripMenuItem.Name = "cheLcsProjectLinksToolStripMenuItem";
-            this.cheLcsProjectLinksToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheLcsProjectLinksToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheLcsProjectLinksToolStripMenuItem.Text = "LCS project links";
             // 
             // cheServiceRequestsToolStripMenuItem
@@ -658,7 +659,7 @@
             // cheDeployPackageToolStripMenuItem
             // 
             this.cheDeployPackageToolStripMenuItem.Name = "cheDeployPackageToolStripMenuItem";
-            this.cheDeployPackageToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.cheDeployPackageToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
             this.cheDeployPackageToolStripMenuItem.Text = "Deploy package";
             this.cheDeployPackageToolStripMenuItem.Click += new System.EventHandler(this.DeployPackageToolStripMenuItem_Click);
             // 
@@ -678,14 +679,14 @@
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
-            this.mainMenuStrip.Size = new System.Drawing.Size(1807, 42);
+            this.mainMenuStrip.Size = new System.Drawing.Size(3162, 74);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
             // loginToLcsMenuItem
             // 
             this.loginToLcsMenuItem.Name = "loginToLcsMenuItem";
-            this.loginToLcsMenuItem.Size = new System.Drawing.Size(146, 36);
+            this.loginToLcsMenuItem.Size = new System.Drawing.Size(146, 34);
             this.loginToLcsMenuItem.Text = "&Login to LCS";
             this.loginToLcsMenuItem.Click += new System.EventHandler(this.LoginToLCSMenuItem_Click);
             // 
@@ -693,7 +694,7 @@
             // 
             this.changeProjectMenuItem.Enabled = false;
             this.changeProjectMenuItem.Name = "changeProjectMenuItem";
-            this.changeProjectMenuItem.Size = new System.Drawing.Size(247, 36);
+            this.changeProjectMenuItem.Size = new System.Drawing.Size(247, 34);
             this.changeProjectMenuItem.Text = "&Change project context";
             this.changeProjectMenuItem.Click += new System.EventHandler(this.ChangeProjectMenuItem_Click);
             // 
@@ -701,14 +702,14 @@
             // 
             this.refreshMenuItem.Enabled = false;
             this.refreshMenuItem.Name = "refreshMenuItem";
-            this.refreshMenuItem.Size = new System.Drawing.Size(294, 36);
+            this.refreshMenuItem.Size = new System.Drawing.Size(294, 34);
             this.refreshMenuItem.Text = "&Refresh instances for project";
             this.refreshMenuItem.Click += new System.EventHandler(this.RefreshMenuItem_Click);
             // 
             // customLinksToolStripMenuItem
             // 
             this.customLinksToolStripMenuItem.Name = "customLinksToolStripMenuItem";
-            this.customLinksToolStripMenuItem.Size = new System.Drawing.Size(213, 36);
+            this.customLinksToolStripMenuItem.Size = new System.Drawing.Size(213, 34);
             this.customLinksToolStripMenuItem.Text = "Define c&ustom links";
             this.customLinksToolStripMenuItem.Click += new System.EventHandler(this.CustomLinksToolStripMenuItem_Click);
             // 
@@ -720,7 +721,7 @@
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem});
             this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(90, 36);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(90, 34);
             this.exportToolStripMenuItem.Text = "Export";
             // 
             // exportProjectDataToolStripMenuItem1
@@ -743,23 +744,23 @@
             // allInstancesExportToolStripMenuItem
             // 
             this.allInstancesExportToolStripMenuItem.Name = "allInstancesExportToolStripMenuItem";
-            this.allInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(315, 40);
+            this.allInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(254, 40);
             this.allInstancesExportToolStripMenuItem.Text = "All instances";
-            this.allInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.allInstancesExportToolStripMenuItem_Click);
+            this.allInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.AllInstancesExportToolStripMenuItem_Click);
             // 
             // cloudHostedInstancesExportToolStripMenuItem
             // 
             this.cloudHostedInstancesExportToolStripMenuItem.Name = "cloudHostedInstancesExportToolStripMenuItem";
-            this.cloudHostedInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(315, 40);
+            this.cloudHostedInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(254, 40);
             this.cloudHostedInstancesExportToolStripMenuItem.Text = "Cloud hosted";
-            this.cloudHostedInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.cloudHostedInstancesExportToolStripMenuItem_Click);
+            this.cloudHostedInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.CloudHostedInstancesExportToolStripMenuItem_Click);
             // 
             // mSHostedInstancesExportToolStripMenuItem
             // 
             this.mSHostedInstancesExportToolStripMenuItem.Name = "mSHostedInstancesExportToolStripMenuItem";
-            this.mSHostedInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(315, 40);
+            this.mSHostedInstancesExportToolStripMenuItem.Size = new System.Drawing.Size(254, 40);
             this.mSHostedInstancesExportToolStripMenuItem.Text = "MS hosted";
-            this.mSHostedInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.mSHostedInstancesExportToolStripMenuItem_Click);
+            this.mSHostedInstancesExportToolStripMenuItem.Click += new System.EventHandler(this.MSHostedInstancesExportToolStripMenuItem_Click);
             // 
             // exportUpdateScheduleForAllProjectsToolStripMenuItem
             // 
@@ -772,21 +773,21 @@
             // 
             this.logoutToolStripMenuItem.Enabled = false;
             this.logoutToolStripMenuItem.Name = "logoutToolStripMenuItem";
-            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(96, 36);
+            this.logoutToolStripMenuItem.Size = new System.Drawing.Size(96, 34);
             this.logoutToolStripMenuItem.Text = "Logout";
             this.logoutToolStripMenuItem.Click += new System.EventHandler(this.LogoutToolStripMenuItem_Click);
             // 
             // cookieToolStripMenuItem
             // 
             this.cookieToolStripMenuItem.Name = "cookieToolStripMenuItem";
-            this.cookieToolStripMenuItem.Size = new System.Drawing.Size(94, 36);
+            this.cookieToolStripMenuItem.Size = new System.Drawing.Size(94, 34);
             this.cookieToolStripMenuItem.Text = "Cookie";
             this.cookieToolStripMenuItem.Click += new System.EventHandler(this.CookieToolStripMenuItem_Click);
             // 
             // parametersToolStripMenuItem
             // 
             this.parametersToolStripMenuItem.Name = "parametersToolStripMenuItem";
-            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(134, 36);
+            this.parametersToolStripMenuItem.Size = new System.Drawing.Size(134, 34);
             this.parametersToolStripMenuItem.Text = "Parameters";
             this.parametersToolStripMenuItem.Click += new System.EventHandler(this.ParametersToolStripMenuItem_Click);
             // 
@@ -795,11 +796,11 @@
             this.tabControl.Controls.Add(this.cheTabPage);
             this.tabControl.Controls.Add(this.saasTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 42);
+            this.tabControl.Location = new System.Drawing.Point(0, 130);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1807, 933);
+            this.tabControl.Size = new System.Drawing.Size(3162, 1577);
             this.tabControl.TabIndex = 1;
             // 
             // cheTabPage
@@ -809,7 +810,7 @@
             this.cheTabPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cheTabPage.Name = "cheTabPage";
             this.cheTabPage.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.cheTabPage.Size = new System.Drawing.Size(1799, 896);
+            this.cheTabPage.Size = new System.Drawing.Size(3154, 1540);
             this.cheTabPage.TabIndex = 0;
             this.cheTabPage.Text = "Cloud-hosted instances";
             this.cheTabPage.UseVisualStyleBackColor = true;
@@ -821,7 +822,7 @@
             this.saasTabPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.saasTabPage.Name = "saasTabPage";
             this.saasTabPage.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.saasTabPage.Size = new System.Drawing.Size(1799, 898);
+            this.saasTabPage.Size = new System.Drawing.Size(3154, 1540);
             this.saasTabPage.TabIndex = 1;
             this.saasTabPage.Text = "MS-hosted environments";
             this.saasTabPage.UseVisualStyleBackColor = true;
@@ -858,7 +859,7 @@
             this.saasDataGridView.Name = "saasDataGridView";
             this.saasDataGridView.ReadOnly = true;
             this.saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.saasDataGridView.Size = new System.Drawing.Size(1791, 892);
+            this.saasDataGridView.Size = new System.Drawing.Size(3146, 1534);
             this.saasDataGridView.TabIndex = 1;
             this.saasDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SaasDataGridView_ColumnHeaderMouseClick);
             this.saasDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView_MouseDown);
@@ -1013,20 +1014,20 @@
             this.saasLcsProjectLinksToolStripMenuItem,
             this.saasDeployPackageToolStripMenuItem});
             this.saasInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.saasInstanceContextMenu.Size = new System.Drawing.Size(311, 402);
+            this.saasInstanceContextMenu.Size = new System.Drawing.Size(296, 364);
             this.saasInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // saasLogonToApplicationToolStripMenuItem
             // 
             this.saasLogonToApplicationToolStripMenuItem.Name = "saasLogonToApplicationToolStripMenuItem";
-            this.saasLogonToApplicationToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasLogonToApplicationToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasLogonToApplicationToolStripMenuItem.Text = "Logon to application";
             this.saasLogonToApplicationToolStripMenuItem.Click += new System.EventHandler(this.LogonToApplicationToolStripMenuItem_Click);
             // 
             // saasOpenRdpConnectionToolStripMenuItem
             // 
             this.saasOpenRdpConnectionToolStripMenuItem.Name = "saasOpenRdpConnectionToolStripMenuItem";
-            this.saasOpenRdpConnectionToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasOpenRdpConnectionToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasOpenRdpConnectionToolStripMenuItem.Text = "Open RDP Connection";
             this.saasOpenRdpConnectionToolStripMenuItem.Click += new System.EventHandler(this.SaasOpenRdpConnectionToolStripMenuItem_Click);
             // 
@@ -1038,10 +1039,11 @@
             this.saasDeallocateMenuItem,
             this.saasDeleteMenuItem,
             this.saasAddNsgRule,
-            this.saasDeleteNsgRule});
+            this.saasDeleteNsgRule,
+            this.saasRestartService});
             this.saasManageVirtualMachineToolStripMenuItem.Name = "saasManageVirtualMachineToolStripMenuItem";
-            this.saasManageVirtualMachineToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
-            this.saasManageVirtualMachineToolStripMenuItem.Text = "Manage virtual machine";
+            this.saasManageVirtualMachineToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
+            this.saasManageVirtualMachineToolStripMenuItem.Text = "Manage instance";
             // 
             // saasStartInstanceMenuItem
             // 
@@ -1085,6 +1087,13 @@
             this.saasDeleteNsgRule.Text = "Delete firewall exception";
             this.saasDeleteNsgRule.Click += new System.EventHandler(this.SaasDeleteNsgRule_Click);
             // 
+            // saasRestartService
+            // 
+            this.saasRestartService.Name = "saasRestartService";
+            this.saasRestartService.Size = new System.Drawing.Size(359, 40);
+            this.saasRestartService.Text = "Restart service";
+            this.saasRestartService.Click += new System.EventHandler(this.SaasRestartService_Click);
+            // 
             // saasRdpAndPasswordsToolStripMenuItem
             // 
             this.saasRdpAndPasswordsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1094,7 +1103,7 @@
             this.saasExportRDCManConnectionsToolStripMenuItem,
             this.saasExportRDMConnectionsToolStripMenuItem});
             this.saasRdpAndPasswordsToolStripMenuItem.Name = "saasRdpAndPasswordsToolStripMenuItem";
-            this.saasRdpAndPasswordsToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasRdpAndPasswordsToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasRdpAndPasswordsToolStripMenuItem.Text = "RDP and passwords";
             // 
             // saasShowPasswordsMenuItem
@@ -1141,7 +1150,7 @@
             this.saasPlatformBinaryHotfixesToolStripMenuItem,
             this.saasCriticalMetadataHotfixesToolStripMenuItem});
             this.saasAvailableHotfixesToolStripMenuItem.Name = "saasAvailableHotfixesToolStripMenuItem";
-            this.saasAvailableHotfixesToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasAvailableHotfixesToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasAvailableHotfixesToolStripMenuItem.Text = "Available hotfixes";
             // 
             // saasApplicationMetadataHotfixesToolStripMenuItem
@@ -1175,14 +1184,14 @@
             // saasUpcomingUpdatesToolStripMenuItem
             // 
             this.saasUpcomingUpdatesToolStripMenuItem.Name = "saasUpcomingUpdatesToolStripMenuItem";
-            this.saasUpcomingUpdatesToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasUpcomingUpdatesToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasUpcomingUpdatesToolStripMenuItem.Text = "Upcoming updates";
             this.saasUpcomingUpdatesToolStripMenuItem.Click += new System.EventHandler(this.SaasUpcomingUpdatesToolStripMenuItem_Click);
             // 
             // saasDetailedBuildInfoToolStripMenuItem
             // 
             this.saasDetailedBuildInfoToolStripMenuItem.Name = "saasDetailedBuildInfoToolStripMenuItem";
-            this.saasDetailedBuildInfoToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasDetailedBuildInfoToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasDetailedBuildInfoToolStripMenuItem.Text = "Detailed build info";
             this.saasDetailedBuildInfoToolStripMenuItem.Click += new System.EventHandler(this.DetailedBuildInfoToolStripMenuItem_Click);
             // 
@@ -1198,7 +1207,7 @@
             this.saasLaunchDynamicsRetailStorefrontToolStripMenuItem,
             this.saasRetailServerURLToolStripMenuItem});
             this.saasLcsInstanceLinksToolStripMenuItem1.Name = "saasLcsInstanceLinksToolStripMenuItem1";
-            this.saasLcsInstanceLinksToolStripMenuItem1.Size = new System.Drawing.Size(310, 36);
+            this.saasLcsInstanceLinksToolStripMenuItem1.Size = new System.Drawing.Size(295, 36);
             this.saasLcsInstanceLinksToolStripMenuItem1.Text = "LCS instance links";
             // 
             // saasInstanceDetailsToolStripMenuItem
@@ -1270,7 +1279,7 @@
             this.saasProjectSettingsToolStripMenuItem,
             this.saasProjectUsersToolStripMenuItem});
             this.saasLcsProjectLinksToolStripMenuItem.Name = "saasLcsProjectLinksToolStripMenuItem";
-            this.saasLcsProjectLinksToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasLcsProjectLinksToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasLcsProjectLinksToolStripMenuItem.Text = "LCS project links";
             // 
             // saasServiceRequestsToolStripMenuItem
@@ -1339,7 +1348,7 @@
             // saasDeployPackageToolStripMenuItem
             // 
             this.saasDeployPackageToolStripMenuItem.Name = "saasDeployPackageToolStripMenuItem";
-            this.saasDeployPackageToolStripMenuItem.Size = new System.Drawing.Size(310, 36);
+            this.saasDeployPackageToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasDeployPackageToolStripMenuItem.Text = "Deploy package";
             this.saasDeployPackageToolStripMenuItem.Click += new System.EventHandler(this.DeployPackageToolStripMenuItem_Click);
             // 
@@ -1545,6 +1554,7 @@
         private System.Windows.Forms.ToolStripMenuItem allInstancesExportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cloudHostedInstancesExportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mSHostedInstancesExportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saasRestartService;
     }
 }
 

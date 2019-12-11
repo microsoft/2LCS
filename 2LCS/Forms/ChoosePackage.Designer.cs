@@ -48,9 +48,10 @@
             // OkButton
             // 
             this.OkButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.OkButton.Location = new System.Drawing.Point(398, 399);
+            this.OkButton.Location = new System.Drawing.Point(486, 479);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(182, 33);
+            this.OkButton.Size = new System.Drawing.Size(222, 40);
             this.OkButton.TabIndex = 1;
             this.OkButton.Text = "OK";
             this.OkButton.UseVisualStyleBackColor = true;
@@ -60,9 +61,10 @@
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(586, 399);
+            this.cancelButton.Location = new System.Drawing.Point(716, 479);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(172, 33);
+            this.cancelButton.Size = new System.Drawing.Size(210, 40);
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -90,14 +92,15 @@
             this.FileAssetDisplayVersion,
             this.LcsEnvironmentActionId,
             this.LcsEnvironmentId});
-            this.packagesDataGridView.Location = new System.Drawing.Point(12, 13);
+            this.packagesDataGridView.Location = new System.Drawing.Point(15, 16);
+            this.packagesDataGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.packagesDataGridView.MultiSelect = false;
             this.packagesDataGridView.Name = "packagesDataGridView";
             this.packagesDataGridView.RowHeadersVisible = false;
             this.packagesDataGridView.RowHeadersWidth = 62;
             this.packagesDataGridView.RowTemplate.Height = 28;
             this.packagesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.packagesDataGridView.Size = new System.Drawing.Size(1194, 380);
+            this.packagesDataGridView.Size = new System.Drawing.Size(1459, 456);
             this.packagesDataGridView.TabIndex = 0;
             this.packagesDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_CellMouseDoubleClick);
             this.packagesDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_ColumnHeaderMouseClick);
@@ -203,16 +206,17 @@
             // 
             // ChoosePackage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(1218, 444);
+            this.ClientSize = new System.Drawing.Size(1489, 533);
             this.Controls.Add(this.packagesDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OkButton);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(780, 400);
+            this.MinimumSize = new System.Drawing.Size(948, 467);
             this.Name = "ChoosePackage";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;

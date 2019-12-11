@@ -86,7 +86,7 @@ namespace LCS.JsonObjects
         public string InstanceId { get; set; }
         public Instance[] Instances { get; set; }
         public DeploymentAction InternalDeploymentAction { get; set; }
-        public int InternalDeploymentStatus { get; set; }
+        public DeploymentStatus InternalDeploymentStatus { get; set; }
         public bool IsARMTopology { get; set; }
         public bool IsDiagnosticsEnabledEnvironment { get; set; }
         public bool IsEnableMaintenanceMode { get; set; }
@@ -102,7 +102,7 @@ namespace LCS.JsonObjects
         public bool IsPublishedToD365 { get; set; }
         public bool IsStagingDeploymentFailed { get; set; }
         public bool IsStagingDeploymentSucceeded { get; set; }
-        public bool IsUpgradeSelfServeCancelledOrCompleted  { get; set; }
+        public bool IsUpgradeSelfServeCancelledOrCompleted { get; set; }
         public bool IsUpgradeSelfServeInProgress { get; set; }
         public bool IsUpgradeTimeExpired { get; set; }
         public object JITExpireTimeRemaining { get; set; }
@@ -318,7 +318,7 @@ namespace LCS.JsonObjects
         public string Name { get; set; }
         public int OrgId { get; set; }
         public string TelemetryId { get; set; }
-        public int Type { get; set; }
+        public OrganizationType Type { get; set; }
     }
 
     public class PackagesData
@@ -444,13 +444,13 @@ namespace LCS.JsonObjects
         public bool Success { get; set; }
     }
 
-    public class SaasDeploymentInstance
+    public class HostedDeploymentInstance
     {
         public string AzureSubscriptionId { get; set; }
         public object BuildNumber { get; set; }
         public object CatalogName { get; set; }
         public int ConnectorId { get; set; }
-        public int DeploymentEnvironmentType { get; set; }
+        public DeploymentEnvironmentType DeploymentEnvironmentType { get; set; }
         public string DeploymentHealthSummary { get; set; }
         public int DeploymentSkuId { get; set; }
         public string DeploymentSkuType { get; set; }
@@ -476,9 +476,9 @@ namespace LCS.JsonObjects
         public int TopologyVersion { get; set; }
     }
 
-    public class SaasInstance
+    public class HostedInstance
     {
-        public List<SaasDeploymentInstance> DeploymentInstances { get; set; }
+        public List<HostedDeploymentInstance> DeploymentInstances { get; set; }
         public string DeploymentSkuName { get; set; }
         public int DisplayOrder { get; set; }
         public object TopologyName { get; set; }
@@ -560,5 +560,21 @@ namespace LCS.JsonObjects
     {
         public string Label { get; set; }
         public string Value { get; set; }
+    }
+
+    public class ServiceToRestart
+    {
+        public string Label { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class ServiceRestartResponseData
+    {
+        public string ActivityId { get; set; }
+        public string ErrorCode { get; set; }
+        public object errorList { get; set; }
+        public bool isSuccessful { get; set; }
+        public string Message { get; set; }
+        public string MessageTitle { get; set; }
     }
 }
