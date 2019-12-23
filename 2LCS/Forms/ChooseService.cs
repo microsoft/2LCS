@@ -40,16 +40,18 @@ namespace LCS.Forms
         private void ChooseService_Load(object sender, EventArgs e)
         {
             ServicesToRestart = new List<ServiceToRestart>();
-            CheckBox box;
+            RadioButton box;
             var i = 1;
             foreach(var service in AvailableServices)
             {
-                box = new CheckBox();
-                box.Tag = i.ToString();
-                box.Text = service.Label;
-                box.Name = service.Value;
-                box.AutoSize = true;
-                box.Location = new Point(20, i * 20);
+                box = new RadioButton
+                {
+                    Tag = i.ToString(),
+                    Text = service.Label,
+                    Name = service.Value,
+                    AutoSize = true,
+                    Location = new Point(20, i * 20)
+                };
                 Controls.Add(box);
                 i++;
             }

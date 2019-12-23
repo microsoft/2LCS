@@ -59,7 +59,7 @@
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Load += new System.EventHandler(this.PowerShell_Load);
+            this.Load += new System.EventHandler(this.LogDisplay_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

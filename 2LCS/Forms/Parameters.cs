@@ -5,8 +5,6 @@ namespace LCS.Forms
 {
     public partial class Parameters : Form
     {
-        private const int CpNocloseButton = 0x200;
-
         public Parameters()
         {
             InitializeComponent();

@@ -24,9 +24,9 @@ namespace LCS.Forms
     {
         private const int GW_HWNDPREV = 3;
         private const int InternetCookieHttponly = 0x2000;
-        private static readonly string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
-        private static readonly string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
-        private static readonly string _lcsUrl = "https://lcs.dynamics.com";
+        private const string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
+        private const string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
+        private const string _lcsUrl = "https://lcs.dynamics.com";
         private readonly BindingSource _cheInstancesSource = new BindingSource();
         private readonly BindingSource _saasInstancesSource = new BindingSource();
         private List<CloudHostedInstance> _cheInstancesList;
@@ -108,7 +108,7 @@ namespace LCS.Forms
         public static bool IsOverlapped(IWin32Window window)
         {
             if (window == null)
-                throw new ArgumentNullException("window");
+                throw new ArgumentNullException(nameof(window));
             if (window.Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Window does not yet exist");
             if (!IsWindowVisible(window.Handle))
@@ -116,16 +116,14 @@ namespace LCS.Forms
 
             IntPtr hWnd = window.Handle;
             HashSet<IntPtr> visited = new HashSet<IntPtr> { hWnd };
-
-            RECT thisRect = new RECT();
-            GetWindowRect(hWnd, out thisRect);
+            _ = new RECT();
+            GetWindowRect(hWnd, out RECT thisRect);
 
             while ((hWnd = GetWindow(hWnd, GW_HWNDPREV)) != IntPtr.Zero && !visited.Contains(hWnd))
             {
                 visited.Add(hWnd);
-                RECT testRect, intersection;
-                testRect = intersection = new RECT();
-                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out testRect) && IntersectRect(out intersection, ref thisRect, ref testRect))
+                _ = new RECT();
+                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out RECT testRect) && IntersectRect(out _, ref thisRect, ref testRect))
                 {
                     return true;
                 }
@@ -175,8 +173,10 @@ namespace LCS.Forms
 
         private void ChangeProjectMenuItem_Click(object sender, EventArgs e)
         {
-            using var form = new ChooseProject();
-            form.HttpClientHelper = _httpClientHelper;
+            using var form = new ChooseProject
+            {
+                HttpClientHelper = _httpClientHelper
+            };
             form.ShowDialog();
             if (!form.Cancelled && (form.LcsProject != null))
             {
@@ -519,11 +519,7 @@ namespace LCS.Forms
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
                 var link = ParseCustomLink(((ToolStripMenuItem)sender).ToolTipText, item);
-                try
-                {
-                    Process.Start(link);
-                }
-                catch { }
+                Process.Start(link);
             }
             Cursor = Cursors.Default;
         }
@@ -648,9 +644,11 @@ namespace LCS.Forms
                     MessageBox.Show($"Request to get build info details. Please try again later.");
                     continue;
                 }
-                using var form = new BuildInfoDetailsForm();
-                form.BuildInfo = buildInfo;
-                form.Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}";
+                using var form = new BuildInfoDetailsForm
+                {
+                    BuildInfo = buildInfo,
+                    Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}"
+                };
                 form.ShowDialog();
             }
             Cursor = Cursors.Default;
@@ -1234,9 +1232,11 @@ namespace LCS.Forms
                     MessageBox.Show($"There are no {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.");
                     continue;
                 }
-                using var form = new AvailableKBs();
-                form.Hotfixes = kbs;
-                form.Text = $"{kbs.Count} {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.";
+                using var form = new AvailableKBs
+                {
+                    Hotfixes = kbs,
+                    Text = $"{kbs.Count} {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance."
+                };
                 form.ShowDialog();
             }
             Cursor = Cursors.Default;
@@ -1420,7 +1420,13 @@ namespace LCS.Forms
             {
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails((CloudHostedInstance)row.DataBoundItem);
                 RDPConnectionDetails rdpEntry;
-                if (rdpList.Count > 1)
+                if (rdpList.Count == 0)
+                {
+                    Cursor = Cursors.Default;
+                    MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
+                    return;
+                }
+                else if(rdpList.Count > 1)
                 {
                     rdpEntry = ChooseRdpLogonUser(rdpList);
                 }
@@ -1482,11 +1488,7 @@ namespace LCS.Forms
         private void ProjectLinkClicked(object sender, EventArgs e)
         {
             var link = ((ToolStripMenuItem)sender).ToolTipText;
-            try
-            {
-                Process.Start(link);
-            }
-            catch { }
+            Process.Start(link);
         }
 
         private void ProjectSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2050,9 +2052,11 @@ namespace LCS.Forms
                 MessageBox.Show($"Request to get upcoming service updates calendar failed. You are using learning project or you do not have access to that information.");
                 return;
             }
-            using var form = new UpcomingUpdates();
-            form.Calendar = calendar;
-            form.Text = $"Upcoming service updates for {_selectedProject.Name} project.";
+            using var form = new UpcomingUpdates
+            {
+                Calendar = calendar,
+                Text = $"Upcoming service updates for {_selectedProject.Name} project."
+            };
             form.ShowDialog();
 
             Cursor = Cursors.Default;
@@ -2155,24 +2159,67 @@ namespace LCS.Forms
 
         private void SaasRestartService_Click(object sender, EventArgs e)
         {
-            using var form = new ChooseService();
-            form.AvailableServices = _httpClientHelper.GetServicesToRestart();
+            using var form = new ChooseService
+            {
+                AvailableServices = _httpClientHelper.GetServicesToRestart()
+            };
             form.ShowDialog();
             if (form.Cancelled || (form.ServicesToRestart == null)) return;
             Cursor = Cursors.WaitCursor;
-            var tasks = new List<Task>();
+
+            StringBuilder log = new StringBuilder();
             foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
             {
                 foreach (var service in form.ServicesToRestart)
                 {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.RestartService((CloudHostedInstance)row.DataBoundItem, service.Value)));
+                    var instance = (CloudHostedInstance)row.DataBoundItem;
+                    log.AppendLine($"Validating ongoing actions of {instance.InstanceId} instance...");
+                    OngoingActionDetails actions;
+                    var attempt = 1;
+                    do
+                    {
+                        actions = _httpClientHelper.GetOngoingActionDetails(instance);
+                        if (actions != null)
+                        {
+                            log.AppendLine($"Attempt {attempt}. Ongoing action found! Delaying next attempt for 30 seconds...");
+                            log.AppendLine($"Action status: {actions.ActionStatusText}");
+                            log.AppendLine($"Action type: {actions.ActionType}");
+                            log.AppendLine($"Action name: {actions.Name}");
+                            log.AppendLine($"Action start date: {actions.StartDate}");
+                            System.Threading.Thread.Sleep(1000 * 30);
+                            attempt++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    while (attempt <= 10);
+                    if (actions == null)
+                    {
+                        log.AppendLine($"Restarting {service.Value} service of {instance.InstanceId} instance...");
+                        var response = _httpClientHelper.RestartService(instance, service.Value);
+                        log.AppendLine($"Result:  {response.Message}");
+                        log.AppendLine();
+                    }
+                    else
+                    {
+                        log.AppendLine($" Previous ongoing action was not finished. Restart will not be executed.");
+                    }
                 }
             }
-            Task.WhenAll(tasks).Wait();
             Cursor = Cursors.Default;
+
+            if (log.Length != 0)
+            {
+                using var logForm = new LogDisplay
+                {
+                    LogEntries = log.ToString(),
+                    Text = $"Restarting service(s) log"
+                };
+                logForm.ShowDialog();
+            }
         }
-
-
     }
 
     public static class StringExtension

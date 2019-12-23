@@ -776,7 +776,7 @@ namespace LCS
 
         internal List<ServiceToRestart> GetServicesToRestart()
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}//EnvironmentServicingV2/GetServicesToRestart/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            var result = _httpClient.GetAsync($"{LcsUrl}/EnvironmentServicingV2/GetServicesToRestart/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
@@ -785,13 +785,13 @@ namespace LCS
                     : response.Data == null ? null : JsonConvert.DeserializeObject<List<ServiceToRestart>>(response.Data.ToString());
         }
 
-        internal async Task<ServiceRestartResponseData> RestartService(CloudHostedInstance instance, string serviceTorestart)
+        internal ServiceRestartResponseData RestartService(CloudHostedInstance instance, string serviceTorestart)
         {
             var parameters = $"lcsEnvironmentId={instance.EnvironmentId}&axServiceName={serviceTorestart}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
-                var result = await _httpClient.PostAsync($"{LcsUrl}/EnvironmentServicingV2/RestartService/{LcsProjectId}", _stringContent);
+                var result = _httpClient.PostAsync($"{LcsUrl}/EnvironmentServicingV2/RestartService/{LcsProjectId}", _stringContent).Result;
                 result.EnsureSuccessStatusCode();
                 var responseBody = result.Content.ReadAsStringAsync().Result;
                 var response = JsonConvert.DeserializeObject<Response>(responseBody);
@@ -799,6 +799,17 @@ namespace LCS
                     ? null
                     : response.Data == null ? null : JsonConvert.DeserializeObject<ServiceRestartResponseData>(response.Data.ToString());
             }
+        }
+
+        internal OngoingActionDetails GetOngoingActionDetails(CloudHostedInstance instance)
+        {
+            var result = _httpClient.GetAsync($"{LcsUrl}/Environment/GetOngoingActionDetails/{LcsProjectId}/?environmentId={instance.EnvironmentId}& _={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            result.EnsureSuccessStatusCode();
+            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var response = JsonConvert.DeserializeObject<Response>(responseBody);
+            return !response.Success
+                    ? null
+                    : response.Data == null ? null : JsonConvert.DeserializeObject<OngoingActionDetails>(response.Data.ToString());
         }
 
         /// <summary>

@@ -26,7 +26,7 @@ namespace LCS.Forms
             get
             {
                 var myCp = base.CreateParams;
-                myCp.ClassStyle = myCp.ClassStyle | CpNocloseButton;
+                myCp.ClassStyle |= CpNocloseButton;
                 return myCp;
             }
         }

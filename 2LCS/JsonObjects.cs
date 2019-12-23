@@ -577,4 +577,19 @@ namespace LCS.JsonObjects
         public string Message { get; set; }
         public string MessageTitle { get; set; }
     }
+
+    public class OngoingActionDetails
+    {
+        public string ActionStatusText { get; set; }
+        public string ActionType { get; set; }
+        public int ActionTypeId { get; set; }
+        public string CompletionDate { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string PackageAssetId { get; set; }
+        public string PackageType { get; set; }
+        public int ServicingAction { get; set; }
+        public string StartDate { get; set; }
+        public LcsEnvironmentActionStatus Status { get; set; }
+    }
 }
