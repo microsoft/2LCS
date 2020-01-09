@@ -142,6 +142,7 @@
             this.saasCriticalMetadataHotfixesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasUpcomingUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasDetailedBuildInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasEnvironmentChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasLcsInstanceLinksToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.saasInstanceDetailsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saasEnvironmentMonitoringToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -166,6 +167,7 @@
             this.projectDescriptionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.cheEnvironmentChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).BeginInit();
             this.cheInstanceContextMenu.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
@@ -209,7 +211,7 @@
             this.cheDataGridView.Name = "cheDataGridView";
             this.cheDataGridView.ReadOnly = true;
             this.cheDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.cheDataGridView.Size = new System.Drawing.Size(3146, 1534);
+            this.cheDataGridView.Size = new System.Drawing.Size(1791, 892);
             this.cheDataGridView.TabIndex = 0;
             this.cheDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_CellMouseDoubleClick);
             this.cheDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CheDataGridView_ColumnHeaderMouseClick);
@@ -360,11 +362,12 @@
             this.cheRdpAndPasswordsToolStripMenuItem,
             this.cheAvailableHotfixesToolStripMenuItem,
             this.cheDetailedBuildInfoToolStripMenuItem,
+            this.cheEnvironmentChangesToolStripMenuItem,
             this.cheLcsInstanceLinksToolStripMenuItem,
             this.cheLcsProjectLinksToolStripMenuItem,
             this.cheDeployPackageToolStripMenuItem});
             this.cheInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.cheInstanceContextMenu.Size = new System.Drawing.Size(293, 328);
+            this.cheInstanceContextMenu.Size = new System.Drawing.Size(293, 402);
             this.cheInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // cheLogonToAppToolStripMenuItem
@@ -679,7 +682,7 @@
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(7, 3, 0, 3);
-            this.mainMenuStrip.Size = new System.Drawing.Size(3162, 74);
+            this.mainMenuStrip.Size = new System.Drawing.Size(1807, 40);
             this.mainMenuStrip.TabIndex = 0;
             this.mainMenuStrip.Text = "menuStrip1";
             // 
@@ -796,11 +799,11 @@
             this.tabControl.Controls.Add(this.cheTabPage);
             this.tabControl.Controls.Add(this.saasTabPage);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl.Location = new System.Drawing.Point(0, 130);
+            this.tabControl.Location = new System.Drawing.Point(0, 40);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(3162, 1577);
+            this.tabControl.Size = new System.Drawing.Size(1807, 935);
             this.tabControl.TabIndex = 1;
             // 
             // cheTabPage
@@ -810,7 +813,7 @@
             this.cheTabPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cheTabPage.Name = "cheTabPage";
             this.cheTabPage.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.cheTabPage.Size = new System.Drawing.Size(3154, 1540);
+            this.cheTabPage.Size = new System.Drawing.Size(1799, 898);
             this.cheTabPage.TabIndex = 0;
             this.cheTabPage.Text = "Cloud-hosted instances";
             this.cheTabPage.UseVisualStyleBackColor = true;
@@ -822,7 +825,7 @@
             this.saasTabPage.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.saasTabPage.Name = "saasTabPage";
             this.saasTabPage.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.saasTabPage.Size = new System.Drawing.Size(3154, 1540);
+            this.saasTabPage.Size = new System.Drawing.Size(1799, 898);
             this.saasTabPage.TabIndex = 1;
             this.saasTabPage.Text = "MS-hosted environments";
             this.saasTabPage.UseVisualStyleBackColor = true;
@@ -859,7 +862,7 @@
             this.saasDataGridView.Name = "saasDataGridView";
             this.saasDataGridView.ReadOnly = true;
             this.saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            this.saasDataGridView.Size = new System.Drawing.Size(3146, 1534);
+            this.saasDataGridView.Size = new System.Drawing.Size(1791, 892);
             this.saasDataGridView.TabIndex = 1;
             this.saasDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.SaasDataGridView_ColumnHeaderMouseClick);
             this.saasDataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.DataGridView_MouseDown);
@@ -1010,11 +1013,12 @@
             this.saasAvailableHotfixesToolStripMenuItem,
             this.saasUpcomingUpdatesToolStripMenuItem,
             this.saasDetailedBuildInfoToolStripMenuItem,
+            this.saasEnvironmentChangesToolStripMenuItem,
             this.saasLcsInstanceLinksToolStripMenuItem1,
             this.saasLcsProjectLinksToolStripMenuItem,
             this.saasDeployPackageToolStripMenuItem});
             this.saasInstanceContextMenu.Name = "instanceContextMenuStrip";
-            this.saasInstanceContextMenu.Size = new System.Drawing.Size(296, 364);
+            this.saasInstanceContextMenu.Size = new System.Drawing.Size(296, 400);
             this.saasInstanceContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.InstanceContextMenu_Opening);
             // 
             // saasLogonToApplicationToolStripMenuItem
@@ -1194,6 +1198,13 @@
             this.saasDetailedBuildInfoToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
             this.saasDetailedBuildInfoToolStripMenuItem.Text = "Detailed build info";
             this.saasDetailedBuildInfoToolStripMenuItem.Click += new System.EventHandler(this.DetailedBuildInfoToolStripMenuItem_Click);
+            // 
+            // saasEnvironmentChangesToolStripMenuItem
+            // 
+            this.saasEnvironmentChangesToolStripMenuItem.Name = "saasEnvironmentChangesToolStripMenuItem";
+            this.saasEnvironmentChangesToolStripMenuItem.Size = new System.Drawing.Size(295, 36);
+            this.saasEnvironmentChangesToolStripMenuItem.Text = "Environment changes";
+            this.saasEnvironmentChangesToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentChangesToolStripMenuItem_Click);
             // 
             // saasLcsInstanceLinksToolStripMenuItem1
             // 
@@ -1384,6 +1395,13 @@
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
             // 
+            // cheEnvironmentChangesToolStripMenuItem
+            // 
+            this.cheEnvironmentChangesToolStripMenuItem.Name = "cheEnvironmentChangesToolStripMenuItem";
+            this.cheEnvironmentChangesToolStripMenuItem.Size = new System.Drawing.Size(292, 36);
+            this.cheEnvironmentChangesToolStripMenuItem.Text = "Environment changes";
+            this.cheEnvironmentChangesToolStripMenuItem.Click += new System.EventHandler(this.EnvironmentChangesToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -1555,6 +1573,8 @@
         private System.Windows.Forms.ToolStripMenuItem cloudHostedInstancesExportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mSHostedInstancesExportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasRestartService;
+        private System.Windows.Forms.ToolStripMenuItem saasEnvironmentChangesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cheEnvironmentChangesToolStripMenuItem;
     }
 }
 

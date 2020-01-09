@@ -384,7 +384,7 @@ namespace LCS.JsonObjects
         public string TfsServerSite { get; set; }
     }
 
-    public class ProjectsPaging
+    public class PagingParameters
     {
         public DynamicPaging DynamicPaging { get; set; }
         public object Filtering { get; set; }
@@ -578,7 +578,7 @@ namespace LCS.JsonObjects
         public string MessageTitle { get; set; }
     }
 
-    public class OngoingActionDetails
+    public class ActionDetails
     {
         public string ActionStatusText { get; set; }
         public string ActionType { get; set; }
@@ -592,4 +592,13 @@ namespace LCS.JsonObjects
         public string StartDate { get; set; }
         public LcsEnvironmentActionStatus Status { get; set; }
     }
+
+    public class EnvironmentHistoryDetailsData
+    {
+        public int PagingType { get; set; }
+        public List<ActionDetails> Results { get; set; }
+        public int StartIndex { get; set; }
+        public int TotalCount { get; set; }
+    }
+
 }

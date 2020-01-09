@@ -2174,7 +2174,7 @@ namespace LCS.Forms
                 {
                     var instance = (CloudHostedInstance)row.DataBoundItem;
                     log.AppendLine($"Validating ongoing actions of {instance.InstanceId} instance...");
-                    OngoingActionDetails actions;
+                    ActionDetails actions;
                     var attempt = 1;
                     do
                     {
@@ -2219,6 +2219,26 @@ namespace LCS.Forms
                 };
                 logForm.ShowDialog();
             }
+        }
+
+        private void EnvironmentChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                var actions = _httpClientHelper.GetEnvironmentHistoryDetails(instance);
+                if (actions != null)
+                {
+                    using var form = new EnvironmentChanges
+                    {
+                        ActionDetails = actions,
+                        Text = $"Environment changes for {instance.DisplayName} instance."
+                    };
+                    form.ShowDialog();
+                }
+            }
+            Cursor = Cursors.Default;
         }
     }
 

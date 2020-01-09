@@ -210,7 +210,7 @@ namespace LCS
             do
             {
                 pageNumber++;
-                var pagingParams = new ProjectsPaging()
+                var pagingParams = new PagingParameters()
                 {
                     DynamicPaging = new DynamicPaging()
                     {
@@ -253,7 +253,7 @@ namespace LCS
             do
             {
                 pageNumber++;
-                var pagingParams = new ProjectsPaging()
+                var pagingParams = new PagingParameters()
                 {
                     DynamicPaging = new DynamicPaging()
                     {
@@ -461,7 +461,7 @@ namespace LCS
             do
             {
                 pageNumber++;
-                var pagingParams = new ProjectsPaging()
+                var pagingParams = new PagingParameters()
                 {
                     DynamicPaging = new DynamicPaging()
                     {
@@ -801,15 +801,54 @@ namespace LCS
             }
         }
 
-        internal OngoingActionDetails GetOngoingActionDetails(CloudHostedInstance instance)
+        internal ActionDetails GetOngoingActionDetails(CloudHostedInstance instance)
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/Environment/GetOngoingActionDetails/{LcsProjectId}/?environmentId={instance.EnvironmentId}& _={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            var result = _httpClient.GetAsync($"{LcsUrl}/Environment/GetOngoingActionDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}").Result;
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
             return !response.Success
                     ? null
-                    : response.Data == null ? null : JsonConvert.DeserializeObject<OngoingActionDetails>(response.Data.ToString());
+                    : response.Data == null ? null : JsonConvert.DeserializeObject<ActionDetails>(response.Data.ToString());
+        }
+
+        internal List<ActionDetails> GetEnvironmentHistoryDetails(CloudHostedInstance instance)
+        {
+            const int historyItemsCount = 40;
+
+            var pagingParams = new PagingParameters()
+            {
+                DynamicPaging = new DynamicPaging()
+                {
+                    StartPosition = 0,
+                    ItemsRequested = historyItemsCount
+                }
+            };
+            var pagingParamsJson = JsonConvert.SerializeObject(pagingParams, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+
+            using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
+            {
+                SetRequestVerificationToken($"{LcsUrl}/V2");
+                var result = _httpClient.PostAsync($"{LcsUrl}/Environment/GetEnvironmentHistoryDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}", _stringContent).Result;
+                result.EnsureSuccessStatusCode();
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+
+                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                if (response.Success)
+                {
+                    var data = JsonConvert.DeserializeObject<EnvironmentHistoryDetailsData>(response.Data.ToString(), settings);
+                    if (data != null)
+                    {
+                        return data.Results;
+                    }
+                }
+                return null;
+            }
         }
 
         /// <summary>

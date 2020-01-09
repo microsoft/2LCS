@@ -65,7 +65,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=12.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.12.2.2\lib\net47\CsvHelper.dll</HintPath>
+      <HintPath>..\packages\CsvHelper.12.2.3\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.11.17.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.11.17\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -102,6 +102,12 @@
     <Compile Include="Enumerations.cs" />
     <Compile Include="ExtendedWebBrowser.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\EnvironmentChanges.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EnvironmentChanges.Designer.cs">
+      <DependentUpon>EnvironmentChanges.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\ChooseService.cs">
       <SubType>Form</SubType>
@@ -212,6 +218,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebBrowserHelper.cs" />
+    <EmbeddedResource Include="Forms\EnvironmentChanges.resx">
+      <DependentUpon>EnvironmentChanges.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ChooseService.resx">
       <DependentUpon>ChooseService.cs</DependentUpon>
     </EmbeddedResource>
