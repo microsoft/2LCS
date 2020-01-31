@@ -58,7 +58,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>favicon-blue.ico</ApplicationIcon>
+    <ApplicationIcon>favicon-white.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>LCS.Program</StartupObject>

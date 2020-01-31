@@ -1410,7 +1410,7 @@
             this.Controls.Add(this.tabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Controls.Add(this.statusStrip);
-            this.Icon = global::LCS.Properties.Resources.favicon_blue;
+            this.Icon = global::LCS.Properties.Resources.favicon_white;
             this.MainMenuStrip = this.mainMenuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MinimumSize = new System.Drawing.Size(725, 410);

@@ -601,4 +601,10 @@ namespace LCS.JsonObjects
         public int TotalCount { get; set; }
     }
 
+    public class ValidateSandboxServicingData
+    {
+        public string PlatformRelease { get; set; }
+        public string ApplicationRelease { get; set; }
+    }
+
 }

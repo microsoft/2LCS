@@ -596,8 +596,10 @@ namespace LCS.Forms
                 if (package == null)
                 {
                     var packages = _httpClientHelper.GetPagedDeployablePackageList(instance);
-                    using var form = new ChoosePackage();
-                    form.Packages = packages;
+                    using var form = new ChoosePackage
+                    {
+                        Packages = packages
+                    };
                     form.ShowDialog();
                     if (!form.Cancelled && (form.DeployablePackage != null))
                     {
