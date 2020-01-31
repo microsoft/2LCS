@@ -34,7 +34,7 @@
             this.labelOrgNameExcl = new System.Windows.Forms.Label();
             this.textBoxProjectExcl = new System.Windows.Forms.TextBox();
             this.groupBoxUIConfig = new System.Windows.Forms.GroupBox();
-            this.minimizeTray = new System.Windows.Forms.CheckBox();
+            this.minimizeToNotificationArea = new System.Windows.Forms.CheckBox();
             this.groupBoxExportConfig.SuspendLayout();
             this.groupBoxUIConfig.SuspendLayout();
             this.SuspendLayout();
@@ -93,7 +93,7 @@
             // 
             // groupBoxUIConfig
             // 
-            this.groupBoxUIConfig.Controls.Add(this.minimizeTray);
+            this.groupBoxUIConfig.Controls.Add(this.minimizeToNotificationArea);
             this.groupBoxUIConfig.Controls.Add(this.AutoRefreshCheckBox);
             this.groupBoxUIConfig.Location = new System.Drawing.Point(12, 8);
             this.groupBoxUIConfig.Margin = new System.Windows.Forms.Padding(2);
@@ -104,15 +104,15 @@
             this.groupBoxUIConfig.TabStop = false;
             this.groupBoxUIConfig.Text = "UI";
             // 
-            // minimizeTray
+            // minimizeToNotificationArea
             // 
-            this.minimizeTray.AutoSize = true;
-            this.minimizeTray.Location = new System.Drawing.Point(5, 46);
-            this.minimizeTray.Name = "minimizeTray";
-            this.minimizeTray.Size = new System.Drawing.Size(351, 21);
-            this.minimizeTray.TabIndex = 2;
-            this.minimizeTray.Text = "Closing the window minimizes to tray";
-            this.minimizeTray.UseVisualStyleBackColor = true;
+            this.minimizeToNotificationArea.AutoSize = true;
+            this.minimizeToNotificationArea.Location = new System.Drawing.Point(5, 46);
+            this.minimizeToNotificationArea.Name = "minimizeToNotificationArea";
+            this.minimizeToNotificationArea.Size = new System.Drawing.Size(335, 21);
+            this.minimizeToNotificationArea.TabIndex = 2;
+            this.minimizeToNotificationArea.Text = "Closing the window minimizes to notification area";
+            this.minimizeToNotificationArea.UseVisualStyleBackColor = true;
             // 
             // Parameters
             // 
@@ -147,6 +147,6 @@
         private System.Windows.Forms.Label labelOrgNameExcl;
         private System.Windows.Forms.TextBox textBoxProjectExcl;
         private System.Windows.Forms.GroupBox groupBoxUIConfig;
-        private System.Windows.Forms.CheckBox minimizeTray;
+        private System.Windows.Forms.CheckBox minimizeToNotificationArea;
     }
 }

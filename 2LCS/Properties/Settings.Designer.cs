@@ -110,12 +110,12 @@ namespace LCS.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool minimizeTray {
+        public bool minimizeToNotificationArea {
             get {
-                return ((bool)(this["minimizeTray"]));
+                return ((bool)(this["minimizeToNotificationArea"]));
             }
             set {
-                this["minimizeTray"] = value;
+                this["minimizeToNotificationArea"] = value;
             }
         }
     }

@@ -40,7 +40,7 @@ namespace LCS.Forms
         private List<ProjectInstance> Instances;
         private List<CustomLink> Links;
         private List<LcsProject> Projects;
-        private bool closeFromTray = false;
+        private bool closeFromNotificationArea = false;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -1278,7 +1278,7 @@ namespace LCS.Forms
 
         private void notifyIconMenuClose_Click(object sender, EventArgs e)
         {
-            closeFromTray = true;
+            closeFromNotificationArea = true;
             this.Close();
         }
 
@@ -1395,7 +1395,7 @@ namespace LCS.Forms
 
         private void MainForm_Closing(object sender, EventArgs e)
         {
-            if (Properties.Settings.Default.minimizeTray && !closeFromTray)
+            if (Properties.Settings.Default.minimizeToNotificationArea && !closeFromNotificationArea)
             {
                 this.WindowState = FormWindowState.Minimized;
                 this.ShowInTaskbar = false;
@@ -1430,7 +1430,7 @@ namespace LCS.Forms
                         _previousState = WindowState;
                         WindowState = FormWindowState.Minimized;
 
-                        if (Properties.Settings.Default.minimizeTray == true)
+                        if (Properties.Settings.Default.minimizeToNotificationArea == true)
                         {
                             this.ShowInTaskbar = false;
                         }
@@ -1440,7 +1440,7 @@ namespace LCS.Forms
                 {
                     WindowState = _previousState;
 
-                    if (Properties.Settings.Default.minimizeTray == true)
+                    if (Properties.Settings.Default.minimizeToNotificationArea == true)
                     {
                         this.ShowInTaskbar = true;
                     }

@@ -23,7 +23,7 @@
     <Setting Name="projOrgExcl" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="minimizeTray" Type="System.Boolean" Scope="User">
+    <Setting Name="minimizeToNotificationArea" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
