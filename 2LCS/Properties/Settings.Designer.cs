@@ -106,5 +106,17 @@ namespace LCS.Properties {
                 this["projOrgExcl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool minimizeTray {
+            get {
+                return ((bool)(this["minimizeTray"]));
+            }
+            set {
+                this["minimizeTray"] = value;
+            }
+        }
     }
 }

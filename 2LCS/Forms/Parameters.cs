@@ -27,12 +27,14 @@ namespace LCS.Forms
         private void Parameters_Load(object sender, EventArgs e)
         {
             AutoRefreshCheckBox.Checked = Properties.Settings.Default.autorefresh;
+            minimizeTray.Checked = Properties.Settings.Default.minimizeTray;
             textBoxProjectExcl.Text = Properties.Settings.Default.projOrgExcl;
         }
 
         private void setParameters()
         {
             Properties.Settings.Default.autorefresh = AutoRefreshCheckBox.Checked;
+            Properties.Settings.Default.minimizeTray = minimizeTray.Checked;
             Properties.Settings.Default.projOrgExcl = textBoxProjectExcl.Text;
             Properties.Settings.Default.Save();
         }
