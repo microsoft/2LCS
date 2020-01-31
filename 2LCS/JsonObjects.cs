@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace LCS.JsonObjects
 {
@@ -72,7 +71,7 @@ namespace LCS.JsonObjects
         public string DeploymentAction { get; set; }
         public int DeploymentErrorCode { get; set; }
         public string DeploymentId { get; set; }
-        public int DeploymentState { get; set; }
+        public DeploymentState DeploymentState { get; set; }
         public string DeploymentStatus { get; set; }
         public string DevTestEnvironmentType { get; set; }
         public string DisasterRecoveryLocation { get; set; }
@@ -86,8 +85,8 @@ namespace LCS.JsonObjects
         public bool HasStagingEnvironment { get; set; }
         public string InstanceId { get; set; }
         public Instance[] Instances { get; set; }
-        public int InternalDeploymentAction { get; set; }
-        public int InternalDeploymentStatus { get; set; }
+        public DeploymentAction InternalDeploymentAction { get; set; }
+        public DeploymentStatus InternalDeploymentStatus { get; set; }
         public bool IsARMTopology { get; set; }
         public bool IsDiagnosticsEnabledEnvironment { get; set; }
         public bool IsEnableMaintenanceMode { get; set; }
@@ -103,11 +102,11 @@ namespace LCS.JsonObjects
         public bool IsPublishedToD365 { get; set; }
         public bool IsStagingDeploymentFailed { get; set; }
         public bool IsStagingDeploymentSucceeded { get; set; }
-        public bool IsUpgradeSelfServeCancelledOrCompleted  { get; set; }
+        public bool IsUpgradeSelfServeCancelledOrCompleted { get; set; }
         public bool IsUpgradeSelfServeInProgress { get; set; }
         public bool IsUpgradeTimeExpired { get; set; }
         public object JITExpireTimeRemaining { get; set; }
-        public object[] JITOptions { get; set; }
+        public JITOptions[] JITOptions { get; set; }
         public bool JITRequestAccessEnabledState { get; set; }
         public object JITRequestActivityId { get; set; }
         public bool JITRequestShowError { get; set; }
@@ -122,9 +121,9 @@ namespace LCS.JsonObjects
         public object RdsFarmAccessRdp { get; set; }
         public object RdsWebAccessCertificate { get; set; }
         public object RdsWebAccessLink { get; set; }
-        public int RefinedEnvironmentType { get; set; }
+        public RefinedEnvironmentType RefinedEnvironmentType { get; set; }
         public string ResourceGroupName { get; set; }
-        public int SaasEnvironmentType { get; set; }
+        public SaasEnvironmentType SaasEnvironmentType { get; set; }
         public object ServiceIds { get; set; }
         public bool ShowRetailComponents { get; set; }
         public bool ShowSslCertRotateWarning { get; set; }
@@ -145,7 +144,7 @@ namespace LCS.JsonObjects
         public string TopologyName { get; set; }
         public string TopologyType { get; set; }
         public string TopologyVersion { get; set; }
-        public int UpgradeEnvironmentStatus { get; set; }
+        public UpgradeEnvironmentStatus UpgradeEnvironmentStatus { get; set; }
         public int VirtualMachineCount { get; set; }
         public object Warnings { get; set; }
     }
@@ -280,7 +279,7 @@ namespace LCS.JsonObjects
         public string OrganizationName { get; set; }
         public int ProductId { get; set; }
         public int ProductVersionId { get; set; }
-        public int ProjectTypeId { get; set; }
+        public ProjectType ProjectTypeId { get; set; }
         public string RequestEmailInvited { get; set; }
         public bool RequestPending { get; set; }
         public bool RequestSentToAlternativeEmail { get; set; }
@@ -319,7 +318,7 @@ namespace LCS.JsonObjects
         public string Name { get; set; }
         public int OrgId { get; set; }
         public string TelemetryId { get; set; }
-        public int Type { get; set; }
+        public OrganizationType Type { get; set; }
     }
 
     public class PackagesData
@@ -353,9 +352,9 @@ namespace LCS.JsonObjects
         public int MethodologyStatus { get; set; }
         public string Name { get; set; }
         public string OrganizationName { get; set; }
-        public int OrgType { get; set; }
+        public OrganizationType OrgType { get; set; }
         public Product Product { get; set; }
-        public int ProjectTypeId { get; set; }
+        public ProjectType ProjectTypeId { get; set; }
         public bool RequestPending { get; set; }
         public ProjectSettings Settings { get; set; }
     }
@@ -378,14 +377,14 @@ namespace LCS.JsonObjects
     public class ProjectSettings
     {
         public bool IsOnPremTfsEnabled { get; set; }
-        public int IssueStorageType { get; set; }
+        public IssueStorage IssueStorageType { get; set; }
         public string SharepointSite { get; set; }
         public string TfsProjectId { get; set; }
         public string TfsProjectName { get; set; }
         public string TfsServerSite { get; set; }
     }
 
-    public class ProjectsPaging
+    public class PagingParameters
     {
         public DynamicPaging DynamicPaging { get; set; }
         public object Filtering { get; set; }
@@ -445,13 +444,13 @@ namespace LCS.JsonObjects
         public bool Success { get; set; }
     }
 
-    public class SaasDeploymentInstance
+    public class HostedDeploymentInstance
     {
         public string AzureSubscriptionId { get; set; }
         public object BuildNumber { get; set; }
         public object CatalogName { get; set; }
         public int ConnectorId { get; set; }
-        public int DeploymentEnvironmentType { get; set; }
+        public DeploymentEnvironmentType DeploymentEnvironmentType { get; set; }
         public string DeploymentHealthSummary { get; set; }
         public int DeploymentSkuId { get; set; }
         public string DeploymentSkuType { get; set; }
@@ -477,9 +476,9 @@ namespace LCS.JsonObjects
         public int TopologyVersion { get; set; }
     }
 
-    public class SaasInstance
+    public class HostedInstance
     {
-        public List<SaasDeploymentInstance> DeploymentInstances { get; set; }
+        public List<HostedDeploymentInstance> DeploymentInstances { get; set; }
         public string DeploymentSkuName { get; set; }
         public int DisplayOrder { get; set; }
         public object TopologyName { get; set; }
@@ -556,4 +555,56 @@ namespace LCS.JsonObjects
         public bool IsModified { get; set; }
         public int WorkflowInstanceId { get; set; }
     }
+
+    public class JITOptions
+    {
+        public string Label { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class ServiceToRestart
+    {
+        public string Label { get; set; }
+        public string Value { get; set; }
+    }
+
+    public class ServiceRestartResponseData
+    {
+        public string ActivityId { get; set; }
+        public string ErrorCode { get; set; }
+        public object errorList { get; set; }
+        public bool isSuccessful { get; set; }
+        public string Message { get; set; }
+        public string MessageTitle { get; set; }
+    }
+
+    public class ActionDetails
+    {
+        public string ActionStatusText { get; set; }
+        public string ActionType { get; set; }
+        public int ActionTypeId { get; set; }
+        public string CompletionDate { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string PackageAssetId { get; set; }
+        public string PackageType { get; set; }
+        public int ServicingAction { get; set; }
+        public string StartDate { get; set; }
+        public LcsEnvironmentActionStatus Status { get; set; }
+    }
+
+    public class EnvironmentHistoryDetailsData
+    {
+        public int PagingType { get; set; }
+        public List<ActionDetails> Results { get; set; }
+        public int StartIndex { get; set; }
+        public int TotalCount { get; set; }
+    }
+
+    public class ValidateSandboxServicingData
+    {
+        public string PlatformRelease { get; set; }
+        public string ApplicationRelease { get; set; }
+    }
+
 }

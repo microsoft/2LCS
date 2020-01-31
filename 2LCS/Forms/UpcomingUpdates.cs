@@ -29,7 +29,7 @@ namespace LCS.Forms
             }
             upcomingUpdatesDataGridView.Columns["UtcStartDateTime"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm";
             upcomingUpdatesDataGridView.DataSource = _calendarSource;
-            _calendarSource.DataSource = Calendar;//.OrderBy(f => f.ReleasedDate).ThenBy(i => i.KBNumber).Reverse();
+            _calendarSource.DataSource = Calendar;
         }
 
         private void UpcomingUpdatesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
