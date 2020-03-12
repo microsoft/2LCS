@@ -140,6 +140,16 @@ namespace LCS.Properties {
             }
             set {
                 this["keepCache"] = value;
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool minimizeToNotificationArea {
+            get {
+                return ((bool)(this["minimizeToNotificationArea"]));
+            }
+            set {
+                this["minimizeToNotificationArea"] = value;
             }
         }
     }

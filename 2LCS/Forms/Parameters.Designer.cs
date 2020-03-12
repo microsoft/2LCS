@@ -38,6 +38,7 @@
             this.ClearCacheButton = new System.Windows.Forms.Button();
             this.StoreCacheCheckBox = new System.Windows.Forms.CheckBox();
             this.CachingEnabledCheckbox = new System.Windows.Forms.CheckBox();
+            this.minimizeToNotificationArea = new System.Windows.Forms.CheckBox();
             this.groupBoxExportConfig.SuspendLayout();
             this.groupBoxUIConfig.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -98,6 +99,7 @@
             // 
             // groupBoxUIConfig
             // 
+            this.groupBoxUIConfig.Controls.Add(this.minimizeToNotificationArea);
             this.groupBoxUIConfig.Controls.Add(this.AutoRefreshCheckBox);
             this.groupBoxUIConfig.Location = new System.Drawing.Point(9, 7);
             this.groupBoxUIConfig.Margin = new System.Windows.Forms.Padding(2);
@@ -161,6 +163,21 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(365, 216);
             this.Controls.Add(this.groupBox1);
+            // minimizeToNotificationArea
+            // 
+            this.minimizeToNotificationArea.AutoSize = true;
+            this.minimizeToNotificationArea.Location = new System.Drawing.Point(5, 46);
+            this.minimizeToNotificationArea.Name = "minimizeToNotificationArea";
+            this.minimizeToNotificationArea.Size = new System.Drawing.Size(335, 21);
+            this.minimizeToNotificationArea.TabIndex = 2;
+            this.minimizeToNotificationArea.Text = "Closing the window minimizes to notification area";
+            this.minimizeToNotificationArea.UseVisualStyleBackColor = true;
+            // 
+            // Parameters
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(487, 206);
             this.Controls.Add(this.groupBoxUIConfig);
             this.Controls.Add(this.groupBoxExportConfig);
             this.Controls.Add(this.closeButton);
@@ -201,5 +218,6 @@
         private System.Windows.Forms.CheckBox StoreCacheCheckBox;
         private System.Windows.Forms.CheckBox CachingEnabledCheckbox;
         private System.Windows.Forms.Button ClearCacheButton;
+        private System.Windows.Forms.CheckBox minimizeToNotificationArea;
     }
 }

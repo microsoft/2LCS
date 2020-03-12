@@ -351,10 +351,17 @@ namespace LCS
             responseBody = responseBody.TrimStart('(');
             responseBody = responseBody.TrimEnd(')');
 
-            var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
-            if (cloudHostedInstancesUnsorted != null)
+            try
             {
-                list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
+                var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(responseBody);
+                if (cloudHostedInstancesUnsorted != null)
+                {
+                    list.AddRange(cloudHostedInstancesUnsorted.Values.OrderBy(x => x.InstanceId));
+                }
+            }
+            catch
+            {
+                return list;
             }
             return list;
         }
@@ -367,16 +374,16 @@ namespace LCS
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
 
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                MissingMemberHandling = MissingMemberHandling.Ignore
-            };
             var list = new List<CloudHostedInstance>();
             if (response.Success)
             {
                 if (response.Data == null) return list;
 
+                var settings = new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
                 var cloudHostedInstancesUnsorted = JsonConvert.DeserializeObject<Dictionary<string, CloudHostedInstance>>(response.Data.ToString(), settings);
                 if (cloudHostedInstancesUnsorted != null)
                 {
