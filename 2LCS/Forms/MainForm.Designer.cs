@@ -168,6 +168,8 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.cheEnvironmentChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.notifyIconContextMenu = new System.Windows.Forms.ContextMenu();
+            this.notifyIconMenuClose = new System.Windows.Forms.MenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).BeginInit();
             this.cheInstanceContextMenu.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
@@ -1392,8 +1394,22 @@
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.notifyIcon.Icon = global::LCS.Properties.Resources.favicon_white;
             this.notifyIcon.Text = "2LCS - Lightweight LCS";
+            this.notifyIcon.ContextMenu = this.notifyIconContextMenu;
             this.notifyIcon.Visible = true;
             this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseClick);
+            // 
+            // notifyIconContextMenu
+            //
+            this.notifyIconContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.notifyIconMenuClose});
+            this.notifyIconContextMenu.Name = "notifyIconContextMenu";
+            // 
+            // notifyIconMenuCloseMenuItem
+            // 
+            this.notifyIconMenuClose.Index = 0;
+            this.notifyIconMenuClose.Name = "notifyIconMenuClose";
+            this.notifyIconMenuClose.Text = "Close 2LCS";
+            this.notifyIconMenuClose.Click += new System.EventHandler(this.notifyIconMenuClose_Click);
             // 
             // cheEnvironmentChangesToolStripMenuItem
             // 
@@ -1417,6 +1433,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "2LCS - Lifecycle Services companion app";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_Closing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).EndInit();
             this.cheInstanceContextMenu.ResumeLayout(false);
@@ -1431,7 +1448,6 @@
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
 
         #endregion
@@ -1500,6 +1516,8 @@
         private System.Windows.Forms.ToolStripMenuItem saasSystemDiagnosticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheOpenRDPConnectionToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenu notifyIconContextMenu;
+        private System.Windows.Forms.MenuItem notifyIconMenuClose;
         private System.Windows.Forms.ToolStripMenuItem cheShowRDPDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasShowRDPDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheAvailableHotfixesToolStripMenuItem;

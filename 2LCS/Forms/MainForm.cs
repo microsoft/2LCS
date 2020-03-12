@@ -40,6 +40,7 @@ namespace LCS.Forms
         private List<ProjectInstance> Instances;
         private List<CustomLink> Links;
         private List<LcsProject> Projects;
+        private bool closeFromNotificationArea = false;
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -1275,6 +1276,12 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
+        private void notifyIconMenuClose_Click(object sender, EventArgs e)
+        {
+            closeFromNotificationArea = true;
+            this.Close();
+        }
+
         private void LoginToLCSMenuItem_Click(object sender, EventArgs e)
         {
             WebBrowserHelper.FixBrowserVersion();
@@ -1386,6 +1393,19 @@ namespace LCS.Forms
             EnableDisableMenuItems();
         }
 
+        private void MainForm_Closing(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.minimizeToNotificationArea && !closeFromNotificationArea)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+
+                FormClosingEventArgs ev = e as FormClosingEventArgs;
+
+                ev.Cancel = true;
+            }
+        }
+
         private void EnableDisableMenuItems()
         {
             if (_selectedProject != null)
@@ -1397,21 +1417,34 @@ namespace LCS.Forms
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
+            if (e.Button == MouseButtons.Left)
             {
-                if (IsOverlapped(this))
+                if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
                 {
-                    Activate();
+                    if (IsOverlapped(this))
+                    {
+                        Activate();
+                    }
+                    else
+                    {
+                        _previousState = WindowState;
+                        WindowState = FormWindowState.Minimized;
+
+                        if (Properties.Settings.Default.minimizeToNotificationArea == true)
+                        {
+                            this.ShowInTaskbar = false;
+                        }
+                    }
                 }
-                else
+                else if (WindowState == FormWindowState.Minimized)
                 {
-                    _previousState = WindowState;
-                    WindowState = FormWindowState.Minimized;
+                    WindowState = _previousState;
+
+                    if (Properties.Settings.Default.minimizeToNotificationArea == true)
+                    {
+                        this.ShowInTaskbar = true;
+                    }
                 }
-            }
-            else if (WindowState == FormWindowState.Minimized)
-            {
-                WindowState = _previousState;
             }
         }
 
