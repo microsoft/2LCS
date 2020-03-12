@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using LCS.Cache;
 using LCS.JsonObjects;
+using LCS.Properties;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -1393,7 +1394,7 @@ namespace LCS.Forms
 
         private void LoadFromCredentialsStore()
         {
-            if(Properties.Settings.Default.keepCache)
+            if(Settings.Default.keepCache)
             {
                 CredentialsCacheHelper.LoadOffLineCredentials();
             }
@@ -1406,7 +1407,7 @@ namespace LCS.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(Properties.Settings.Default.keepCache)
+            if(Settings.Default.keepCache)
             {
                 CredentialsCacheHelper.SaveCredentialsOffline();
             }
