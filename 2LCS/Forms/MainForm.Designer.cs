@@ -1409,7 +1409,7 @@
             this.notifyIconMenuClose.Index = 0;
             this.notifyIconMenuClose.Name = "notifyIconMenuClose";
             this.notifyIconMenuClose.Text = "Close 2LCS";
-            this.notifyIconMenuClose.Click += new System.EventHandler(this.notifyIconMenuClose_Click);
+            this.notifyIconMenuClose.Click += new System.EventHandler(this.NotifyIconMenuClose_Click);
             // 
             // cheEnvironmentChangesToolStripMenuItem
             // 

@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 using static LCS.NativeMethods;
+using System.Globalization;
 
 namespace LCS.Forms
 {
@@ -51,6 +52,26 @@ namespace LCS.Forms
             public int top;
             public int right;
             public int bottom;
+
+            public override bool Equals(object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(RECT left, RECT right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(RECT left, RECT right)
+            {
+                return !(left == right);
+            }
         }
 
         public MainForm()
@@ -67,8 +88,10 @@ namespace LCS.Forms
             Button button_Cancel = new Button() { Text = "Cancel", Location = new Point(140, 30) };
             button_OK.DialogResult = DialogResult.OK;
             button_Cancel.DialogResult = DialogResult.Cancel;
-            FlowLayoutPanel panel = new FlowLayoutPanel();
-            panel.Dock = DockStyle.Fill;
+            FlowLayoutPanel panel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill
+            };
 
             form.Text = "Choose user";
             form.ClientSize = new Size(280, 60);
@@ -350,7 +373,7 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
+        <ID>{Guid.NewGuid()}</ID>
         <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
@@ -781,7 +804,7 @@ namespace LCS.Forms
                 try
                 {
                     using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
-                    var csv = new CsvWriter(sw);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
                     csv.WriteRecords(exportedInstances);
                 }
                 catch (Exception ex)
@@ -1278,7 +1301,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void notifyIconMenuClose_Click(object sender, EventArgs e)
+        private void NotifyIconMenuClose_Click(object sender, EventArgs e)
         {
             closeFromNotificationArea = true;
             this.Close();
@@ -1684,9 +1707,11 @@ namespace LCS.Forms
                 if (nsgRule == null)
                 {
                     var networkSecurityGroup = _httpClientHelper.GetNetworkSecurityGroup(instance);
-                    using var form = new ChooseNSG();
-                    form.NetworkSecurityGroup = networkSecurityGroup;
-                    form.Text = $"Choose firewall rule to delete";
+                    using var form = new ChooseNSG
+                    {
+                        NetworkSecurityGroup = networkSecurityGroup,
+                        Text = $"Choose firewall rule to delete"
+                    };
                     form.ShowDialog();
                     if (!form.Cancelled && (form.NSGRule != null))
                     {
@@ -1830,7 +1855,7 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
+        <ID>{Guid.NewGuid()}</ID>
         <Name>{saasInstance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
@@ -2189,7 +2214,7 @@ namespace LCS.Forms
                 try
                 {
                     using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
-                    var csv = new CsvWriter(sw);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
                     csv.WriteRecords(exportedUpdates);
                 }
                 catch (Exception ex)

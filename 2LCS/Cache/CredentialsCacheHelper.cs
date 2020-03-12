@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace LCS.Cache
 {
@@ -56,7 +56,7 @@ namespace LCS.Cache
             {
                 using(var writer = new StreamWriter(tempFile))
                 {
-                    writer.Write(JsonSerializer.Serialize(EnvironmentCredentialCache, EnvironmentCredentialCache.GetType()));
+                    writer.Write(JsonConvert.SerializeObject(EnvironmentCredentialCache));
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace LCS.Cache
                 {
                     var cache = reader.ReadToEnd();
 
-                    store = JsonSerializer.Deserialize<CredentialsStore>(cache);
+                    store = JsonConvert.DeserializeObject<CredentialsStore>(cache);
 
                     store.RebuildMemCache();
                 }

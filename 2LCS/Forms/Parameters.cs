@@ -23,7 +23,7 @@ namespace LCS.Forms
 
         private void OkButton_Click(object sender, EventArgs e)
         {
-            setParameters();
+            SetParameters();
             Close();
         }
 
@@ -42,7 +42,7 @@ namespace LCS.Forms
             SetStoreCacheEnabledDisabled();
         }
 
-        private void setParameters()
+        private void SetParameters()
         {
             Properties.Settings.Default.autorefresh = AutoRefreshCheckBox.Checked;
             Properties.Settings.Default.minimizeToNotificationArea = minimizeToNotificationArea.Checked;
