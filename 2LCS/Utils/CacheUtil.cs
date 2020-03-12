@@ -10,6 +10,15 @@ namespace LCS.Utils
 {
     public class CacheUtil
     {
+        public static bool IsCachingEnabled()
+        {
+            return Properties.Settings.Default.cachingEnabled;
+        }
+        public static bool SaveCacheToStoreEnabled()
+        {
+            return Properties.Settings.Default.keepCache;
+        }
+
         public static void Add(string key, object o)
         {
             if (o == null)
