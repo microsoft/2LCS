@@ -243,6 +243,10 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\CacheUtil.cs" />
+    <Compile Include="Cache\CredentialsCacheHelper.cs" />
+    <Compile Include="Cache\EnvironmentCredentials.cs" />
+    <Compile Include="Cache\CredentialsStore.cs" />
     <Compile Include="WebBrowserHelper.cs" />
     <EmbeddedResource Include="Forms\EnvironmentChanges.resx">
       <DependentUpon>EnvironmentChanges.cs</DependentUpon>
