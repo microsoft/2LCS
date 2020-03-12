@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
+using LCS.Cache;
 using LCS.JsonObjects;
+using LCS.Utils;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -387,13 +389,32 @@ namespace LCS
 
         internal Dictionary<string, string> GetCredentials(string environmentId, string itemName)
         {
+            Dictionary<string, string> credentialsDic;
+
+            if (CacheUtil.IsCachingEnabled())
+            {
+                credentialsDic = CredentialsCacheHelper.GetCredentialsCache(environmentId);
+
+                if (credentialsDic != null)
+                    return credentialsDic;
+            }
+
             var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetCredentials/{LcsProjectId}?environmentId={environmentId}&deploymentItemName={itemName}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
             result.EnsureSuccessStatusCode();
             var responseBody = result.Content.ReadAsStringAsync().Result;
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
-            return response.Success && response.Data != null
-                ? JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Data.ToString())
-                : null;
+
+            if (response.Success && response.Data != null)
+            {
+                credentialsDic = JsonConvert.DeserializeObject<Dictionary<string, string>>(response.Data.ToString());
+
+                if (CacheUtil.IsCachingEnabled())
+                    CredentialsCacheHelper.AddCredentialsCache(environmentId, credentialsDic);
+
+                return credentialsDic;
+            }
+
+            return null;
         }
 
         internal string GetDiagEnvironmentId(CloudHostedInstance instance)
