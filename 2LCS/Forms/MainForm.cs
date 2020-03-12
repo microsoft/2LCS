@@ -1,4 +1,6 @@
 ﻿using CsvHelper;
+using LCS.Cache;
+using LCS.Utils;
 using LCS.JsonObjects;
 using Newtonsoft.Json;
 using System;
@@ -1391,6 +1393,31 @@ namespace LCS.Forms
             CreateCustomLinksMenuItems();
             CreateProjectLinksMenuItems();
             EnableDisableMenuItems();
+            WireEvents();
+
+            //caching
+            LoadFromCredentialsStore();
+        }
+
+        private void LoadFromCredentialsStore()
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.LoadOffLineCredentials();
+            }
+        }
+
+        private void WireEvents()
+        {
+            this.FormClosing += MainForm_FormClosing;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.SaveCredentialsOffline();
+            }
         }
 
         private void MainForm_Closing(object sender, EventArgs e)
