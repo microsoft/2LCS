@@ -29,7 +29,7 @@
     <Setting Name="cachingStore" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="keepCache" Type="System.String" Scope="User">
+    <Setting Name="keepCache" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

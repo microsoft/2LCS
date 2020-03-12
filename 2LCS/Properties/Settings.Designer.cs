@@ -133,10 +133,9 @@ namespace LCS.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string keepCache {
+        public bool keepCache {
             get {
-                return ((string)(this["keepCache"]));
+                return ((bool)(this["keepCache"]));
             }
             set {
                 this["keepCache"] = value;
