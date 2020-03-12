@@ -96,27 +96,30 @@ namespace LCS.Cache
         {
             Properties.Settings.Default.cachingEnabled = false;
             Properties.Settings.Default.keepCache = false;
+            Properties.Settings.Default.cachingStore = "";
             Properties.Settings.Default.Save();
         }
 
 
-        public static void ClearCache()
+        public static string ClearCache()
         {
             var tempFile = Properties.Settings.Default.cachingStore;
 
             if (string.IsNullOrEmpty(tempFile))
-                return;
+                return null;
 
             try
             {
                 File.Delete(tempFile);
                 Properties.Settings.Default.cachingStore = "";
                 Properties.Settings.Default.Save();
+                
+                return null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                DisableCache();
+                return ex.Message;
             }
         }
 
