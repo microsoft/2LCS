@@ -37,7 +37,7 @@ namespace LCS.Forms
             Close();
         }
 
-        private void ChoosePackage_Load(object sender, EventArgs e)
+        private void ChooseNSG_Load(object sender, EventArgs e)
         {
             nsgRulesDataGridView.AutoGenerateColumns = false;
             if (!SystemInformation.TerminalServerSession)
@@ -66,7 +66,7 @@ namespace LCS.Forms
             Close();
         }
 
-        private void PackagesDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void NsgRulesDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (nsgRulesDataGridView.SelectedRows.Count > 0)
             {
@@ -79,7 +79,7 @@ namespace LCS.Forms
             Close();
         }
 
-        private void PackagesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        private void NsgRulesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (nsgRulesDataGridView.DataSource == null) return;
             _nsgRulesSource.DataSource = _sortAscending ? NetworkSecurityGroup.Rules.OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : NetworkSecurityGroup.Rules.OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();

@@ -1,4 +1,6 @@
 ﻿using CsvHelper;
+using LCS.Cache;
+using LCS.Utils;
 using LCS.JsonObjects;
 using Newtonsoft.Json;
 using System;
@@ -14,7 +16,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Xceed.Document.NET;
 using Xceed.Words.NET;
+using static LCS.NativeMethods;
+using System.Globalization;
 
 namespace LCS.Forms
 {
@@ -22,9 +27,9 @@ namespace LCS.Forms
     {
         private const int GW_HWNDPREV = 3;
         private const int InternetCookieHttponly = 0x2000;
-        private static readonly string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
-        private static readonly string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
-        private static readonly string _lcsUrl = "https://lcs.dynamics.com";
+        private const string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
+        private const string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
+        private const string _lcsUrl = "https://lcs.dynamics.com";
         private readonly BindingSource _cheInstancesSource = new BindingSource();
         private readonly BindingSource _saasInstancesSource = new BindingSource();
         private List<CloudHostedInstance> _cheInstancesList;
@@ -38,6 +43,36 @@ namespace LCS.Forms
         private List<ProjectInstance> Instances;
         private List<CustomLink> Links;
         private List<LcsProject> Projects;
+        private bool closeFromNotificationArea = false;
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
+        {
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+
+            public override bool Equals(object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(RECT left, RECT right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(RECT left, RECT right)
+            {
+                return !(left == right);
+            }
+        }
 
         public MainForm()
         {
@@ -53,8 +88,10 @@ namespace LCS.Forms
             Button button_Cancel = new Button() { Text = "Cancel", Location = new Point(140, 30) };
             button_OK.DialogResult = DialogResult.OK;
             button_Cancel.DialogResult = DialogResult.Cancel;
-            FlowLayoutPanel panel = new FlowLayoutPanel();
-            panel.Dock = DockStyle.Fill;
+            FlowLayoutPanel panel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill
+            };
 
             form.Text = "Choose user";
             form.ClientSize = new Size(280, 60);
@@ -97,7 +134,7 @@ namespace LCS.Forms
         public static bool IsOverlapped(IWin32Window window)
         {
             if (window == null)
-                throw new ArgumentNullException("window");
+                throw new ArgumentNullException(nameof(window));
             if (window.Handle == IntPtr.Zero)
                 throw new InvalidOperationException("Window does not yet exist");
             if (!IsWindowVisible(window.Handle))
@@ -105,16 +142,14 @@ namespace LCS.Forms
 
             IntPtr hWnd = window.Handle;
             HashSet<IntPtr> visited = new HashSet<IntPtr> { hWnd };
-
-            RECT thisRect = new RECT();
-            GetWindowRect(hWnd, out thisRect);
+            _ = new RECT();
+            GetWindowRect(hWnd, out RECT thisRect);
 
             while ((hWnd = GetWindow(hWnd, GW_HWNDPREV)) != IntPtr.Zero && !visited.Contains(hWnd))
             {
                 visited.Add(hWnd);
-                RECT testRect, intersection;
-                testRect = intersection = new RECT();
-                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out testRect) && IntersectRect(out intersection, ref thisRect, ref testRect))
+                _ = new RECT();
+                if (IsWindowVisible(hWnd) && GetWindowRect(hWnd, out RECT testRect) && IntersectRect(out _, ref thisRect, ref testRect))
                 {
                     return true;
                 }
@@ -157,24 +192,6 @@ namespace LCS.Forms
             return cookies;
         }
 
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetWindow(IntPtr hWnd, int uCmd);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowRect(IntPtr hWnd, [Out] out RECT lpRect);
-
-        [DllImport("wininet.dll", SetLastError = true)]
-        private static extern bool InternetGetCookieEx(string url, string cookieName, StringBuilder cookieData, ref int size, Int32 dwFlags, IntPtr lpReserved);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IntersectRect([Out] out RECT lprcDst, [In] ref RECT lprcSrc1, [In] ref RECT lprcSrc2);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool IsWindowVisible(IntPtr hWnd);
-
         private void AssetLibraryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start($"https://lcs.dynamics.com/V2/AssetLibrary/{_selectedProject.Id}");
@@ -182,40 +199,42 @@ namespace LCS.Forms
 
         private void ChangeProjectMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new ChooseProject())
+            using var form = new ChooseProject
             {
-                form.HttpClientHelper = _httpClientHelper;
-                form.ShowDialog();
-                if (!form.Cancelled && (form.LcsProject != null))
+                HttpClientHelper = _httpClientHelper
+            };
+            form.ShowDialog();
+            if (!form.Cancelled && (form.LcsProject != null))
+            {
+                Projects = form.Projects;
+                if (_selectedProject == null || form.LcsProject.Id != _selectedProject.Id)
                 {
-                    Projects = form.Projects;
-                    if (_selectedProject == null || form.LcsProject.Id != _selectedProject.Id)
-                    {
-                        _cheInstancesSource.DataSource = null;
-                        _cheInstancesSource.ResetBindings(false);
-                        _saasInstancesSource.DataSource = null;
-                        _saasInstancesSource.ResetBindings(false);
-                        _selectedProject = form.LcsProject;
+                    _cheInstancesSource.DataSource = null;
+                    _cheInstancesSource.ResetBindings(false);
+                    _saasInstancesSource.DataSource = null;
+                    _saasInstancesSource.ResetBindings(false);
+                    _selectedProject = form.LcsProject;
 
-                        if (!Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                    if (!Instances.Exists(x => x.LcsProjectId == _selectedProject.Id))
+                    {
+                        var instance = new ProjectInstance()
                         {
-                            var instance = new ProjectInstance()
-                            {
-                                LcsProjectId = _selectedProject.Id,
-                            };
-                            Instances.Add(instance);
-                        }
+                            LcsProjectId = _selectedProject.Id,
+                        };
+                        Instances.Add(instance);
                     }
-                    refreshMenuItem.Enabled = true;
-                    exportToolStripMenuItem.Enabled = true;
-                    _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
-                    _cookies = _httpClientHelper.CookieContainer;
-                    GetLcsProjectFromCookie();
-                    SetLcsProjectText();
-                    CreateProjectLinksMenuItems();
-                    RefreshChe(Properties.Settings.Default.autorefresh);
-                    RefreshSaas(Properties.Settings.Default.autorefresh);
                 }
+                refreshMenuItem.Enabled = true;
+                exportToolStripMenuItem.Enabled = true;
+                _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+                _cookies = _httpClientHelper.CookieContainer;
+                GetLcsProjectFromCookie();
+                SetLcsProjectText();
+                CreateProjectLinksMenuItems();
+                EnableDisableMenuItems();
+                RefreshChe(Properties.Settings.Default.autorefresh);
+                RefreshSaas(Properties.Settings.Default.autorefresh);
             }
         }
 
@@ -326,8 +345,8 @@ namespace LCS.Forms
             };
             if (savefile.ShowDialog() == DialogResult.OK)
             {
-                using (StreamWriter sw = new StreamWriter(savefile.FileName))
-                    sw.Write(sb);
+                using StreamWriter sw = new StreamWriter(savefile.FileName);
+                sw.Write(sb);
             }
             Cursor = Cursors.Default;
         }
@@ -354,7 +373,7 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
+        <ID>{Guid.NewGuid()}</ID>
         <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
@@ -376,8 +395,8 @@ namespace LCS.Forms
             };
             if (savefile.ShowDialog() == DialogResult.OK)
             {
-                using (StreamWriter sw = new StreamWriter(savefile.FileName))
-                    sw.Write(sb);
+                using StreamWriter sw = new StreamWriter(savefile.FileName);
+                sw.Write(sb);
             }
             Cursor = Cursors.Default;
         }
@@ -416,18 +435,16 @@ namespace LCS.Forms
 
         private void CookieToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new CookieEdit())
-            {
-                form.ShowDialog();
-                if (form.Cancelled || string.IsNullOrEmpty(form.Cookie)) return;
-                if (form.Cookie == Properties.Settings.Default.cookie) return;
-                Properties.Settings.Default.cookie = form.Cookie;
-                Properties.Settings.Default.projects = "";
-                Properties.Settings.Default.instances = "";
-                Properties.Settings.Default.Save();
-                MessageBox.Show("Application will now restart", "Message", MessageBoxButtons.OK);
-                Application.Restart();
-            }
+            using var form = new CookieEdit();
+            form.ShowDialog();
+            if (form.Cancelled || string.IsNullOrEmpty(form.Cookie)) return;
+            if (form.Cookie == Properties.Settings.Default.cookie) return;
+            Properties.Settings.Default.cookie = form.Cookie;
+            Properties.Settings.Default.projects = "";
+            Properties.Settings.Default.instances = "";
+            Properties.Settings.Default.Save();
+            MessageBox.Show("Application will now restart", "Message", MessageBoxButtons.OK);
+            Application.Restart();
         }
 
         private void CreateCustomLinksMenuItems()
@@ -528,24 +545,18 @@ namespace LCS.Forms
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
                 var link = ParseCustomLink(((ToolStripMenuItem)sender).ToolTipText, item);
-                try
-                {
-                    Process.Start(link);
-                }
-                catch { }
+                Process.Start(link);
             }
             Cursor = Cursors.Default;
         }
 
         private void CustomLinksToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new CustomLinks())
-            {
-                form.ShowDialog();
-                if (form.Cancelled) return;
-                RemoveCustomLinksMenuItems();
-                CreateCustomLinksMenuItems();
-            }
+            using var form = new CustomLinks();
+            form.ShowDialog();
+            if (form.Cancelled) return;
+            RemoveCustomLinksMenuItems();
+            CreateCustomLinksMenuItems();
         }
 
         private void DataGridView_MouseDown(object sender, MouseEventArgs e)
@@ -611,22 +622,22 @@ namespace LCS.Forms
                 if (package == null)
                 {
                     var packages = _httpClientHelper.GetPagedDeployablePackageList(instance);
-                    using (var form = new ChoosePackage())
+                    using var form = new ChoosePackage
                     {
-                        form.Packages = packages;
-                        form.ShowDialog();
-                        if (!form.Cancelled && (form.DeployablePackage != null))
-                        {
-                            package = form.DeployablePackage;
-                            log.AppendLine($"Chosen package name: {package.Name}");
-                            log.AppendLine($"Chosen package description: {package.Description}");
-                            log.AppendLine($"Chosen package platform version: {package.PlatformVersion}");
-                            log.AppendLine();
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        Packages = packages
+                    };
+                    form.ShowDialog();
+                    if (!form.Cancelled && (form.DeployablePackage != null))
+                    {
+                        package = form.DeployablePackage;
+                        log.AppendLine($"Chosen package name: {package.Name}");
+                        log.AppendLine($"Chosen package description: {package.Description}");
+                        log.AppendLine($"Chosen package platform version: {package.PlatformVersion}");
+                        log.AppendLine();
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 if (package != null)
@@ -661,12 +672,12 @@ namespace LCS.Forms
                     MessageBox.Show($"Request to get build info details. Please try again later.");
                     continue;
                 }
-                using (var form = new BuildInfoDetailsForm())
+                using var form = new BuildInfoDetailsForm
                 {
-                    form.BuildInfo = buildInfo;
-                    form.Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}";
-                    form.ShowDialog();
-                }
+                    BuildInfo = buildInfo,
+                    Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}"
+                };
+                form.ShowDialog();
             }
             Cursor = Cursors.Default;
         }
@@ -703,22 +714,10 @@ namespace LCS.Forms
             }
             Cursor = Cursors.Default;
         }
-        enum LCSEnvironments
-        {
-            ALL = 0,
-            CHE = 1,
-            SAAS = 2
-        }
-        
-        enum LCSProjectAllCurrent
-        {
-            ALL = 0,
-            CURRENT = 1
-        }
 
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
         {
-            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -727,80 +726,72 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
 
-            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
-            {
-                Projects = _httpClientHelper.GetAllProjects();
-            }
-            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
-            {
-                Projects = new List<LcsProject>();
-                Projects.Add(previousProject);
-            }
-
-            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+            Projects = _httpClientHelper.GetAllProjects();
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
             {
                 if (_project.RequestPending == true) continue;
                 _selectedProject = _project;
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
                 SetLcsProjectText();
                 RefreshChe();
                 RefreshSaas();
 
-                if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)                  
-                if (_saasInstancesList != null && _saasInstancesList.Count > 0)
-                {
-                    foreach (var _instance in _saasInstancesList)
+                if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
+                    if (_saasInstancesList != null && _saasInstancesList.Count > 0)
                     {
-                        var exportedInstance = new ExportedInstance
+                        foreach (var _instance in _saasInstancesList)
                         {
-                            ProjectId = _project.Id.ToString(),
-                            ProjectName = _project.Name,
-                            Organization = _project.OrganizationName,
-                            InstanceName = _instance.DisplayName,
-                            EnvironmentId = _instance.EnvironmentId,
-                            CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
-                            CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
-                            CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
-                            CurrentPlatformVersion = _instance.CurrentPlatformVersion,
-                            BuildInfo = _instance.BuildInfo,
-                            TopologyType = _instance.TopologyType,
-                            TopologyVersion = _instance.TopologyVersion,
-                            TopologyName = _instance.TopologyName,
-                            DeploymentStatus = _instance.DeploymentStatus,
-                            HostingType = "MS hosted"
-                        };
-                        exportedInstances.Add(exportedInstance);
+                            var exportedInstance = new ExportedInstance
+                            {
+                                ProjectId = _project.Id.ToString(),
+                                ProjectName = _project.Name,
+                                Organization = _project.OrganizationName,
+                                InstanceName = _instance.DisplayName,
+                                EnvironmentId = _instance.EnvironmentId,
+                                CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
+                                CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
+                                CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
+                                CurrentPlatformVersion = _instance.CurrentPlatformVersion,
+                                BuildInfo = _instance.BuildInfo,
+                                TopologyType = _instance.TopologyType,
+                                TopologyVersion = _instance.TopologyVersion,
+                                TopologyName = _instance.TopologyName,
+                                DeploymentStatus = _instance.DeploymentStatus,
+                                HostingType = "MS hosted"
+                            };
+                            exportedInstances.Add(exportedInstance);
+                        }
                     }
-                }
 
                 if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.CHE)
-                if (_cheInstancesList != null && _cheInstancesList.Count > 0)
-                {
-                    foreach (var _instance in _cheInstancesList)
+                    if (_cheInstancesList != null && _cheInstancesList.Count > 0)
                     {
-                        var exportedInstance = new ExportedInstance
+                        foreach (var _instance in _cheInstancesList)
                         {
-                            ProjectId = _project.Id.ToString(),
-                            ProjectName = _project.Name,
-                            Organization = _project.OrganizationName,
-                            InstanceName = _instance.DisplayName,
-                            EnvironmentId = _instance.EnvironmentId,
-                            CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
-                            CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
-                            CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
-                            CurrentPlatformVersion = _instance.CurrentPlatformVersion,
-                            BuildInfo = _instance.BuildInfo,
-                            TopologyType = _instance.TopologyType,
-                            TopologyVersion = _instance.TopologyVersion,
-                            TopologyName = _instance.TopologyName,
-                            DeploymentStatus = _instance.DeploymentStatus,
-                            HostingType = "Cloud hosted"
-                        };
-                        exportedInstances.Add(exportedInstance);
+                            var exportedInstance = new ExportedInstance
+                            {
+                                ProjectId = _project.Id.ToString(),
+                                ProjectName = _project.Name,
+                                Organization = _project.OrganizationName,
+                                InstanceName = _instance.DisplayName,
+                                EnvironmentId = _instance.EnvironmentId,
+                                CurrentApplicationBuildVersion = _instance.CurrentApplicationBuildVersion,
+                                CurrentApplicationReleaseName = _instance.CurrentApplicationReleaseName,
+                                CurrentPlatformReleaseName = _instance.CurrentPlatformReleaseName,
+                                CurrentPlatformVersion = _instance.CurrentPlatformVersion,
+                                BuildInfo = _instance.BuildInfo,
+                                TopologyType = _instance.TopologyType,
+                                TopologyVersion = _instance.TopologyVersion,
+                                TopologyName = _instance.TopologyName,
+                                DeploymentStatus = _instance.DeploymentStatus,
+                                HostingType = "Cloud hosted"
+                            };
+                            exportedInstances.Add(exportedInstance);
+                        }
                     }
-                }
             }
             SaveFileDialog savefile = new SaveFileDialog
             {
@@ -812,11 +803,9 @@ namespace LCS.Forms
             {
                 try
                 {
-                    using (StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode))
-                    {
-                        var csv = new CsvWriter(sw);
-                        csv.WriteRecords(exportedInstances);
-                    }
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedInstances);
                 }
                 catch (Exception ex)
                 {
@@ -825,6 +814,7 @@ namespace LCS.Forms
             }
             _selectedProject = previousProject;
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
             RefreshChe(false);
             RefreshSaas(false);
@@ -875,7 +865,7 @@ namespace LCS.Forms
                     tenantNameHeader.SpacingAfter(10d);
                     var tenantIdHeader = document.InsertParagraph("Tenant ID: " + plans.TenantId).FontSize(14d);
                     tenantIdHeader.SpacingAfter(10d);
-                    if(plans.Plans.Count > 0)
+                    if (plans.Plans.Count > 0)
                     {
                         //plans table
                         var plansColumnWidths = new float[] { 200f, 200f, 60f, 40f, 40f };
@@ -1002,11 +992,10 @@ namespace LCS.Forms
 
                         instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
 
-                        var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
-                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(saasInstance);
                         if (rdpList.Count > 0)
                         {
-                            var vms = document.InsertParagraph("RDP connections: " + instance.DisplayName.ToUpper()).FontSize(14d);
+                            var vms = document.InsertParagraph("RDP connections: " + saasInstance.DisplayName.ToUpper()).FontSize(14d);
                             vms.SpacingBefore(20d);
                             vms.SpacingAfter(10d);
                             foreach (var rdpEntry in rdpList)
@@ -1030,9 +1019,9 @@ namespace LCS.Forms
                                 document.InsertParagraph();
                             }
                         }
-                        foreach (var vm in instance.Instances)
+                        foreach (var vm in saasInstance.Instances)
                         {
-                            var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
+                            var CredentialsDict = _httpClientHelper.GetCredentials(saasInstance.EnvironmentId, vm.ItemName);
                             if (CredentialsDict.Count > 0)
                             {
                                 var credentialsParagraph = document.InsertParagraph("Credentials for " + vm.MachineName).FontSize(14d);
@@ -1271,12 +1260,12 @@ namespace LCS.Forms
                     MessageBox.Show($"There are no {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.");
                     continue;
                 }
-                using (var form = new AvailableKBs())
+                using var form = new AvailableKBs
                 {
-                    form.Hotfixes = kbs;
-                    form.Text = $"{kbs.Count} {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.";
-                    form.ShowDialog();
-                }
+                    Hotfixes = kbs,
+                    Text = $"{kbs.Count} {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance."
+                };
+                form.ShowDialog();
             }
             Cursor = Cursors.Default;
         }
@@ -1312,32 +1301,37 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
+        private void NotifyIconMenuClose_Click(object sender, EventArgs e)
+        {
+            closeFromNotificationArea = true;
+            this.Close();
+        }
+
         private void LoginToLCSMenuItem_Click(object sender, EventArgs e)
         {
             WebBrowserHelper.FixBrowserVersion();
-            using (var form = new Login())
+            using var form = new Login();
+            form.ShowDialog();
+            if (form.Cancelled) return;
+            _cookies = GetUriCookieContainer();
+            if (_cookies == null) return;
+            _httpClientHelper = new HttpClientHelper(_cookies)
             {
-                form.ShowDialog();
-                if (form.Cancelled) return;
-                _cookies = GetUriCookieContainer();
-                if (_cookies == null) return;
-                _httpClientHelper = new HttpClientHelper(_cookies)
-                {
-                    LcsUrl = _lcsUrl,
-                    LcsUpdateUrl = _lcsUpdateUrl,
-                    LcsDiagUrl = _lcsDiagUrl
-                };
-                if (_selectedProject != null)
-                {
-                    _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
-                }
-                changeProjectMenuItem.Enabled = true;
-                cheInstanceContextMenu.Enabled = true;
-                saasInstanceContextMenu.Enabled = true;
-                logoutToolStripMenuItem.Enabled = true;
-                loginToLcsMenuItem.Enabled = false;
-                ChangeProjectMenuItem_Click(null, null);
+                LcsUrl = _lcsUrl,
+                LcsUpdateUrl = _lcsUpdateUrl,
+                LcsDiagUrl = _lcsDiagUrl
+            };
+            if (_selectedProject != null)
+            {
+                _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             }
+            changeProjectMenuItem.Enabled = true;
+            cheInstanceContextMenu.Enabled = true;
+            saasInstanceContextMenu.Enabled = true;
+            logoutToolStripMenuItem.Enabled = true;
+            loginToLcsMenuItem.Enabled = false;
+            ChangeProjectMenuItem_Click(null, null);
         }
 
         private void LogonToApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1404,6 +1398,7 @@ namespace LCS.Forms
                     refreshMenuItem.Enabled = true;
                     exportToolStripMenuItem.Enabled = true;
                     _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                    _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
                     var projectInstance = Instances.FirstOrDefault(x => x.LcsProjectId.Equals(_selectedProject.Id));
                     if (projectInstance != null)
                     {
@@ -1420,25 +1415,86 @@ namespace LCS.Forms
             }
             CreateCustomLinksMenuItems();
             CreateProjectLinksMenuItems();
+            EnableDisableMenuItems();
+            WireEvents();
+
+            //caching
+            LoadFromCredentialsStore();
+        }
+
+        private void LoadFromCredentialsStore()
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.LoadOffLineCredentials();
+            }
+        }
+
+        private void WireEvents()
+        {
+            this.FormClosing += MainForm_FormClosing;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.SaveCredentialsOffline();
+            }
+        }
+
+        private void MainForm_Closing(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.minimizeToNotificationArea && !closeFromNotificationArea)
+            {
+                this.WindowState = FormWindowState.Minimized;
+                this.ShowInTaskbar = false;
+
+                FormClosingEventArgs ev = e as FormClosingEventArgs;
+
+                ev.Cancel = true;
+            }
+        }
+
+        private void EnableDisableMenuItems()
+        {
+            if (_selectedProject != null)
+            {
+                saasOpenRdpConnectionToolStripMenuItem.Visible = (_selectedProject.ProjectTypeId != ProjectType.ServiceFabricImplementation || _selectedProject.ProjectTypeId != ProjectType.OnPremImplementation);
+                saasRdpAndPasswordsToolStripMenuItem.Visible = (_selectedProject.ProjectTypeId != ProjectType.ServiceFabricImplementation || _selectedProject.ProjectTypeId != ProjectType.OnPremImplementation);
+            }
         }
 
         private void NotifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
-            if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
+            if (e.Button == MouseButtons.Left)
             {
-                if (IsOverlapped(this))
+                if (WindowState == FormWindowState.Normal || WindowState == FormWindowState.Maximized)
                 {
-                    Activate();
+                    if (IsOverlapped(this))
+                    {
+                        Activate();
+                    }
+                    else
+                    {
+                        _previousState = WindowState;
+                        WindowState = FormWindowState.Minimized;
+
+                        if (Properties.Settings.Default.minimizeToNotificationArea == true)
+                        {
+                            this.ShowInTaskbar = false;
+                        }
+                    }
                 }
-                else
+                else if (WindowState == FormWindowState.Minimized)
                 {
-                    _previousState = WindowState;
-                    WindowState = FormWindowState.Minimized;
+                    WindowState = _previousState;
+
+                    if (Properties.Settings.Default.minimizeToNotificationArea == true)
+                    {
+                        this.ShowInTaskbar = true;
+                    }
                 }
-            }
-            else if (WindowState == FormWindowState.Minimized)
-            {
-                WindowState = _previousState;
             }
         }
 
@@ -1449,7 +1505,13 @@ namespace LCS.Forms
             {
                 var rdpList = _httpClientHelper.GetRdpConnectionDetails((CloudHostedInstance)row.DataBoundItem);
                 RDPConnectionDetails rdpEntry;
-                if (rdpList.Count > 1)
+                if (rdpList.Count == 0)
+                {
+                    Cursor = Cursors.Default;
+                    MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
+                    return;
+                }
+                else if(rdpList.Count > 1)
                 {
                     rdpEntry = ChooseRdpLogonUser(rdpList);
                 }
@@ -1483,10 +1545,8 @@ namespace LCS.Forms
 
         private void ParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (var form = new Parameters())
-            {
-                form.ShowDialog();
-            }
+            using var form = new Parameters();
+            form.ShowDialog();
         }
 
         private string ParseCustomLink(string template, CloudHostedInstance instance)
@@ -1513,11 +1573,7 @@ namespace LCS.Forms
         private void ProjectLinkClicked(object sender, EventArgs e)
         {
             var link = ((ToolStripMenuItem)sender).ToolTipText;
-            try
-            {
-                Process.Start(link);
-            }
-            catch { }
+            Process.Start(link);
         }
 
         private void ProjectSettingsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1584,7 +1640,7 @@ namespace LCS.Forms
             Cursor = Cursors.WaitCursor;
             if (reloadFromLcs)
             {
-                _saasInstancesList = _httpClientHelper.GetSaasInstances();
+                _saasInstancesList = _httpClientHelper.GetHostedInstances();
 
                 if (_saasInstancesList != null)
                 {
@@ -1618,19 +1674,17 @@ namespace LCS.Forms
 
         private void SaasAddNsgRule_Click(object sender, EventArgs e)
         {
-            using (var form = new AddNsg())
+            using var form = new AddNsg();
+            form.ShowDialog();
+            if (form.Cancelled || (form.Rule == null)) return;
+            Cursor = Cursors.WaitCursor;
+            var tasks = new List<Task>();
+            foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
             {
-                form.ShowDialog();
-                if (form.Cancelled || (form.Rule == null)) return;
-                Cursor = Cursors.WaitCursor;
-                var tasks = new List<Task>();
-                foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
-                {
-                    tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.AddNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule.FirstOrDefault().Key, form.Rule.FirstOrDefault().Value)));
-                }
-                Task.WhenAll(tasks).Wait();
-                Cursor = Cursors.Default;
+                tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.AddNsgRule((CloudHostedInstance)row.DataBoundItem, form.Rule.FirstOrDefault().Key, form.Rule.FirstOrDefault().Value)));
             }
+            Task.WhenAll(tasks).Wait();
+            Cursor = Cursors.Default;
         }
 
         private void SaasDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -1653,21 +1707,21 @@ namespace LCS.Forms
                 if (nsgRule == null)
                 {
                     var networkSecurityGroup = _httpClientHelper.GetNetworkSecurityGroup(instance);
-                    using (var form = new ChooseNSG())
+                    using var form = new ChooseNSG
                     {
-                        form.NetworkSecurityGroup = networkSecurityGroup;
-                        form.Text = $"Choose firewall rule to delete";
-                        form.ShowDialog();
-                        if (!form.Cancelled && (form.NSGRule != null))
-                        {
-                            nsgRule = form.NSGRule;
-                            log.AppendLine($"Firewall rule to be deleted: {nsgRule.Name}, IP: {nsgRule.IpOrCidr}");
-                            log.AppendLine();
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        NetworkSecurityGroup = networkSecurityGroup,
+                        Text = $"Choose firewall rule to delete"
+                    };
+                    form.ShowDialog();
+                    if (!form.Cancelled && (form.NSGRule != null))
+                    {
+                        nsgRule = form.NSGRule;
+                        log.AppendLine($"Firewall rule to be deleted: {nsgRule.Name}, IP: {nsgRule.IpOrCidr}");
+                        log.AppendLine();
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
                 if (nsgRule != null)
@@ -1718,12 +1772,11 @@ namespace LCS.Forms
 
             foreach (var saasInstance in _saasInstancesList)
             {
-                var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
                 sb.Append(
                     $@"
         <group>
             <properties>
-                <name>{instance.InstanceId}</name>
+                <name>{saasInstance.InstanceId}</name>
                 <expanded>True</expanded>
                 <comment />
                 <logonCredentials inherit=""FromParent"" />
@@ -1735,7 +1788,7 @@ namespace LCS.Forms
                 <displaySettings inherit=""FromParent"" />
             </properties>");
 
-                var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails(saasInstance);
                 foreach (var rdpEntry in rdpList)
                 {
                     sb.Append(
@@ -1774,8 +1827,8 @@ namespace LCS.Forms
             };
             if (savefile.ShowDialog() == DialogResult.OK)
             {
-                using (StreamWriter sw = new StreamWriter(savefile.FileName))
-                    sw.Write(sb);
+                using StreamWriter sw = new StreamWriter(savefile.FileName);
+                sw.Write(sb);
             }
             Cursor = Cursors.Default;
         }
@@ -1791,8 +1844,7 @@ namespace LCS.Forms
 
             foreach (var saasInstance in _saasInstancesList)
             {
-                var instance = _httpClientHelper.GetSaasDeploymentDetail(saasInstance.EnvironmentId);
-                var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                var rdpList = _httpClientHelper.GetRdpConnectionDetails(saasInstance);
                 foreach (var rdpEntry in rdpList)
                 {
                     sb.Append($@"
@@ -1803,8 +1855,8 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
-        <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
+        <ID>{Guid.NewGuid()}</ID>
+        <Name>{saasInstance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
         <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
@@ -1825,8 +1877,8 @@ namespace LCS.Forms
             };
             if (savefile.ShowDialog() == DialogResult.OK)
             {
-                using (StreamWriter sw = new StreamWriter(savefile.FileName))
-                    sw.Write(sb);
+                using StreamWriter sw = new StreamWriter(savefile.FileName);
+                sw.Write(sb);
             }
             Cursor = Cursors.Default;
         }
@@ -2022,15 +2074,6 @@ namespace LCS.Forms
             Process.Start($"https://diag.lcs.dynamics.com/Home/Index/{_selectedProject.Id}");
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        private struct RECT
-        {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
-        }
-
         private void LogonToPointOfSaleToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
@@ -2085,7 +2128,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void saasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -2093,18 +2136,20 @@ namespace LCS.Forms
             if (calendar == null || calendar.Count == 0)
             {
                 Cursor = Cursors.Default;
-                MessageBox.Show($"Request to get upcoming updates calendar failed. You are using learning project or you do not have access to that information.");
+                MessageBox.Show($"Request to get upcoming service updates calendar failed. You are using learning project or you do not have access to that information.");
                 return;
             }
-            using var form = new UpcomingUpdates();
-            form.Calendar = calendar;
-            form.Text = $"Upcoming updates for {_selectedProject.Name} project.";
+            using var form = new UpcomingUpdates
+            {
+                Calendar = calendar,
+                Text = $"Upcoming service updates for {_selectedProject.Name} project."
+            };
             form.ShowDialog();
 
             Cursor = Cursors.Default;
         }
 
-        private List<LcsProject> excludeProjectsForOrganisation(List<LcsProject> _projects)
+        private List<LcsProject> ExcludeProjectsForOrganization(List<LcsProject> _projects)
         {
             string exclOrg = Properties.Settings.Default.projOrgExcl;
             if (string.IsNullOrEmpty(exclOrg))
@@ -2125,10 +2170,10 @@ namespace LCS.Forms
             }
         }
 
-        private void exportUpdateScheduleForAllProjects(LCSProjectAllCurrent _LCSProjectAllCurrent)
+        private void ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
-            notifyIcon.BalloonTipTitle = "Exporting updates list";
+            notifyIcon.BalloonTipText = $"Exporting updates schedule for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = "Exporting updates schedule list";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
@@ -2137,7 +2182,7 @@ namespace LCS.Forms
             var exportedUpdates = new List<Datum>();
 
             Projects = _httpClientHelper.GetAllProjects();
-            Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
             {
@@ -2168,11 +2213,9 @@ namespace LCS.Forms
             {
                 try
                 {
-                    using (StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode))
-                    {
-                        var csv = new CsvWriter(sw);
-                        csv.WriteRecords(exportedUpdates);
-                    }
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedUpdates);
                 }
                 catch (Exception ex)
                 {
@@ -2186,55 +2229,104 @@ namespace LCS.Forms
             RefreshSaas(false);
         }
 
-        private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
+        private void AllInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
         }
 
-        private void currentProjectTSMExportAllInstances_Click(object sender, EventArgs e)
+        private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.CURRENT);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
         }
 
-        private void allProjectsTSMExportCHInstances_Click(object sender, EventArgs e)
+        private void MSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
         }
 
-        private void currentProjectTSMExportCHInstances_Click(object sender, EventArgs e)
+        private void SaasRestartService_Click(object sender, EventArgs e)
         {
+            using var form = new ChooseService
+            {
+                AvailableServices = _httpClientHelper.GetServicesToRestart()
+            };
+            form.ShowDialog();
+            if (form.Cancelled || (form.ServicesToRestart == null)) return;
+            Cursor = Cursors.WaitCursor;
 
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.CURRENT);
+            StringBuilder log = new StringBuilder();
+            foreach (DataGridViewRow row in saasDataGridView.SelectedRows)
+            {
+                foreach (var service in form.ServicesToRestart)
+                {
+                    var instance = (CloudHostedInstance)row.DataBoundItem;
+                    log.AppendLine($"Validating ongoing actions of {instance.InstanceId} instance...");
+                    ActionDetails actions;
+                    var attempt = 1;
+                    do
+                    {
+                        actions = _httpClientHelper.GetOngoingActionDetails(instance);
+                        if (actions != null)
+                        {
+                            log.AppendLine($"Attempt {attempt}. Ongoing action found! Delaying next attempt for 30 seconds...");
+                            log.AppendLine($"Action status: {actions.ActionStatusText}");
+                            log.AppendLine($"Action type: {actions.ActionType}");
+                            log.AppendLine($"Action name: {actions.Name}");
+                            log.AppendLine($"Action start date: {actions.StartDate}");
+                            System.Threading.Thread.Sleep(1000 * 30);
+                            attempt++;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                    while (attempt <= 10);
+                    if (actions == null)
+                    {
+                        log.AppendLine($"Restarting {service.Value} service of {instance.InstanceId} instance...");
+                        var response = _httpClientHelper.RestartService(instance, service.Value);
+                        log.AppendLine($"Result:  {response.Message}");
+                        log.AppendLine();
+                    }
+                    else
+                    {
+                        log.AppendLine($" Previous ongoing action was not finished. Restart will not be executed.");
+                    }
+                }
+            }
+            Cursor = Cursors.Default;
+
+            if (log.Length != 0)
+            {
+                using var logForm = new LogDisplay
+                {
+                    LogEntries = log.ToString(),
+                    Text = $"Restarting service(s) log"
+                };
+                logForm.ShowDialog();
+            }
         }
 
-        private void allProjectsTSMExportMSInstances_Click(object sender, EventArgs e)
+        private void EnvironmentChangesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
+            Cursor = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
+            {
+                var instance = (CloudHostedInstance)row.DataBoundItem;
+                var actions = _httpClientHelper.GetEnvironmentHistoryDetails(instance);
+                if (actions != null)
+                {
+                    using var form = new EnvironmentChanges
+                    {
+                        ActionDetails = actions,
+                        Text = $"Environment changes for {instance.DisplayName} instance."
+                    };
+                    form.ShowDialog();
+                }
+            }
+            Cursor = Cursors.Default;
         }
-
-        private void currentProjectTSMExportMSInstances_Click(object sender, EventArgs e)
-        {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.CURRENT);
-        }
-
-        private void allProjectsTSMExportUpdateSchedule_Click(object sender, EventArgs e)
-        {
-            exportUpdateScheduleForAllProjects(LCSProjectAllCurrent.ALL);
-        }
-
-        private void currentProjectTSMExportUpdateSchedule_Click(object sender, EventArgs e)
-        {
-            exportUpdateScheduleForAllProjects(LCSProjectAllCurrent.CURRENT);
-        }
-    }
-
-    public enum HotfixesType
-    {
-        Metadata = 8,
-        PlatformBinary = 11,
-        ApplicationBinary = 9,
-        CriticalMetadata = 16
     }
 
     public static class StringExtension

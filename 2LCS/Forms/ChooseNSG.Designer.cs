@@ -41,9 +41,10 @@
             // OkButton
             // 
             this.OkButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.OkButton.Location = new System.Drawing.Point(398, 399);
+            this.OkButton.Location = new System.Drawing.Point(486, 479);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(182, 33);
+            this.OkButton.Size = new System.Drawing.Size(222, 40);
             this.OkButton.TabIndex = 1;
             this.OkButton.Text = "OK";
             this.OkButton.UseVisualStyleBackColor = true;
@@ -53,9 +54,10 @@
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(586, 399);
+            this.cancelButton.Location = new System.Drawing.Point(716, 479);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(172, 33);
+            this.cancelButton.Size = new System.Drawing.Size(210, 40);
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -76,17 +78,18 @@
             this.IpOrCidr,
             this.Service,
             this.Expiration});
-            this.nsgRulesDataGridView.Location = new System.Drawing.Point(12, 13);
+            this.nsgRulesDataGridView.Location = new System.Drawing.Point(15, 16);
+            this.nsgRulesDataGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.nsgRulesDataGridView.MultiSelect = false;
             this.nsgRulesDataGridView.Name = "nsgRulesDataGridView";
             this.nsgRulesDataGridView.RowHeadersVisible = false;
             this.nsgRulesDataGridView.RowHeadersWidth = 62;
             this.nsgRulesDataGridView.RowTemplate.Height = 28;
             this.nsgRulesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.nsgRulesDataGridView.Size = new System.Drawing.Size(1194, 380);
+            this.nsgRulesDataGridView.Size = new System.Drawing.Size(1459, 456);
             this.nsgRulesDataGridView.TabIndex = 0;
-            this.nsgRulesDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_CellMouseDoubleClick);
-            this.nsgRulesDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_ColumnHeaderMouseClick);
+            this.nsgRulesDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NsgRulesDataGridView_CellMouseDoubleClick);
+            this.nsgRulesDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.NsgRulesDataGridView_ColumnHeaderMouseClick);
             // 
             // RuleName
             // 
@@ -123,21 +126,22 @@
             // ChooseNSG
             // 
             this.AcceptButton = this.OkButton;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(1218, 444);
+            this.ClientSize = new System.Drawing.Size(1489, 533);
             this.Controls.Add(this.nsgRulesDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OkButton);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(780, 400);
+            this.MinimumSize = new System.Drawing.Size(948, 467);
             this.Name = "ChooseNSG";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Choose machine to connect to";
-            this.Load += new System.EventHandler(this.ChoosePackage_Load);
+            this.Text = "Choose firewall rule to delete";
+            this.Load += new System.EventHandler(this.ChooseNSG_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nsgRulesDataGridView)).EndInit();
             this.ResumeLayout(false);
 
