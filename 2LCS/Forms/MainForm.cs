@@ -709,10 +709,16 @@ namespace LCS.Forms
             CHE = 1,
             SAAS = 2
         }
-
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
+        
+        enum LCSProjectAllCurrent
         {
-            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
+            ALL = 0,
+            CURRENT = 1
+        }
+
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -721,7 +727,16 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
 
-            Projects = _httpClientHelper.GetAllProjects();
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
             Projects = excludeProjectsForOrganisation(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
@@ -2110,7 +2125,7 @@ namespace LCS.Forms
             }
         }
 
-        private void exportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportUpdateScheduleForAllProjects(LCSProjectAllCurrent _LCSProjectAllCurrent)
         {
             notifyIcon.BalloonTipText = $"Exporting updates for all LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = "Exporting updates list";
@@ -2130,7 +2145,7 @@ namespace LCS.Forms
                 _selectedProject = _project;
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 SetLcsProjectText();
-             
+
                 List<Datum> calendar = _httpClientHelper.GetUpcomingCalendars();
                 if (calendar != null || calendar.Count != 0)
                 {
@@ -2171,19 +2186,46 @@ namespace LCS.Forms
             RefreshSaas(false);
         }
 
-        private void allInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
         }
 
-        private void cloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void currentProjectTSMExportAllInstances_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.CURRENT);
         }
 
-        private void mSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
+        private void allProjectsTSMExportCHInstances_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
+
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportCHInstances_Click(object sender, EventArgs e)
+        {
+
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allProjectsTSMExportMSInstances_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportMSInstances_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allProjectsTSMExportUpdateSchedule_Click(object sender, EventArgs e)
+        {
+            exportUpdateScheduleForAllProjects(LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportUpdateSchedule_Click(object sender, EventArgs e)
+        {
+            exportUpdateScheduleForAllProjects(LCSProjectAllCurrent.CURRENT);
         }
     }
 
