@@ -715,9 +715,9 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
         {
-            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -726,7 +726,16 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
 
-            Projects = _httpClientHelper.GetAllProjects();
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
             Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
@@ -2228,20 +2237,15 @@ namespace LCS.Forms
             RefreshChe(false);
             RefreshSaas(false);
         }
-
-        private void AllInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
-        }
-
+        
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
         }
 
         private void MSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
         }
 
         private void SaasRestartService_Click(object sender, EventArgs e)
@@ -2326,6 +2330,17 @@ namespace LCS.Forms
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.CURRENT);
         }
     }
 
