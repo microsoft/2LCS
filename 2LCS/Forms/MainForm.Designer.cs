@@ -99,6 +99,10 @@
             this.cloudHostedInstancesExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mSHostedInstancesExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportListOfEnvChangesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allInstancesExportChangesTSM = new System.Windows.Forms.ToolStripMenuItem();
+            this.cloudInstancesExportChangesTSM = new System.Windows.Forms.ToolStripMenuItem();
+            this.saasInstancesExportChangesTSM = new System.Windows.Forms.ToolStripMenuItem();
             this.logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cookieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.parametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -731,7 +735,8 @@
             this.exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportProjectDataToolStripMenuItem1,
             this.exportListOfInstancesForAllProjectsToolStripMenuItem,
-            this.exportUpdateScheduleForAllProjectsToolStripMenuItem});
+            this.exportUpdateScheduleForAllProjectsToolStripMenuItem,
+            this.exportListOfEnvChangesToolStripMenuItem});
             this.exportToolStripMenuItem.Enabled = false;
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
@@ -740,7 +745,7 @@
             // exportProjectDataToolStripMenuItem1
             // 
             this.exportProjectDataToolStripMenuItem1.Name = "exportProjectDataToolStripMenuItem1";
-            this.exportProjectDataToolStripMenuItem1.Size = new System.Drawing.Size(276, 22);
+            this.exportProjectDataToolStripMenuItem1.Size = new System.Drawing.Size(357, 22);
             this.exportProjectDataToolStripMenuItem1.Text = "Export project data";
             this.exportProjectDataToolStripMenuItem1.Click += new System.EventHandler(this.ExportProjectDataToolStripMenuItem_Click);
             // 
@@ -751,7 +756,7 @@
             this.cloudHostedInstancesExportToolStripMenuItem,
             this.mSHostedInstancesExportToolStripMenuItem});
             this.exportListOfInstancesForAllProjectsToolStripMenuItem.Name = "exportListOfInstancesForAllProjectsToolStripMenuItem";
-            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.exportListOfInstancesForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.exportListOfInstancesForAllProjectsToolStripMenuItem.Text = "Export list of instances";
             // 
             // allInstancesExportToolStripMenuItem
@@ -766,14 +771,14 @@
             // allProjectsTSMExportAllInstances
             // 
             this.allProjectsTSMExportAllInstances.Name = "allProjectsTSMExportAllInstances";
-            this.allProjectsTSMExportAllInstances.Size = new System.Drawing.Size(180, 22);
+            this.allProjectsTSMExportAllInstances.Size = new System.Drawing.Size(154, 22);
             this.allProjectsTSMExportAllInstances.Text = "All projects";
             this.allProjectsTSMExportAllInstances.Click += new System.EventHandler(this.allProjectsTSMExportAllInstances_Click);
             // 
             // currentProjectTSMExportAllInstances
             // 
             this.currentProjectTSMExportAllInstances.Name = "currentProjectTSMExportAllInstances";
-            this.currentProjectTSMExportAllInstances.Size = new System.Drawing.Size(180, 22);
+            this.currentProjectTSMExportAllInstances.Size = new System.Drawing.Size(154, 22);
             this.currentProjectTSMExportAllInstances.Text = "Current project";
             this.currentProjectTSMExportAllInstances.Click += new System.EventHandler(this.currentProjectTSMExportAllInstances_Click);
             // 
@@ -794,9 +799,40 @@
             // exportUpdateScheduleForAllProjectsToolStripMenuItem
             // 
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Name = "exportUpdateScheduleForAllProjectsToolStripMenuItem";
-            this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
+            this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Text = "Export update schedule for all projects";
             this.exportUpdateScheduleForAllProjectsToolStripMenuItem.Click += new System.EventHandler(this.ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click);
+            // 
+            // exportListOfEnvChangesToolStripMenuItem
+            // 
+            this.exportListOfEnvChangesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.allInstancesExportChangesTSM,
+            this.cloudInstancesExportChangesTSM,
+            this.saasInstancesExportChangesTSM});
+            this.exportListOfEnvChangesToolStripMenuItem.Name = "exportListOfEnvChangesToolStripMenuItem";
+            this.exportListOfEnvChangesToolStripMenuItem.Size = new System.Drawing.Size(357, 22);
+            this.exportListOfEnvChangesToolStripMenuItem.Text = "Export list of environment changes for current project";
+            // 
+            // allInstancesExportChangesTSM
+            // 
+            this.allInstancesExportChangesTSM.Name = "allInstancesExportChangesTSM";
+            this.allInstancesExportChangesTSM.Size = new System.Drawing.Size(180, 22);
+            this.allInstancesExportChangesTSM.Text = "All instances";
+            this.allInstancesExportChangesTSM.Click += new System.EventHandler(this.allInstancesExportChangesTSM_Click);
+            // 
+            // cloudInstancesExportChangesTSM
+            // 
+            this.cloudInstancesExportChangesTSM.Name = "cloudInstancesExportChangesTSM";
+            this.cloudInstancesExportChangesTSM.Size = new System.Drawing.Size(180, 22);
+            this.cloudInstancesExportChangesTSM.Text = "Cloud hosted";
+            this.cloudInstancesExportChangesTSM.Click += new System.EventHandler(this.cloudInstancesExportChangesTSM_Click);
+            // 
+            // saasInstancesExportChangesTSM
+            // 
+            this.saasInstancesExportChangesTSM.Name = "saasInstancesExportChangesTSM";
+            this.saasInstancesExportChangesTSM.Size = new System.Drawing.Size(180, 22);
+            this.saasInstancesExportChangesTSM.Text = "Microsoft Hosted";
+            this.saasInstancesExportChangesTSM.Click += new System.EventHandler(this.saasInstancesExportChangesTSM_Click);
             // 
             // logoutToolStripMenuItem
             // 
@@ -1611,6 +1647,10 @@
         private System.Windows.Forms.ToolStripMenuItem cheEnvironmentChangesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allProjectsTSMExportAllInstances;
         private System.Windows.Forms.ToolStripMenuItem currentProjectTSMExportAllInstances;
+        private System.Windows.Forms.ToolStripMenuItem exportListOfEnvChangesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allInstancesExportChangesTSM;
+        private System.Windows.Forms.ToolStripMenuItem cloudInstancesExportChangesTSM;
+        private System.Windows.Forms.ToolStripMenuItem saasInstancesExportChangesTSM;
     }
 }
 
