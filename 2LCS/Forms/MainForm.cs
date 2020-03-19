@@ -715,9 +715,85 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
+        private void ExportEnvironmentUpdates(LCSEnvironments _LCSEnvironments)
         {
-            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipText = $"Exporting list of Environment Updates to {_LCSEnvironments} environments for current project. Please wait...";
+            notifyIcon.BalloonTipTitle = $"Exporting list of Environment Updates";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+                       
+            var previousProject = _selectedProject;
+            var exportedActionDetailList = new List<ActionDetails>();
+           
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            RefreshChe();
+            RefreshSaas();
+
+            if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
+                if (_saasInstancesList != null && _saasInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _saasInstancesList)
+                    {
+                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        if (actions != null)
+                        {
+                            foreach (ActionDetails _action in actions)
+                            {
+                                _action.EnvironmentName = _instance.DisplayName;
+                                exportedActionDetailList.Add(_action);
+                            }
+                        }
+                    }                
+            }
+            if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.CHE)
+                if (_cheInstancesList != null && _cheInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _cheInstancesList)
+                    {
+                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        if (actions != null)
+                        {
+                            foreach (ActionDetails _action in actions)
+                            {
+                                _action.EnvironmentName = _instance.DisplayName;
+                                exportedActionDetailList.Add(_action);
+                            }
+                        }
+                    }
+            }
+
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = $"D365FO {_LCSEnvironments} environment updates - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedActionDetailList);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            SetLcsProjectText();
+
+            RefreshChe(false);
+            RefreshSaas(false);
+        }
+
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -726,7 +802,16 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
 
-            Projects = _httpClientHelper.GetAllProjects();
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
             Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
@@ -2228,20 +2313,15 @@ namespace LCS.Forms
             RefreshChe(false);
             RefreshSaas(false);
         }
-
-        private void AllInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
-        }
-
+        
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
         }
 
         private void MSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
         }
 
         private void SaasRestartService_Click(object sender, EventArgs e)
@@ -2326,6 +2406,32 @@ namespace LCS.Forms
                 }
             }
             Cursor = Cursors.Default;
+        }
+            
+        private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.ALL);
+        }
+
+        private void cloudInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.CHE);
+        }
+
+        private void saasInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.SAAS);
         }
     }
 

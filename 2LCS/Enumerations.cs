@@ -16,6 +16,12 @@
         SAAS = 2
     }
 
+    enum LCSProjectAllCurrent
+    {
+        ALL = 0,
+        CURRENT = 1
+    }
+
     #region LCS enums
     public enum ProjectDocScope { Methodology = 0, Artifact = 1 }
 
