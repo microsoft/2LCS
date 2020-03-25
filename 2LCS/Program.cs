@@ -18,6 +18,7 @@ namespace LCS
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
                     mainForm.SetLoginButtonEnabled();
+                    mainForm.LoginToLCSMenuItem_Click(null, null);
                     break;
 
                 default:

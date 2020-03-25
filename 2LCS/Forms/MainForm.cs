@@ -1392,7 +1392,7 @@ namespace LCS.Forms
             this.Close();
         }
 
-        private void LoginToLCSMenuItem_Click(object sender, EventArgs e)
+        public void LoginToLCSMenuItem_Click(object sender, EventArgs e)
         {
             WebBrowserHelper.FixBrowserVersion();
             using var form = new Login();
