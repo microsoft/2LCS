@@ -12,10 +12,12 @@ namespace LCS
             switch (e.Exception.Source)
             {
                 case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
+                case "mscorlib" when e.Exception.InnerException.Message == $"Response status code does not indicate success: 498 ().":
                     MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
                     mainForm.SetLoginButtonEnabled();
+                    mainForm.LoginToLCS();
                     break;
 
                 default:
