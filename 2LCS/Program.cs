@@ -1,5 +1,6 @@
 ﻿using LCS.Forms;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -12,6 +13,7 @@ namespace LCS
             switch (e.Exception.Source)
             {
                 case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
+                case "mscorlib" when e.Exception.InnerException.Message == $"Response status code does not indicate success: 498 ().":
                     MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
@@ -38,6 +40,11 @@ namespace LCS
         private static void Main()
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+
+            if (Debugger.IsAttached)
+            {
+                Properties.Settings.Default.Reset();
+            }
 
             // Copy user settings from previous application version if necessary
             if (Properties.Settings.Default.update)
