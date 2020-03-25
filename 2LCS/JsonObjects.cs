@@ -591,6 +591,7 @@ namespace LCS.JsonObjects
         public int ServicingAction { get; set; }
         public string StartDate { get; set; }
         public LcsEnvironmentActionStatus Status { get; set; }
+        public string EnvironmentName { get; set; }
     }
 
     public class EnvironmentHistoryDetailsData

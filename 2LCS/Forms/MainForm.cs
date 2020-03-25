@@ -1,4 +1,6 @@
 ﻿using CsvHelper;
+using LCS.Cache;
+using LCS.Utils;
 using LCS.JsonObjects;
 using Newtonsoft.Json;
 using System;
@@ -17,6 +19,7 @@ using System.Windows.Forms;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 using static LCS.NativeMethods;
+using System.Globalization;
 
 namespace LCS.Forms
 {
@@ -49,6 +52,26 @@ namespace LCS.Forms
             public int top;
             public int right;
             public int bottom;
+
+            public override bool Equals(object obj)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override int GetHashCode()
+            {
+                throw new NotImplementedException();
+            }
+
+            public static bool operator ==(RECT left, RECT right)
+            {
+                return left.Equals(right);
+            }
+
+            public static bool operator !=(RECT left, RECT right)
+            {
+                return !(left == right);
+            }
         }
 
         public MainForm()
@@ -65,8 +88,10 @@ namespace LCS.Forms
             Button button_Cancel = new Button() { Text = "Cancel", Location = new Point(140, 30) };
             button_OK.DialogResult = DialogResult.OK;
             button_Cancel.DialogResult = DialogResult.Cancel;
-            FlowLayoutPanel panel = new FlowLayoutPanel();
-            panel.Dock = DockStyle.Fill;
+            FlowLayoutPanel panel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill
+            };
 
             form.Text = "Choose user";
             form.ClientSize = new Size(280, 60);
@@ -348,7 +373,7 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
+        <ID>{Guid.NewGuid()}</ID>
         <Name>{instance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
@@ -690,9 +715,85 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments)
+        private void ExportEnvironmentUpdates(LCSEnvironments _LCSEnvironments)
         {
-            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for all LCS projects. Please wait...";
+            notifyIcon.BalloonTipText = $"Exporting list of Environment Updates to {_LCSEnvironments} environments for current project. Please wait...";
+            notifyIcon.BalloonTipTitle = $"Exporting list of Environment Updates";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+                       
+            var previousProject = _selectedProject;
+            var exportedActionDetailList = new List<ActionDetails>();
+           
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            RefreshChe();
+            RefreshSaas();
+
+            if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
+                if (_saasInstancesList != null && _saasInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _saasInstancesList)
+                    {
+                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        if (actions != null)
+                        {
+                            foreach (ActionDetails _action in actions)
+                            {
+                                _action.EnvironmentName = _instance.DisplayName;
+                                exportedActionDetailList.Add(_action);
+                            }
+                        }
+                    }                
+            }
+            if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.CHE)
+                if (_cheInstancesList != null && _cheInstancesList.Count > 0)
+                {
+                    foreach (var _instance in _cheInstancesList)
+                    {
+                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        if (actions != null)
+                        {
+                            foreach (ActionDetails _action in actions)
+                            {
+                                _action.EnvironmentName = _instance.DisplayName;
+                                exportedActionDetailList.Add(_action);
+                            }
+                        }
+                    }
+            }
+
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = $"D365FO {_LCSEnvironments} environment updates - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedActionDetailList);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            SetLcsProjectText();
+
+            RefreshChe(false);
+            RefreshSaas(false);
+        }
+
+        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
@@ -701,7 +802,16 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedInstances = new List<ExportedInstance>();
 
-            Projects = _httpClientHelper.GetAllProjects();
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
             Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)
@@ -779,7 +889,7 @@ namespace LCS.Forms
                 try
                 {
                     using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
-                    var csv = new CsvWriter(sw);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
                     csv.WriteRecords(exportedInstances);
                 }
                 catch (Exception ex)
@@ -1276,7 +1386,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void notifyIconMenuClose_Click(object sender, EventArgs e)
+        private void NotifyIconMenuClose_Click(object sender, EventArgs e)
         {
             closeFromNotificationArea = true;
             this.Close();
@@ -1391,6 +1501,31 @@ namespace LCS.Forms
             CreateCustomLinksMenuItems();
             CreateProjectLinksMenuItems();
             EnableDisableMenuItems();
+            WireEvents();
+
+            //caching
+            LoadFromCredentialsStore();
+        }
+
+        private void LoadFromCredentialsStore()
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.LoadOffLineCredentials();
+            }
+        }
+
+        private void WireEvents()
+        {
+            this.FormClosing += MainForm_FormClosing;
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if(CacheUtil.SaveCacheToStoreEnabled())
+            {
+                CredentialsCacheHelper.SaveCredentialsOffline();
+            }
         }
 
         private void MainForm_Closing(object sender, EventArgs e)
@@ -1657,9 +1792,11 @@ namespace LCS.Forms
                 if (nsgRule == null)
                 {
                     var networkSecurityGroup = _httpClientHelper.GetNetworkSecurityGroup(instance);
-                    using var form = new ChooseNSG();
-                    form.NetworkSecurityGroup = networkSecurityGroup;
-                    form.Text = $"Choose firewall rule to delete";
+                    using var form = new ChooseNSG
+                    {
+                        NetworkSecurityGroup = networkSecurityGroup,
+                        Text = $"Choose firewall rule to delete"
+                    };
                     form.ShowDialog();
                     if (!form.Cancelled && (form.NSGRule != null))
                     {
@@ -1803,7 +1940,7 @@ namespace LCS.Forms
             <UserName>{rdpEntry.Domain}\{rdpEntry.Username}</UserName>
         </RDP>
         <ConnectionType>RDPConfigured</ConnectionType>
-        <ID>{Guid.NewGuid().ToString()}</ID>
+        <ID>{Guid.NewGuid()}</ID>
         <Name>{saasInstance.InstanceId}-{rdpEntry.Machine}</Name>
         <OpenEmbedded>true</OpenEmbedded>
         <Url>{rdpEntry.Address}:{rdpEntry.Port}</Url>
@@ -2162,7 +2299,7 @@ namespace LCS.Forms
                 try
                 {
                     using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
-                    var csv = new CsvWriter(sw);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
                     csv.WriteRecords(exportedUpdates);
                 }
                 catch (Exception ex)
@@ -2176,20 +2313,15 @@ namespace LCS.Forms
             RefreshChe(false);
             RefreshSaas(false);
         }
-
-        private void AllInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL);
-        }
-
+        
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
         }
 
         private void MSHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS);
+            ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
         }
 
         private void SaasRestartService_Click(object sender, EventArgs e)
@@ -2274,6 +2406,32 @@ namespace LCS.Forms
                 }
             }
             Cursor = Cursors.Default;
+        }
+            
+        private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
+        }
+
+        private void currentProjectTSMExportAllInstances_Click(object sender, EventArgs e)
+        {
+
+            ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.ALL);
+        }
+
+        private void cloudInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.CHE);
+        }
+
+        private void saasInstancesExportChangesTSM_Click(object sender, EventArgs e)
+        {
+            ExportEnvironmentUpdates(LCSEnvironments.SAAS);
         }
     }
 

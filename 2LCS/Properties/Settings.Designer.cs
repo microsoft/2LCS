@@ -110,12 +110,48 @@ namespace LCS.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool cachingEnabled {
+            get {
+                return ((bool)(this["cachingEnabled"]));
+            }
+            set {
+                this["cachingEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string cachingStore {
+            get {
+                return ((string)(this["cachingStore"]));
+            }
+            set {
+                this["cachingStore"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool minimizeToNotificationArea {
             get {
                 return ((bool)(this["minimizeToNotificationArea"]));
             }
             set {
                 this["minimizeToNotificationArea"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool keepCache {
+            get {
+                return ((bool)(this["keepCache"]));
+            }
+            set {
+                this["keepCache"] = value;
             }
         }
     }
