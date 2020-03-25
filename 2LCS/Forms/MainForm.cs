@@ -1417,33 +1417,7 @@ namespace LCS.Forms
             logoutToolStripMenuItem.Enabled = true;
             loginToLcsMenuItem.Enabled = false;
             ChangeProjectMenuItem_Click(null, null);
-        }
-
-        public void LoginToLCS()
-        {
-            WebBrowserHelper.FixBrowserVersion();
-            using var form = new Login();
-            form.ShowDialog();
-            if (form.Cancelled) return;
-            _cookies = GetUriCookieContainer();
-            if (_cookies == null) return;
-            _httpClientHelper = new HttpClientHelper(_cookies)
-            {
-                LcsUrl = _lcsUrl,
-                LcsUpdateUrl = _lcsUpdateUrl,
-                LcsDiagUrl = _lcsDiagUrl
-            };
-            if (_selectedProject != null)
-            {
-                _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
-                _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
-            }
-            changeProjectMenuItem.Enabled = true;
-            cheInstanceContextMenu.Enabled = true;
-            saasInstanceContextMenu.Enabled = true;
-            logoutToolStripMenuItem.Enabled = true;
-            loginToLcsMenuItem.Enabled = false;            
-        }
+        }        
 
         private void LogonToApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {

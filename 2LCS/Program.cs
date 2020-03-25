@@ -1,5 +1,6 @@
 ﻿using LCS.Forms;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -17,7 +18,6 @@ namespace LCS
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
                     mainForm.SetLoginButtonEnabled();
-                    mainForm.LoginToLCS();
                     break;
 
                 default:
@@ -40,6 +40,11 @@ namespace LCS
         private static void Main()
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+
+            if (Debugger.IsAttached)
+            {
+                Properties.Settings.Default.Reset();
+            }
 
             // Copy user settings from previous application version if necessary
             if (Properties.Settings.Default.update)
