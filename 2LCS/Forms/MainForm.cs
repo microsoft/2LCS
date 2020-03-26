@@ -1417,7 +1417,7 @@ namespace LCS.Forms
             logoutToolStripMenuItem.Enabled = true;
             loginToLcsMenuItem.Enabled = false;
             ChangeProjectMenuItem_Click(null, null);
-        }        
+        }
 
         private void LogonToApplicationToolStripMenuItem_Click(object sender, EventArgs e)
         {

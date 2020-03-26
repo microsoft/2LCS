@@ -14,10 +14,12 @@ namespace LCS
             {
                 case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
                 case "mscorlib" when e.Exception.InnerException.Message == $"Response status code does not indicate success: 498 ().":
-                    MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");
+                    MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");                                        
                     var mainForm = GetMainForm();
                     mainForm.Cursor = Cursors.Default;
                     mainForm.SetLoginButtonEnabled();
+                    // Close first instance of ChooseProject form (if open) before calling LoginToLCSMenuItem_Click which opens another ChooseProject instance
+                    CloseChooseProject();
                     mainForm.LoginToLCSMenuItem_Click(null, null);
                     break;
 
@@ -34,6 +36,17 @@ namespace LCS
             return null;
         }
 
+        private static void CloseChooseProject()
+        {
+            foreach (Form form in Application.OpenForms)
+                if (form is ChooseProject)
+                {
+                    var chooseProject = (ChooseProject)form;
+                    chooseProject.Close();                    
+                }
+
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -41,12 +54,7 @@ namespace LCS
         private static void Main()
         {
             Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
-
-            if (Debugger.IsAttached)
-            {
-                Properties.Settings.Default.Reset();
-            }
-
+            
             // Copy user settings from previous application version if necessary
             if (Properties.Settings.Default.update)
             {
