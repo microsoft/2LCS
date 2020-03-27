@@ -1,6 +1,5 @@
 ﻿using LCS.Forms;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -8,43 +7,31 @@ namespace LCS
 {
     internal static class Program
     {
+        static MainForm mainForm;
+
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            switch (e.Exception.Source)
+            MessageBox.Show("Please login to LCS again. Your cookie probably expired.");
+            GetMainFormAndCloseOthers();
+            mainForm.Cursor = Cursors.Default;
+            mainForm.SetLoginButtonEnabled();
+            mainForm.LoginToLCSMenuItem_Click(null, null);
+        }
+
+        private static void GetMainFormAndCloseOthers()
+        {
+            foreach (Form form in Application.OpenForms)
             {
-                case "System.Net.Http" when e.Exception.Message == $"Response status code does not indicate success: 498 ().":
-                case "mscorlib" when e.Exception.InnerException.Message == $"Response status code does not indicate success: 498 ().":
-                    MessageBox.Show("Please login to LCS again. Your cookie is probably invalid or expired.");                                        
-                    var mainForm = GetMainForm();
-                    mainForm.Cursor = Cursors.Default;
-                    mainForm.SetLoginButtonEnabled();
-                    // Close first instance of ChooseProject form (if open) before calling LoginToLCSMenuItem_Click which opens another ChooseProject instance
-                    CloseChooseProject();
-                    mainForm.LoginToLCSMenuItem_Click(null, null);
-                    break;
-
-                default:
-                    throw e.Exception;
-            }
-        }
-
-        private static MainForm GetMainForm()
-        {
-            foreach (Form form in Application.OpenForms)
                 if (form is MainForm)
-                    return (MainForm)form;
-            return null;
-        }
-
-        private static void CloseChooseProject()
-        {
-            foreach (Form form in Application.OpenForms)
-                if (form is ChooseProject)
                 {
-                    var chooseProject = (ChooseProject)form;
-                    chooseProject.Close();                    
+                    mainForm = (MainForm)form;
                 }
-
+                else
+                {
+                    form.Hide();
+                    form.Close();
+                }
+            }
         }
 
         /// <summary>
