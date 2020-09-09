@@ -102,6 +102,7 @@ namespace LCS
             if (!_httpClient.DefaultRequestHeaders.Contains("__RequestVerificationToken"))
             {
                 var getResponse = _httpClient.GetAsync(url).Result;
+                getResponse.EnsureSuccessStatusCode();
                 var html = getResponse.Content.ReadAsStringAsync().Result;
                 HtmlDocument doc = new HtmlDocument();
                 doc.LoadHtml(html);
