@@ -39,6 +39,7 @@ namespace LCS.Forms
             textBoxProjectExcl.Text = Properties.Settings.Default.projOrgExcl;
             CachingEnabledCheckbox.Checked = Properties.Settings.Default.cachingEnabled;
             StoreCacheCheckBox.Checked = Properties.Settings.Default.keepCache;
+            alwaysLogAsAdmin.Checked = Properties.Settings.Default.alwaysLogAsAdmin;
             SetStoreCacheEnabledDisabled();
         }
 
@@ -49,6 +50,7 @@ namespace LCS.Forms
             Properties.Settings.Default.projOrgExcl = textBoxProjectExcl.Text;
             Properties.Settings.Default.cachingEnabled = CachingEnabledCheckbox.Checked;
             Properties.Settings.Default.keepCache = StoreCacheCheckBox.Checked;
+            Properties.Settings.Default.alwaysLogAsAdmin = alwaysLogAsAdmin.Checked;
             Properties.Settings.Default.Save();
         }
 
