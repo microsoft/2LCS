@@ -9,7 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -286,7 +286,7 @@ namespace LCS.Forms
         private void CheDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (cheDataGridView.DataSource == null || _cheInstancesList == null) return;
-            _cheInstancesSource.DataSource = _cheSortAscending ? _cheInstancesList.OrderBy(cheDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _cheInstancesList.OrderBy(cheDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _cheInstancesSource.DataSource = _cheSortAscending ? _cheInstancesList.AsQueryable().OrderBy(cheDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _cheInstancesList.AsQueryable().OrderBy(cheDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _cheSortAscending = !_cheSortAscending;
             cheDataGridView.ClearSelection();
         }
@@ -1782,7 +1782,7 @@ namespace LCS.Forms
         private void SaasDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (saasDataGridView.DataSource == null || _saasInstancesList == null) return;
-            _saasInstancesSource.DataSource = _saasSortAscending ? _saasInstancesList.OrderBy(saasDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _saasInstancesList.OrderBy(saasDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _saasInstancesSource.DataSource = _saasSortAscending ? _saasInstancesList.AsQueryable().OrderBy(saasDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _saasInstancesList.AsQueryable().OrderBy(saasDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _saasSortAscending = !_saasSortAscending;
             saasDataGridView.ClearSelection();
         }

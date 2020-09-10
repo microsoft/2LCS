@@ -1,7 +1,7 @@
 ﻿using LCS.JsonObjects;
 using System;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -82,7 +82,7 @@ namespace LCS.Forms
         private void NsgRulesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (nsgRulesDataGridView.DataSource == null) return;
-            _nsgRulesSource.DataSource = _sortAscending ? NetworkSecurityGroup.Rules.OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : NetworkSecurityGroup.Rules.OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _nsgRulesSource.DataSource = _sortAscending ? NetworkSecurityGroup.Rules.AsQueryable().OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : NetworkSecurityGroup.Rules.AsQueryable().OrderBy(nsgRulesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }

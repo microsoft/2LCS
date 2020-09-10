@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -35,7 +35,7 @@ namespace LCS.Forms
         private void EnvironmentChangesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (environmentChangesDataGridView.DataSource == null) return;
-            _actionDetailsSource.DataSource = _sortAscending ? ActionDetails.OrderBy(environmentChangesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : ActionDetails.OrderBy(environmentChangesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _actionDetailsSource.DataSource = _sortAscending ? ActionDetails.AsQueryable().OrderBy(environmentChangesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : ActionDetails.AsQueryable().OrderBy(environmentChangesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }

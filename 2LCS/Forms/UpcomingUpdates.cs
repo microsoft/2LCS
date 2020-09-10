@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -35,7 +35,7 @@ namespace LCS.Forms
         private void UpcomingUpdatesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (upcomingUpdatesDataGridView.DataSource == null) return;
-            _calendarSource.DataSource = _sortAscending ? Calendar.OrderBy(upcomingUpdatesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Calendar.OrderBy(upcomingUpdatesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _calendarSource.DataSource = _sortAscending ? Calendar.AsQueryable().OrderBy(upcomingUpdatesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Calendar.AsQueryable().OrderBy(upcomingUpdatesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }

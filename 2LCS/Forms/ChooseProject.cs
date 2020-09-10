@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -98,7 +98,7 @@ namespace LCS.Forms
         private void ProjectsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (projectsDataGridView.DataSource == null) return;
-            _projectsSource.DataSource = _sortAscending ? Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Projects.OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _projectsSource.DataSource = _sortAscending ? Projects.AsQueryable().OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Projects.AsQueryable().OrderBy(projectsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
 

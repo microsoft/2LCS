@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -35,7 +35,7 @@ namespace LCS.Forms
         private void AvailableKBsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (availableKBsDataGridView.DataSource == null) return;
-            _hotfixesSource.DataSource = _sortAscending ? Hotfixes.OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Hotfixes.OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _hotfixesSource.DataSource = _sortAscending ? Hotfixes.AsQueryable().OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Hotfixes.AsQueryable().OrderBy(availableKBsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }
