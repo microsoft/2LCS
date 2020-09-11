@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -75,7 +75,7 @@ namespace LCS.Forms
         private void LinksDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (linksDataGridView.DataSource == null || _linksList == null) return;
-            _linksSource.DataSource = _sortAscending ? _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _linksList.OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _linksSource.DataSource = _sortAscending ? _linksList.AsQueryable().OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : _linksList.AsQueryable().OrderBy(linksDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
             linksDataGridView.ClearSelection();
         }

@@ -15,7 +15,7 @@ namespace LCS.Forms
         private void Login_Load(object sender, EventArgs e)
         {
             Cancelled = true;
-            webBrowser1.Navigate("https://lcs.dynamics.com");
+            webBrowser1.Navigate("https://lcs.dynamics.com/Logon/AdLogon");
         }
 
         private void WebBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)

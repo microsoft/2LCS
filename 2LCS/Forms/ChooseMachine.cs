@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -83,7 +83,7 @@ namespace LCS.Forms
         private void PackagesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (rdpConnectionsDataGridView.DataSource == null) return;
-            _rdpConnectionsSource.DataSource = _sortAscending ? RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : RDPConnections.OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _rdpConnectionsSource.DataSource = _sortAscending ? RDPConnections.AsQueryable().OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : RDPConnections.AsQueryable().OrderBy(rdpConnectionsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }

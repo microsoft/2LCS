@@ -1,7 +1,7 @@
 ﻿using LCS.JsonObjects;
 using System;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -34,7 +34,7 @@ namespace LCS.Forms
         private void BuildInfoDetailsDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (buildInfoDetailsDataGridView.DataSource == null) return;
-            _buildInfoSource.DataSource = _sortAscending ? BuildInfo.BuildInfoTreeView.OrderBy(buildInfoDetailsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : BuildInfo.BuildInfoTreeView.OrderBy(buildInfoDetailsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _buildInfoSource.DataSource = _sortAscending ? BuildInfo.BuildInfoTreeView.AsQueryable().OrderBy(buildInfoDetailsDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : BuildInfo.BuildInfoTreeView.AsQueryable().OrderBy(buildInfoDetailsDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }

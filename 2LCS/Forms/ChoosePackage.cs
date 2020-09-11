@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Dynamic;
+using System.Linq.Dynamic.Core;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -84,7 +84,7 @@ namespace LCS.Forms
         private void PackagesDataGridView_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (packagesDataGridView.DataSource == null) return;
-            _packagesSource.DataSource = _sortAscending ? Packages.OrderBy(packagesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Packages.OrderBy(packagesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
+            _packagesSource.DataSource = _sortAscending ? Packages.AsQueryable().OrderBy(packagesDataGridView.Columns[e.ColumnIndex].DataPropertyName).ToList() : Packages.AsQueryable().OrderBy(packagesDataGridView.Columns[e.ColumnIndex].DataPropertyName).Reverse().ToList();
             _sortAscending = !_sortAscending;
         }
     }
