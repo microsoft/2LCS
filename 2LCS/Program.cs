@@ -1,4 +1,5 @@
 ﻿using LCS.Forms;
+using LCS.Properties;
 using System;
 using System.Threading;
 using System.Windows.Forms;
@@ -7,15 +8,15 @@ namespace LCS
 {
     internal static class Program
     {
-        static MainForm mainForm;
+        static MainForm mainForm;        
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             MessageBox.Show("Please login to LCS again. Your cookie probably expired.");
-            GetMainFormAndCloseOthers();
+            GetMainFormAndCloseOthers();                        
             mainForm.Cursor = Cursors.Default;
             mainForm.SetLoginButtonEnabled();
-            mainForm.LoginToLCSMenuItem_Click(null, null);
+            mainForm.LoginToLCSAfterExpiredCookie();
         }
 
         private static void GetMainFormAndCloseOthers()

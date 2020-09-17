@@ -44,6 +44,7 @@ namespace LCS.Forms
         private List<CustomLink> Links;
         private List<LcsProject> Projects;
         private bool closeFromNotificationArea = false;
+        private bool isChangeProjectsClicked = false;        
 
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
@@ -242,6 +243,8 @@ namespace LCS.Forms
                 EnableDisableMenuItems();
                 RefreshChe(Properties.Settings.Default.autorefresh);
                 RefreshSaas(Properties.Settings.Default.autorefresh);
+
+                isChangeProjectsClicked = true;
             }
         }
 
@@ -1423,7 +1426,39 @@ namespace LCS.Forms
             saasInstanceContextMenu.Enabled = true;
             logoutToolStripMenuItem.Enabled = true;
             loginToLcsMenuItem.Enabled = false;
-            ChangeProjectMenuItem_Click(null, null);
+            ChangeProjectMenuItem_Click(null, null);            
+        }
+
+        public void LoginToLCSAfterExpiredCookie()
+        {
+            WebBrowserHelper.FixBrowserVersion();
+            using var form = new Login();
+            form.ShowDialog();
+            if (form.Cancelled) return;
+            _cookies = GetUriCookieContainer();
+            if (_cookies == null) return;
+            _httpClientHelper = new HttpClientHelper(_cookies)
+            {
+                LcsUrl = _lcsUrl,
+                LcsUpdateUrl = _lcsUpdateUrl,
+                LcsDiagUrl = _lcsDiagUrl
+            };
+            if (_selectedProject != null)
+            {
+                _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            }
+            changeProjectMenuItem.Enabled = true;
+            cheInstanceContextMenu.Enabled = true;
+            saasInstanceContextMenu.Enabled = true;
+            logoutToolStripMenuItem.Enabled = true;
+            loginToLcsMenuItem.Enabled = false;
+
+            if (isChangeProjectsClicked)
+            {
+                ChangeProjectMenuItem_Click(null, null);
+                isChangeProjectsClicked = false;
+            }
         }
 
         private void LogonToApplicationToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1724,7 +1759,7 @@ namespace LCS.Forms
             {
                 RefreshSaas();
                 RefreshChe();
-            }
+            }            
         }
 
         private void RefreshSaas(bool reloadFromLcs = true)
