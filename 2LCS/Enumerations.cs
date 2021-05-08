@@ -51,7 +51,7 @@
 
     public enum EnvironmentActionCategoryType { None = 0, PureCategory = 1, ActionableCategory = 2 }
 
-    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; }
+    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; public const string SouthAfrica = "SouthAfrica"; public const string UAE = "UAE"; public const string Switzerland = "Switzerland"}
 
     public enum MethodologyPinScopes { None = 0, GettingStarted = 1, Task = 2, Phase = 4 }
 
@@ -99,15 +99,15 @@
 
     public enum AX7PartnerOption { None = 0, PartnerProject = 1, CustomerPresalesExperience = 2, Implementation = 3, OnPremImplementation = 4 }
 
-    public enum DeploymentStatus { Undefined = 0, Succeeded = 1, Failed = 2, Canceled = 3, StateTransitionIncomplete = 4 }
+    public enum DeploymentStatus { Undefined = 0, Succeeded = 1, Failed = 2, Canceled = 3, StateTransitionIncomplete = 4, StateTransitionIncompleteInDR = 5 }
 
-    public enum DeploymentState { Undefined = 0, Active = 1, Paused = 2, Finished = 3, Starting = 4, Stopping = 5, Stopped = 6, Deleting = 7, Deallocating = 8, Deallocated = 9, Deleted = 10, Servicing = 11, Recovering = 12, SafeMode = 13, Restoring = 14, Swapping = 15, SwapRollingBack = 16, RotatingSecrets = 17, CommitingSwap = 18, Swapped = 19, ServicingRollback = 20, DatabaseRestoreRollback = 21, Migrating = 22, RestartingServices = 23, DatabaseNeedsUpgrade = 24, ValidatingDataUpgrade = 25, ExecutingSQLCommand = 26, ExecutingGenevaAction = 27, MigratingToSF = 28, MigratedToSF = 29, CDSConfiguring = 30, ScalingOut = 31, InfrastructureMaintenance = 32, PreparingForMigration = 33, PreppedForMigration = 34, ConfiguringFirewallRules = 35 }
+    public enum DeploymentState { Undefined = 0, Active = 1, Paused = 2, Finished = 3, Starting = 4, Stopping = 5, Stopped = 6, Deleting = 7, Deallocating = 8, Deallocated = 9, Deleted = 10, Servicing = 11, Recovering = 12, SafeMode = 13, Restoring = 14, Swapping = 15, SwapRollingBack = 16, RotatingSecrets = 17, CommitingSwap = 18, Swapped = 19, ServicingRollback = 20, DatabaseRestoreRollback = 21, RestartingServices = 22, Migrating = 23, DatabaseNeedsUpgrade = 24, ValidatingDataUpgrade = 25, ExecutingSQLCommand = 26, ExecutingGenevaAction = 27, MigratingToSF = 28, MigratedToSF = 29, ScalingOut = 30, CdsConfiguring = 31, CdsDualWriteConfiguring = 32, InfrastructureMaintenance = 33, Disabled = 34, PreparingForMigration = 35, PreppedForMigration = 36, ConfiguringFirewallRules = 37 }
 
     public enum LocalAgentEnums_DeploymentStatus { None = 0, Warning = 1, Failed = 2, StateTransitionIncomplete = 3 }
 
     public enum LocalAgentEnums_DeploymentState { Undefined = 0, Active = 1, Deploying = 2, Deleting = 3, Inactive = 5, Preparing = 6, Downloading = 7, Prepared = 8 }
 
-    public enum DeploymentAction { Undefined = 0, Deploy = 1, Start = 2, Stop = 3, Update = 4, ScaleOut = 5, Configure = 6, Delete = 7, Restart = 8, Service = 9, PreService = 10, PostService = 11, MoveVMToMaintenancePool = 12, MoveVMToLivePool = 13, MarkStepComplete = 14, Rollback = 15, Abort = 16, Failover = 17, DeployDisasterRecovery = 18, RestoreDatabaseFromSourceToTargetServer = 19, Failback = 20, CleanupFailoverResources = 21, Resume = 22, SwapStaging = 23, SwapRollback = 24, SwapCommit = 25, ExecutePowershellScript = 26, RotateSecrets = 27, CreateJITAccount = 28, UpdateNetworkSecurityGroup = 29, ImportDatabase = 30, DataUpgrade = 31, RestartService = 32, ValidateDataUpgrade = 33, ExecuteSQLCommand = 34, Redeploy = 35, DataMovement = 36, ExecuteGenevaAction = 37, DataUpgradeRollback = 38 }
+    public enum DeploymentAction { Undefined = 0, Deploy = 1, Start = 2, Stop = 3, Update = 4, ScaleOut = 5, Configure = 6, Delete = 7, DeleteMetadata = 8, Restart = 9, Service = 10, PreService = 11, PostService = 12, MoveVMToMaintenancePool = 13, MoveVMToLivePool = 14, MarkStepComplete = 15, Rollback = 16, Abort = 17, Failover = 18, DeployDisasterRecovery = 19, RestoreDatabaseFromSourceToTargetServer = 20, Failback = 21, CleanupFailoverResources = 22, Resume = 23, SwapStaging = 24, SwapRollback = 25, SwapCommit = 26, ExecutePowershellScript = 27, RotateSecrets = 28, CreateJITAccount = 29, UpdateNetworkSecurityGroup = 30, ImportDatabase = 31, DataUpgrade = 32, RestartService = 33, ValidateDataUpgrade = 34, ExecuteSQLCommand = 35, Redeploy = 36, DataMovement = 37, ExecuteGenevaAction = 38, TopologyInstanceUpdateAction = 39, DataUpgradeRollback = 40, DisasterRecoveryBackup = 41, RunSQLManagementOperation = 42, ConfigureCDS = 43, ConfigureCdsDualWrite = 44, CopySingleDatabase = 45, PrepareMigrationToIaas = 46, MigrationToIaas = 47, RollbackSfMigrationToIaas = 48, ExecuteMigration = 49, InfrastructureMaintenance = 50, AddSpartanFirewallRules = 51, RemoveSpartanFirewallRules = 52, ExecutePostMigrationSteps = 53, DisasterRecoveryDeploymentStatus = 54, ExecuteElasticPoolDatabaseMigrationAction = 55, UpdateCertificate = 56, GeoReplicationStatus = 57, CleanupTenantStorageAccount = 58 }
 
     public enum EnvironmentGroup { Primary = 0, DisasterRecovery = 1, Staging = 2 }
 
@@ -117,13 +117,13 @@
 
     public enum LcsEnvironmentServiceRequestStatus { None = 0, Requested = 1, RequestDenied = 2, RequestCancelled = 3, RequestAccepted = 4, InProgress = 5, Failed = 6, Succeeded = 7, SignedOff = 8, Aborted = 9, SignedOffWithIssues = 10, Preparation = 11, PostFailureCleanup = 12, PostCompletionCleanup = 13, PostCancellationCleanup = 14, Reserved = 15, RollbackSignedOff = 16, RollbackSignedOffWithIssues = 17, RollbackSucceeded = 18, RollbackFailed = 19, ValidationFailed = 20, ValidationSuccessful = 21, ReadyForValidation = 22 }
 
-    public enum ServicingWorkItemRequestType { None = 0, NewDeployment = 1, UpdateDeployment = 2, DbBackup = 3, DbUpgrade = 4, DbRefresh = 5, ProdPointInTimeDBRestore = 6, OtherType = 7, SandboxPointInTimeDBRestore = 8, EnvironmentUpgrade = 9, DbRefreshSandboxToProd = 10 }
+    public enum ServicingWorkItemRequestType { None = 0, NewDeployment = 1, UpdateDeployment = 2, DbBackup = 3, DbUpgrade = 4, DbRefresh = 5, ProdPointInTimeDBRestore = 6, OtherType = 7, SandboxPointInTimeDBRestore = 8, EnvironmentUpgrade = 9, DbRefreshSandboxToProd = 10, UpcomingUpdate = 11 }
 
-    public enum Types { None = 0, VMPasswords = 1, SQLPasswords = 2, StorageAccountKey = 4, Certificates = 8, AADCertificate = 16, SSLCertificates = 32 }
+    public enum Types { None = 0, VMPasswords = 1, SQLPasswords = 2, StorageAccountKey = 4, Certificates = 8, AADCertificate = 16, SSLCertificates = 32, MonitoringAgentCertificate = 64, DynamicsDeploymentCertificate = 128, RSATCertificate = 256 }
 
     public enum DatabaseType { AX = 0, MR = 1 }
 
-    public enum StepStatus { NotStarted = 1, InProgress = 2, Completed = 3, ManuallyCompleted = 4, Failed = 5, EnvironmentIssue = 6, MarkingStepAsComplete = 7, RerunningStep = 8, NotApplicable = 9 }
+    public enum StepStatus { NotStarted = 0, InProgress = 1, Completed = 2, ManuallyCompleted = 3, Failed = 4, EnvironmentIssue = 5, MarkingStepAsComplete = 6, RerunningStep = 7, NotApplicable = 8 }
 
     public enum StepDetailsType { Servicing = 0, Rollback = 1, DataMovement = 2 }
 
@@ -152,5 +152,7 @@
     public enum CrmGetIdStatus { CrmVersion = 1, CrmStatus = 2 }
 
     public struct PauseReasons { public const string Other = "Other"; public const string Holidays = "Holidays"; public const string UpComingGoLive = "UpComingGoLive"; public const string PendingUpgrade = "PendingUpgrade"; public const string IssueDuringValidation = "IssueDuringValidation"; public const string PendingValidation = "PendingValidation"; public const string CustomizationConflict = "CustomizationConflict"; public const string IsvReadiness = "IsvReadiness"; }
+
+    public enum CDSSelectionValidationResult { Unknown = 0, Success = 1, Warning = 2, Error = 3 };
     #endregion
 }
