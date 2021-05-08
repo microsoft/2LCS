@@ -473,7 +473,7 @@ namespace LCS.JsonObjects
         public object TopologyId { get; set; }
         public object TopologyName { get; set; }
         public object TopologyType { get; set; }
-        public int TopologyVersion { get; set; }
+        public object TopologyVersion { get; set; }
     }
 
     public class HostedInstance
