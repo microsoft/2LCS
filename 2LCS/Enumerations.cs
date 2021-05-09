@@ -51,7 +51,7 @@
 
     public enum EnvironmentActionCategoryType { None = 0, PureCategory = 1, ActionableCategory = 2 }
 
-    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; public const string SouthAfrica = "SouthAfrica"; public const string UAE = "UAE"; public const string Switzerland = "Switzerland"}
+    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; public const string SouthAfrica = "SouthAfrica"; public const string UAE = "UAE"; public const string Switzerland = "Switzerland"; }
 
     public enum MethodologyPinScopes { None = 0, GettingStarted = 1, Task = 2, Phase = 4 }
 
