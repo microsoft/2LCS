@@ -42,16 +42,18 @@
             this.FileAssetDisplayVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LcsEnvironmentActionId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LcsEnvironmentId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Scope = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EstimatedDuration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.packagesDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // OkButton
             // 
             this.OkButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.OkButton.Location = new System.Drawing.Point(486, 479);
-            this.OkButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.OkButton.Location = new System.Drawing.Point(265, 259);
+            this.OkButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.OkButton.Name = "OkButton";
-            this.OkButton.Size = new System.Drawing.Size(222, 40);
+            this.OkButton.Size = new System.Drawing.Size(121, 22);
             this.OkButton.TabIndex = 1;
             this.OkButton.Text = "OK";
             this.OkButton.UseVisualStyleBackColor = true;
@@ -61,10 +63,10 @@
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(716, 479);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cancelButton.Location = new System.Drawing.Point(391, 259);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(210, 40);
+            this.cancelButton.Size = new System.Drawing.Size(115, 22);
             this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
@@ -91,16 +93,18 @@
             this.PackageId,
             this.FileAssetDisplayVersion,
             this.LcsEnvironmentActionId,
-            this.LcsEnvironmentId});
-            this.packagesDataGridView.Location = new System.Drawing.Point(15, 16);
-            this.packagesDataGridView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.LcsEnvironmentId,
+            this.Scope,
+            this.EstimatedDuration});
+            this.packagesDataGridView.Location = new System.Drawing.Point(8, 9);
+            this.packagesDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.packagesDataGridView.MultiSelect = false;
             this.packagesDataGridView.Name = "packagesDataGridView";
             this.packagesDataGridView.RowHeadersVisible = false;
             this.packagesDataGridView.RowHeadersWidth = 62;
             this.packagesDataGridView.RowTemplate.Height = 28;
             this.packagesDataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.packagesDataGridView.Size = new System.Drawing.Size(1459, 456);
+            this.packagesDataGridView.Size = new System.Drawing.Size(796, 247);
             this.packagesDataGridView.TabIndex = 0;
             this.packagesDataGridView.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_CellMouseDoubleClick);
             this.packagesDataGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.PackagesDataGridView_ColumnHeaderMouseClick);
@@ -204,19 +208,37 @@
             this.LcsEnvironmentId.ReadOnly = true;
             this.LcsEnvironmentId.Visible = false;
             // 
+            // Scope
+            // 
+            this.Scope.DataPropertyName = "Scope";
+            this.Scope.FillWeight = 8F;
+            this.Scope.HeaderText = "Scope";
+            this.Scope.MinimumWidth = 8;
+            this.Scope.Name = "Scope";
+            this.Scope.ReadOnly = true;
+            // 
+            // EstimatedDuration
+            // 
+            this.EstimatedDuration.DataPropertyName = "EstimatedDuration";
+            this.EstimatedDuration.FillWeight = 8F;
+            this.EstimatedDuration.HeaderText = "EstimatedDuration";
+            this.EstimatedDuration.MinimumWidth = 8;
+            this.EstimatedDuration.Name = "EstimatedDuration";
+            this.EstimatedDuration.ReadOnly = true;
+            // 
             // ChoosePackage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(1489, 533);
+            this.ClientSize = new System.Drawing.Size(812, 289);
             this.Controls.Add(this.packagesDataGridView);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.OkButton);
             this.Icon = global::LCS.Properties.Resources.favicon_blue;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(948, 467);
+            this.MinimumSize = new System.Drawing.Size(529, 286);
             this.Name = "ChoosePackage";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -242,5 +264,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn FileAssetDisplayVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn LcsEnvironmentActionId;
         private System.Windows.Forms.DataGridViewTextBoxColumn LcsEnvironmentId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Scope;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EstimatedDuration;
     }
 }

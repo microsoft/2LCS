@@ -692,7 +692,7 @@ namespace LCS
 
         internal Response StartSandboxServicing(DeployablePackage package, string platformVersion)
         {
-            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&package[AppVersion]={package.AppVersion}&platformReleaseName={platformVersion}";
+            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[Scope]={package.Scope}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&package[AppVersion]={package.AppVersion}&package[EstimatedDuration]={package.EstimatedDuration}&platformReleaseName={platformVersion}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
@@ -718,7 +718,7 @@ namespace LCS
 
         internal Response ValidateSandboxServicing(DeployablePackage package)
         {
-            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&package[AppVersion]={package.AppVersion}";
+            var parameters = $"package[PackageId]={package.PackageId}&package[Name]={package.Name}&package[Description]={package.Description}&package[packageType]={package.PackageType}&package[ModifiedDate]={package.ModifiedDate}&package[ModifiedBy]={package.ModifiedBy}&package[Publisher]={package.Publisher}&package[Scope]={package.Scope}&package[LcsEnvironmentActionId]={package.LcsEnvironmentActionId}&package[LcsEnvironmentId]={package.LcsEnvironmentId}&package[FileAssetDisplayVersion]={package.FileAssetDisplayVersion}&package[PlatformVersion]={package.PlatformVersion}&package[AppVersion]={package.AppVersion}&package[EstimatedDuration]={package.EstimatedDuration}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");

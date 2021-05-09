@@ -50,6 +50,8 @@ namespace LCS.JsonObjects
         public bool CanShowLoginButton { get; set; }
         public bool CanShowNavigationLinks { get; set; }
         public bool CanShowRdp { get; set; }
+        public bool CanShowSqlEnableAccess { get; set; }
+        public bool CanShowStagingEnvironmentId { get; set; }
         public bool CanShowTrialLink { get; set; }
         public bool CanStart { get; set; }
         public bool CanStop { get; set; }
@@ -73,14 +75,16 @@ namespace LCS.JsonObjects
         public string DeploymentId { get; set; }
         public DeploymentState DeploymentState { get; set; }
         public string DeploymentStatus { get; set; }
+        public object DevOpsDetails { get; set; }
         public string DevTestEnvironmentType { get; set; }
         public string DisasterRecoveryLocation { get; set; }
         public string DisasterRecoveryLocationLabel { get; set; }
         public string DisplayName { get; set; }
         public string EnvironmentAdmin { get; set; }
-        public object EnvironmentCDSDetails { get; set; }
+        public EnvironmentCDSDetails EnvironmentCDSDetails { get; set; }
         public string EnvironmentId { get; set; }
         public string EnvironmentName { get; set; }
+        public EnvironmentNotifications EnvironmentNotifications { get; set; }
         public object Errors { get; set; }
         public bool HasStagingEnvironment { get; set; }
         public string InstanceId { get; set; }
@@ -100,6 +104,8 @@ namespace LCS.JsonObjects
         public bool IsPinToD365Visible { get; set; }
         public bool IsPreparationFailed { get; set; }
         public bool IsPublishedToD365 { get; set; }
+        public bool IsSandboxUpgradeEnvironment { get; set; }
+        public bool IsServicingEstimationEnabled { get; set; }
         public bool IsStagingDeploymentFailed { get; set; }
         public bool IsStagingDeploymentSucceeded { get; set; }
         public bool IsUpgradeSelfServeCancelledOrCompleted { get; set; }
@@ -129,7 +135,7 @@ namespace LCS.JsonObjects
         public bool ShowSslCertRotateWarning { get; set; }
         public bool ShowUpgradeEnvironmentDetails { get; set; }
         public Credentials[] SqlAzureCredentials { get; set; }
-        public string StagingActivityId { get; set; }
+        public System.Guid StagingActivityId { get; set; }
         public string StagingDeployedBy { get; set; }
         public string StagingDeployedOn { get; set; }//Todo
         public string StagingEnvironmentAdministrator { get; set; }
@@ -155,8 +161,11 @@ namespace LCS.JsonObjects
         public string DeploymentItemName { get; set; }
         public string InstanceName { get; set; }
         public bool IsCredentialKeyVaultUri { get; set; }
+        public bool IsPasswordExpired { get; set; }
         public string Password { get; set; }
         public string PasswordExpiryTime { get; set; }
+        public object ReasonForAccess { get; set; }
+        public object ReasonForAccessDetails { get; set; }
         public string SymbolicName { get; set; }
         public string UserName { get; set; }
     }
@@ -171,6 +180,7 @@ namespace LCS.JsonObjects
     {
         public string AppVersion { get; set; }
         public string Description { get; set; }
+        public string EstimatedDuration { get; set; }
         public int FileAssetDisplayVersion { get; set; }
         public int LcsEnvironmentActionId { get; set; }
         public string LcsEnvironmentId { get; set; }
@@ -181,6 +191,7 @@ namespace LCS.JsonObjects
         public string PackageType { get; set; }
         public string PlatformVersion { get; set; }
         public string Publisher { get; set; }
+        public string Scope { get; set; }
     }
 
     public class DynamicPaging
@@ -273,18 +284,18 @@ namespace LCS.JsonObjects
     {
         public string CreatedByUserName { get; set; }
         public string Description { get; set; }
-        public bool Favorite { get; set; }
         public int Id { get; set; }
         public string Name { get; set; }
         public string OrganizationName { get; set; }
-        public int ProductId { get; set; }
-        public int ProductVersionId { get; set; }
+        public LCS.Product ProductId { get; set; }
+        public ProductVersionId ProductVersionId { get; set; }
         public ProjectType ProjectTypeId { get; set; }
         public string RequestEmailInvited { get; set; }
         public bool RequestPending { get; set; }
         public bool RequestSentToAlternativeEmail { get; set; }
+        public SolutionRequestStatus SolutionRequestStatus { get; set; }
+        public bool Favorite { get; set; }
         public string SharepointSite { get; set; }
-        public int SolutionRequestStatus { get; set; }
         public string TfsProjectName { get; set; }
         public string TfsServerSite { get; set; }
     }
@@ -331,9 +342,9 @@ namespace LCS.JsonObjects
 
     public class Product
     {
-        public int ProductId { get; set; }
+        public LCS.Product ProductId { get; set; }
         public string ProductName { get; set; }
-        public int ProductVersion { get; set; }
+        public ProductVersionId ProductVersion { get; set; }
         public string ProductVersionName { get; set; }
     }
 
@@ -345,7 +356,7 @@ namespace LCS.JsonObjects
         public int CurrentPhaseId { get; set; }
         public string Description { get; set; }
         public int Id { get; set; }
-        public int IndustryId { get; set; }
+        public Industry IndustryId { get; set; }
         public string IndustryName { get; set; }
         public int MethodologyId { get; set; }
         public object MethodologyName { get; set; }
@@ -379,7 +390,7 @@ namespace LCS.JsonObjects
         public bool IsOnPremTfsEnabled { get; set; }
         public IssueStorage IssueStorageType { get; set; }
         public string SharepointSite { get; set; }
-        public string TfsProjectId { get; set; }
+        public System.Guid TfsProjectId { get; set; }
         public string TfsProjectName { get; set; }
         public string TfsServerSite { get; set; }
     }
@@ -436,6 +447,7 @@ namespace LCS.JsonObjects
 
     public class Response
     {
+        public object ActivityId { get; set; }
         public object Data { get; set; }
         public int ErrorCode { get; set; }
         public object ErrorList { get; set; }
@@ -585,6 +597,7 @@ namespace LCS.JsonObjects
         public int ActionTypeId { get; set; }
         public string CompletionDate { get; set; }
         public int Id { get; set; }
+        public bool IsPostServicing { get; set; }
         public string Name { get; set; }
         public string PackageAssetId { get; set; }
         public string PackageType { get; set; }
@@ -608,4 +621,23 @@ namespace LCS.JsonObjects
         public string ApplicationRelease { get; set; }
     }
 
+    public class EnvironmentCDSDetails
+    {
+        public string AdditionalInfoMessage { get; set; }
+        public object AdditionalResourceLinks { get; set; }
+        public bool AllowCDSResume { get; set; }
+        public bool AllowNewCDSConfiguration { get; set; }
+        public string CDSInstanceName { get; set; }
+        public object CurrentConfigurationState { get; set; }
+        public object DisplayErrorMessage { get; set; }
+        public bool IsCDSInstanceConfigured { get; set; }
+        public bool ShowProvisioningResumedMessage { get; set; }
+        public bool ShowProvisioningTriggeredMessage { get; set; }
+    }
+
+    public class EnvironmentNotifications
+    {
+        public object EnvironmentNotificationDetails { get; set; }
+        public bool ShowEnvironmentNotifications { get; set; }
+    }
 }

@@ -936,13 +936,17 @@ namespace LCS.Forms
                 document.DifferentFirstPage = true;
                 document.Footers.Odd.InsertParagraph("Generated with ").AppendHyperlink(link2LCS);
 
-                var toc = document.InsertTableOfContents("Table of Contents",
-                    TableOfContentsSwitches.O // use paragraphs with built in heading styles
-                    | TableOfContentsSwitches.U  // build the toc by using paragraph outline level
-                    | TableOfContentsSwitches.Z  // hide tba leader in web layout
-                    | TableOfContentsSwitches.H  // use hyperlinks
-                    | TableOfContentsSwitches.W  // preserve tabs
-                    | TableOfContentsSwitches.X);// preserve new line characters
+                var tocSwitches = new Dictionary<TableOfContentsSwitches, string>()
+                {
+                    { TableOfContentsSwitches.O, "1-3"},
+                    { TableOfContentsSwitches.U, ""},
+                    { TableOfContentsSwitches.Z, ""},
+                    { TableOfContentsSwitches.H, ""},
+                    { TableOfContentsSwitches.W, ""},
+                    { TableOfContentsSwitches.X, ""},
+                };
+
+                var toc = document.InsertTableOfContents("Table of Contents", tocSwitches);
 
                 var tocParagraph = document.InsertParagraph();
                 tocParagraph.InsertPageBreakAfterSelf();
