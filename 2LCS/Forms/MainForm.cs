@@ -2275,7 +2275,7 @@ namespace LCS.Forms
 
             Cursor = Cursors.WaitCursor;
             var previousProject = _selectedProject;
-            var exportedUpdates = new List<Datum>();
+            var exportedUpdates = new List<UpcomingCalendarViewModels>();
 
             Projects = _httpClientHelper.GetAllProjects();
             Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
@@ -2287,8 +2287,8 @@ namespace LCS.Forms
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 SetLcsProjectText();
 
-                List<Datum> calendar = _httpClientHelper.GetUpcomingCalendars();
-                if (calendar != null || calendar.Count != 0)
+                List<UpcomingCalendarViewModels> calendar = _httpClientHelper.GetUpcomingCalendars();
+                if (calendar != null && calendar.Any())
                 {
                     foreach (var _updateRow in calendar)
                     {

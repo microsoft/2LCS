@@ -771,7 +771,7 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<PlanData>(response.Data.ToString());
         }
 
-        internal List<Datum> GetUpcomingCalendars()
+        internal List<UpcomingCalendarViewModels> GetUpcomingCalendars()
         {
             try
             {
@@ -779,10 +779,10 @@ namespace LCS
                 result.EnsureSuccessStatusCode();
 
                 var responseBody = result.Content.ReadAsStringAsync().Result;
-                var response = JsonConvert.DeserializeObject<Response>(responseBody);
+                dynamic response = JsonConvert.DeserializeObject<Response>(responseBody);
                 return !response.Success
                     ? null
-                    : response.Data == null ? null : JsonConvert.DeserializeObject<List<Datum>>(response.Data.ToString());
+                    : response.Data == null ? null : JsonConvert.DeserializeObject<List<UpcomingCalendarViewModels>>(response.Data.UpcomingCalendarViewModels.ToString());
             }
             catch
             {
