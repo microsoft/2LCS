@@ -91,17 +91,21 @@ namespace LCS.Forms
             {
                 try
                 { 
+                    bool success = false;
                     if (uriSchemeEnabled.Checked)
                     {
-                        URIHandler.Install();
+                        success = URIHandler.Install();
                     }
                     else
                     {
-                        URIHandler.Uninstall();
+                        success = URIHandler.Uninstall();
                     }
-                    SetParameters();
+                    if (success)
+                    { 
+                       SetParameters();
+                    }
                 }  
-                catch
+                finally
                 {
                     LoadParameters();
                 }

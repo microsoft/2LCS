@@ -55,9 +55,9 @@ namespace LCS
         {
             bool retVal = true;
 
-            if (!RequireAdministratorPrivilages()) return false;
-
+            retVal = retVal && RequireAdministratorPrivilages();
             retVal = retVal && Uninstall();
+
             if (retVal)
             { 
                 Assembly assembly = Assembly.GetExecutingAssembly();
