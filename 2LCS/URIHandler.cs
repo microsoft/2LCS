@@ -27,8 +27,6 @@ namespace LCS
         {
             bool retVal = false;
 
-            //UriParser.Register(new HttpStyleUriParser(), URI_PROTOCOL_NAME.ToLower(), 80);
-
             foreach (string arg in args)
             {
                 if (Uri.TryCreate(arg, UriKind.RelativeOrAbsolute, out Uri srcUri))
@@ -62,25 +60,27 @@ namespace LCS
             retVal = retVal && Uninstall();
             if (retVal)
             { 
-
-                //-- get assembly info
-                var assembly = Assembly.GetExecutingAssembly();
-                var handlerLocation = assembly.Location;
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                string handlerLocation = assembly.Location;
 
                 //-- create registy structure
-                var rootKey = Registry.ClassesRoot.CreateSubKey(URI_PROTOCOL_NAME.ToLower());
-                var defaultIconKey = rootKey?.CreateSubKey("DefaultIcon");
-                var commandKey = rootKey?.CreateSubKey("shell")?.CreateSubKey("open")?.CreateSubKey("command");
+                RegistryKey rootKey = Registry.ClassesRoot.CreateSubKey(URI_PROTOCOL_NAME.ToLower());
 
-                rootKey?.SetValue("", $"URL:{URI_PROTOCOL_NAME.ToLower()}");
-                rootKey?.SetValue("URL Protocol", "");
-                defaultIconKey?.SetValue("", handlerLocation);
-                commandKey?.SetValue("", $@"""{handlerLocation}"" ""%1""");
+                if (rootKey  != null)
+                {
+                    RegistryKey defaultIconKey = rootKey.CreateSubKey("DefaultIcon");
+                    RegistryKey commandKey = rootKey.CreateSubKey("shell")?.CreateSubKey("open")?.CreateSubKey("command");
 
-                //--
+                    rootKey.SetValue("", $"URL:{URI_PROTOCOL_NAME.ToLower()}");
+                    rootKey.SetValue("URL Protocol", "");
+
+                    defaultIconKey?.SetValue("", handlerLocation);
+                    commandKey?.SetValue("", $@"""{handlerLocation}"" ""%1""");
+                }
+
                 MessageBox.Show($"RDP Protocol Handler installed\nWARNING: Do not move this '{assembly.FullName}' to other location, otherwise handler will not work. If you change the location run installation process again.");
 
-                retVal = retVal & true;
+                retVal = true;
             }
             return  retVal;
         }
