@@ -1,5 +1,6 @@
 ﻿using LCS.Forms;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -51,7 +52,14 @@ namespace LCS
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            if (URIHandler.DetectURILaunch(Environment.GetCommandLineArgs()))
+            {
+                Application.Run(new RDPConnect());
+            }  else
+            { 
+                Application.Run(new MainForm());
+            }
         }
     }
 }
