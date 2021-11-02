@@ -94,11 +94,11 @@ namespace LCS.Forms
                     bool success = false;
                     if (uriSchemeEnabled.Checked)
                     {
-                        success = URIHandler.Install();
+                        success = URIHandler.RegisterHandler();
                     }
                     else
                     {
-                        success = URIHandler.Uninstall();
+                        success = URIHandler.RemoveHandler();
                     }
                     if (success)
                     { 

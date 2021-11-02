@@ -40,54 +40,57 @@ namespace LCS
             return retVal;
         }
 
-        public static bool Uninstall()
+        public static bool RemoveHandler()
         {
-            if (!RequireAdministratorPrivilages()) return false;
-
-            Registry.ClassesRoot.DeleteSubKeyTree(URI_PROTOCOL_NAME, false);
-
-            MessageBox.Show("RDP Protocol Handler uninstalled.");
-
-            return true;
+            bool retVal = false;
+            if (IsAdministratorAccessProvided())
+            { 
+                Registry.ClassesRoot.DeleteSubKeyTree(URI_PROTOCOL_NAME, false);
+                MessageBox.Show($"{URI_PROTOCOL_NAME} protocol handler registration removed.");
+                retVal = true;
+            }
+            return retVal;
         }
 
-        public static bool Install()
+        public static bool RegisterHandler()
         {
             bool retVal = true;
 
-            retVal = retVal && RequireAdministratorPrivilages();
-            retVal = retVal && Uninstall();
+            retVal = retVal && IsAdministratorAccessProvided();
+            retVal = retVal && RemoveHandler();
 
             if (retVal)
             { 
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                string handlerLocation = assembly.Location;
+                Assembly appAssembly = Assembly.GetExecutingAssembly();
+                string appAssemblyLocation = appAssembly.Location;
 
                 //-- create registy structure
                 RegistryKey rootKey = Registry.ClassesRoot.CreateSubKey(URI_PROTOCOL_NAME.ToLower());
 
                 if (rootKey  != null)
                 {
-                    RegistryKey defaultIconKey = rootKey.CreateSubKey("DefaultIcon");
-                    RegistryKey commandKey = rootKey.CreateSubKey("shell")?.CreateSubKey("open")?.CreateSubKey("command");
-
                     rootKey.SetValue("", $"URL:{URI_PROTOCOL_NAME.ToLower()}");
                     rootKey.SetValue("URL Protocol", "");
 
-                    defaultIconKey?.SetValue("", handlerLocation);
-                    commandKey?.SetValue("", $@"""{handlerLocation}"" ""%1""");
+                    rootKey.CreateSubKey("DefaultIcon")
+                           .SetValue("", appAssemblyLocation);
+
+                    rootKey.CreateSubKey("shell")
+                           .CreateSubKey("open")
+                           .CreateSubKey("command")
+                           .SetValue("", $@"""{appAssemblyLocation}"" ""%1""");
                 }
 
-                MessageBox.Show($"RDP Protocol Handler installed\nWARNING: Do not move this '{assembly.FullName}' to other location, otherwise handler will not work. If you change the location run installation process again.");
+                MessageBox.Show($"{URI_PROTOCOL_NAME} protocol  handler registration completed.\nRemember to not move the executable to other location or re-register it after.");
 
                 retVal = true;
             }
             return  retVal;
         }
 
-        private static bool RequireAdministratorPrivilages()
+        private static bool IsAdministratorAccessProvided()
         {
-            var isAdmin = IsUserAdministrator();
+             bool isAdmin = CheckIsUserAdministrator();
 
             if (!isAdmin)
             {
@@ -97,19 +100,21 @@ namespace LCS
             return isAdmin;
         }
 
-        private static bool IsUserAdministrator()
+        private static bool CheckIsUserAdministrator()
         {
             using WindowsIdentity user = WindowsIdentity.GetCurrent();
+            bool retVal;
             try
             {
-                //get the currently logged in user
                 WindowsPrincipal principal = new WindowsPrincipal(user);
-                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                retVal = principal.IsInRole(WindowsBuiltInRole.Administrator);
             }
             catch (UnauthorizedAccessException)
             {
-                return false;
+                retVal = false;
             }
+
+            return retVal;
         }
     }
 }
