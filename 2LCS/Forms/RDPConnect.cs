@@ -16,7 +16,7 @@ namespace LCS.Forms
 {
     public partial class RDPConnect : Form
     {
-        private BackgroundWorker bw = null;
+        private BackgroundWorker worker = null;
         private dynamic rdpData = null;
 
         public RDPConnect()
@@ -53,13 +53,14 @@ namespace LCS.Forms
             { 
                 vmNameLabel.Text = rdpData.Environment;
 
-                bw = new BackgroundWorker();
-
-                bw.WorkerReportsProgress = true;
-                bw.WorkerSupportsCancellation = true;
-                bw.DoWork += new DoWorkEventHandler(bw_DoWork);
-                bw.ProgressChanged += new ProgressChangedEventHandler(bw_ProgressChanged);
-                bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted);
+                worker = new BackgroundWorker
+                {
+                    WorkerReportsProgress = true,
+                    WorkerSupportsCancellation = true
+                };
+                worker.DoWork += new DoWorkEventHandler(OnWorkerDoWork);
+                worker.ProgressChanged += new ProgressChangedEventHandler(OnWorkerProgressChanged);
+                worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(OnWorkerRunWorkerCompleted);
 
                 this.SetProgress(10, "Authenticating to LCS");
 
@@ -69,7 +70,7 @@ namespace LCS.Forms
                 }
 
                 this.SetProgress(25, "Initializing LCS connections");
-                bw.RunWorkerAsync();
+                worker.RunWorkerAsync();
             } 
             else
             {
@@ -83,17 +84,17 @@ namespace LCS.Forms
             return false;
         }
 
-        private void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void OnWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             this.Close();
         }
 
-        private void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void OnWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             this.SetProgress(e.ProgressPercentage, e.UserState as string);
         }
 
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        private void OnWorkerDoWork(object sender, DoWorkEventArgs e)
         {           
             if (rdpData.Command.ToLower() == "connectrdp")
             {
@@ -108,17 +109,17 @@ namespace LCS.Forms
                     LcsDiagUrl = URIHandler.LCS_DIAG_URL
                 };
 
-                bw.ReportProgress(20, "Loading project");
+                worker.ReportProgress(20, "Loading project");
 
                 httpClientHelper.ChangeLcsProjectId(rdpData.ProjectId);
 
-                bw.ReportProgress(50, "Loading cloud-hosted instances");
+                worker.ReportProgress(50, "Loading cloud-hosted instances");
 
                 CloudHostedInstance chInstance = httpClientHelper.GetCheInstances().FirstOrDefault(e => e.DisplayName == rdpData.Environment);
 
                 if (chInstance.CanShowRdp)
                 {
-                    bw.ReportProgress(80, "Loading connection details");
+                    worker.ReportProgress(80, "Loading connection details");
 
                     var rdpList = httpClientHelper.GetRdpConnectionDetails(chInstance);
                     RDPConnectionDetails rdpEntry = null;
@@ -149,7 +150,7 @@ namespace LCS.Forms
                                 }
                             };
 
-                            bw.ReportProgress(95, "Starting connection..");
+                            worker.ReportProgress(95, "Starting connection..");
 
                             rdcProcess.Start();
                         }

@@ -190,7 +190,7 @@
             this.uriSchemeEnabled.Size = new System.Drawing.Size(169, 20);
             this.uriSchemeEnabled.TabIndex = 1;
             this.uriSchemeEnabled.Text = "Enable URI scheme support";
-            this.uriSchemeEnabled.CheckedChanged += new System.EventHandler(this.uriSchemeEnabled_CheckedChanged);
+            this.uriSchemeEnabled.CheckedChanged += new System.EventHandler(this.OnUriSchemeEnabledCheckedChanged);
             // 
             // alwaysLogAsAdmin
             // 

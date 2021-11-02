@@ -23,9 +23,9 @@ namespace LCS
         {
             foreach (Form form in Application.OpenForms)
             {
-                if (form is MainForm)
+                if (form is MainForm locMainForm)
                 {
-                    mainForm = (MainForm)form;
+                    mainForm = locMainForm;
                 }
                 else
                 {

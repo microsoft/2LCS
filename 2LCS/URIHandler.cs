@@ -99,18 +99,16 @@ namespace LCS
 
         private static bool IsUserAdministrator()
         {
-            using (WindowsIdentity user = WindowsIdentity.GetCurrent())
+            using WindowsIdentity user = WindowsIdentity.GetCurrent();
+            try
             {
-                try
-                {
-                    //get the currently logged in user
-                    WindowsPrincipal principal = new WindowsPrincipal(user);
-                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    return false;
-                }
+                //get the currently logged in user
+                WindowsPrincipal principal = new WindowsPrincipal(user);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
             }
         }
     }

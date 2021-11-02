@@ -85,7 +85,7 @@ namespace LCS.Forms
             }
         }
 
-        private void uriSchemeEnabled_CheckedChanged(object sender, EventArgs e)
+        private void OnUriSchemeEnabledCheckedChanged(object sender, EventArgs e)
         {
             if (Properties.Settings.Default.uriSchemeEnabled != uriSchemeEnabled.Checked)
             {
@@ -101,7 +101,7 @@ namespace LCS.Forms
                     }
                     SetParameters();
                 }  
-                catch (Exception ex)
+                catch
                 {
                     LoadParameters();
                 }
