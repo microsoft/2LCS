@@ -45,7 +45,8 @@ namespace LCS
             bool retVal = false;
             if (IsAdministratorAccessProvided())
             { 
-                Registry.ClassesRoot.DeleteSubKeyTree(URI_PROTOCOL_NAME, false);
+                Registry.ClassesRoot.DeleteSubKeyTree(URI_PROTOCOL_NAME, false);            
+                
                 MessageBox.Show($"{URI_PROTOCOL_NAME} protocol handler registration removed.");
                 retVal = true;
             }
@@ -61,14 +62,12 @@ namespace LCS
 
             if (retVal)
             { 
-                Assembly appAssembly = Assembly.GetExecutingAssembly();
-                string appAssemblyLocation = appAssembly.Location;
-
-                //-- create registy structure
                 RegistryKey rootKey = Registry.ClassesRoot.CreateSubKey(URI_PROTOCOL_NAME.ToLower());
 
                 if (rootKey  != null)
                 {
+                    string appAssemblyLocation = Assembly.GetExecutingAssembly().Location;
+
                     rootKey.SetValue("", $"URL:{URI_PROTOCOL_NAME.ToLower()}");
                     rootKey.SetValue("URL Protocol", "");
 
@@ -82,7 +81,6 @@ namespace LCS
                 }
 
                 MessageBox.Show($"{URI_PROTOCOL_NAME} protocol  handler registration completed.\nRemember to not move the executable to other location or re-register it after.");
-
                 retVal = true;
             }
             return  retVal;
@@ -100,21 +98,6 @@ namespace LCS
             return isAdmin;
         }
 
-        private static bool CheckIsUserAdministrator()
-        {
-            using WindowsIdentity user = WindowsIdentity.GetCurrent();
-            bool retVal;
-            try
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(user);
-                retVal = principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-            catch (UnauthorizedAccessException)
-            {
-                retVal = false;
-            }
-
-            return retVal;
-        }
+        private static bool CheckIsUserAdministrator() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
     }
 }
