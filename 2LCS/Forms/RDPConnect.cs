@@ -24,10 +24,10 @@ namespace LCS.Forms
             InitializeComponent();
         }
 
-        private  void SetProgress(int progress, string text)
+        private void SetProgress(int progress, string text)
         {
             progressBar.Value = progress;
-            stateValueLabel.Text  =  text;
+            stateValueLabel.Text = text;
         }
 
         private void RDPConnect_Shown(object sender, EventArgs e)
@@ -46,12 +46,13 @@ namespace LCS.Forms
             };
             bool validationOk = true;
 
-            validationOk &= string.IsNullOrWhiteSpace(rdpData.ProjectId) ? CheckFailed("ProjectId is missing", "Wrong arguments")  : validationOk;
-            validationOk &= string.IsNullOrWhiteSpace(rdpData.Environment) ? CheckFailed("EnvironmentId is missing", "Wrong arguments") :  validationOk;
+            validationOk &= string.IsNullOrWhiteSpace(rdpData.ProjectId) ? CheckFailed("ProjectId is missing", "Wrong arguments") : validationOk;
+            validationOk &= string.IsNullOrWhiteSpace(rdpData.Environment) ? CheckFailed("EnvironmentId is missing", "Wrong arguments") : validationOk;
 
             if (validationOk)
-            { 
+            {
                 vmNameLabel.Text = rdpData.Environment;
+                projectIdLabel.Text = rdpData.ProjectId;
 
                 worker = new BackgroundWorker
                 {
@@ -65,13 +66,12 @@ namespace LCS.Forms
                 this.SetProgress(10, "Authenticating to LCS");
 
                 using (var form = new Login())
-                {                
+                {
                     form.ShowDialog();
                 }
 
-                this.SetProgress(25, "Initializing LCS connections");
                 worker.RunWorkerAsync();
-            } 
+            }
             else
             {
                 this.Close();
@@ -95,76 +95,100 @@ namespace LCS.Forms
         }
 
         private void OnWorkerDoWork(object sender, DoWorkEventArgs e)
-        {           
+        {
+            worker.ReportProgress(25, "Initializing LCS connections");
+
+            CookieContainer cookies = MainForm.GetUriCookieContainer();
+            if (cookies == null) return;
+
+            HttpClientHelper httpClientHelper = new HttpClientHelper(cookies)
+            {
+                LcsUrl = URIHandler.LCS_URL,
+                LcsUpdateUrl = URIHandler.LCS_UPDATE_URL,
+                LcsDiagUrl = URIHandler.LCS_DIAG_URL
+            };
+
             if (rdpData.Command.ToLower() == "connectrdp")
             {
-
-                CookieContainer cookies = MainForm.GetUriCookieContainer();
-                if (cookies == null) return;
-
-                HttpClientHelper httpClientHelper = new HttpClientHelper(cookies)
-                {
-                    LcsUrl = URIHandler.LCS_URL,
-                    LcsUpdateUrl = URIHandler.LCS_UPDATE_URL,
-                    LcsDiagUrl = URIHandler.LCS_DIAG_URL
-                };
-
                 worker.ReportProgress(20, "Loading project");
 
                 httpClientHelper.ChangeLcsProjectId(rdpData.ProjectId);
+
+                ProjectData project = httpClientHelper.GetProject(rdpData.ProjectId);
+                projectNameLabel.Invoke(new MethodInvoker(delegate { projectNameLabel.Text = project.Name; }));
 
                 worker.ReportProgress(50, "Loading cloud-hosted instances");
 
                 CloudHostedInstance chInstance = httpClientHelper.GetCheInstances().FirstOrDefault(e => e.DisplayName == rdpData.Environment);
 
-                if (chInstance.CanShowRdp)
+                if (chInstance != null)
                 {
-                    worker.ReportProgress(80, "Loading connection details");
-
-                    var rdpList = httpClientHelper.GetRdpConnectionDetails(chInstance);
-                    RDPConnectionDetails rdpEntry = null;
-
-                    if (rdpList.Count == 0)
+                    if (chInstance.CanShowRdp)
                     {
-                        MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
-                    }
-                    else if (rdpList.Count > 1)
-                    {
-                        rdpEntry = MainForm.ChooseRdpLogonUser(rdpList);
+                        worker.ReportProgress(80, "Loading connection details");
+
+                        var rdpList = httpClientHelper.GetRdpConnectionDetails(chInstance);
+                        RDPConnectionDetails rdpEntry = null;
+
+                        if (rdpList != null && rdpList.Count > 0)
+                        {
+                            if (rdpList.Count > 1)
+                            {
+                                rdpEntry = MainForm.ChooseRdpLogonUser(rdpList);
+                            }
+                            else
+                            {
+                                rdpEntry = rdpList.First();
+                            }
+
+                            if (rdpEntry != null)
+                            { 
+                                using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
+                                {
+                                    var rdcProcess = new Process
+                                    {
+                                        StartInfo =
+                                    {
+                                        FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
+                                        Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
+                                    }
+                                    };
+
+                                    worker.ReportProgress(95, "Starting connection..");
+
+                                    rdcProcess.Start();
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show($"Operation cancelled", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+
                     }
                     else
                     {
-                        rdpEntry = rdpList.First();
-                    }
-
-                    if (rdpEntry != null)
-                    {
-                        using (new RdpCredentials(rdpEntry.Address, $"{rdpEntry.Domain}\\{rdpEntry.Username}", rdpEntry.Password))
-                        {
-                            var rdcProcess = new Process
-                            {
-                                StartInfo =
-                                {
-                                    FileName = Environment.ExpandEnvironmentVariables(@"%SystemRoot%\system32\mstsc.exe"),
-                                    Arguments = "/v " + $"{rdpEntry.Address}:{rdpEntry.Port}"
-                                }
-                            };
-
-                            worker.ReportProgress(95, "Starting connection..");
-
-                            rdcProcess.Start();
-                        }
+                        MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operaation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Cannot find cloud-hosted instance with ID {rdpData.Environment} on project {project.Name}", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Unsupported operation", "Unsupported operation", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Unsupported operation", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void RDPConnect_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
