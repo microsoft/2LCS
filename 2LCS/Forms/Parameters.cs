@@ -40,6 +40,7 @@ namespace LCS.Forms
             CachingEnabledCheckbox.Checked = Properties.Settings.Default.cachingEnabled;
             StoreCacheCheckBox.Checked = Properties.Settings.Default.keepCache;
             alwaysLogAsAdmin.Checked = Properties.Settings.Default.alwaysLogAsAdmin;
+            uriSchemeEnabled.Checked = Properties.Settings.Default.uriSchemeEnabled;
             SetStoreCacheEnabledDisabled();
         }
 
@@ -51,6 +52,7 @@ namespace LCS.Forms
             Properties.Settings.Default.cachingEnabled = CachingEnabledCheckbox.Checked;
             Properties.Settings.Default.keepCache = StoreCacheCheckBox.Checked;
             Properties.Settings.Default.alwaysLogAsAdmin = alwaysLogAsAdmin.Checked;
+            Properties.Settings.Default.uriSchemeEnabled = uriSchemeEnabled.Checked;
             Properties.Settings.Default.Save();
         }
 
@@ -77,9 +79,36 @@ namespace LCS.Forms
         {
             var result = CredentialsCacheHelper.ClearCache();
 
-            if(result != null)
+            if (result != null)
             {
                 MessageBox.Show(string.Format("Error while trying to clear cache, caching disabled.\n {0}", result), "Error");
+            }
+        }
+
+        private void OnUriSchemeEnabledCheckedChanged(object sender, EventArgs e)
+        {
+            if (Properties.Settings.Default.uriSchemeEnabled != uriSchemeEnabled.Checked)
+            {
+                try
+                { 
+                    bool success = false;
+                    if (uriSchemeEnabled.Checked)
+                    {
+                        success = URIHandler.RegisterHandler();
+                    }
+                    else
+                    {
+                        success = URIHandler.RemoveHandler();
+                    }
+                    if (success)
+                    { 
+                       SetParameters();
+                    }
+                }  
+                finally
+                {
+                    LoadParameters();
+                }
             }
         }
     }

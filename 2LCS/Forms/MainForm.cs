@@ -169,7 +169,7 @@ namespace LCS.Forms
             loginToLcsMenuItem.Enabled = true;
         }
 
-        private static CookieContainer GetUriCookieContainer()
+        public static CookieContainer GetUriCookieContainer()
         {
             CookieContainer cookies = null;
             var datasize = 8192 * 16;

@@ -1,5 +1,6 @@
 ﻿using LCS.Forms;
 using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -22,9 +23,9 @@ namespace LCS
         {
             foreach (Form form in Application.OpenForms)
             {
-                if (form is MainForm)
+                if (form is MainForm locMainForm)
                 {
-                    mainForm = (MainForm)form;
+                    mainForm = locMainForm;
                 }
                 else
                 {
@@ -51,7 +52,14 @@ namespace LCS
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            if (URIHandler.DetectURILaunch(Environment.GetCommandLineArgs()))
+            {
+                Application.Run(new RDPConnect());
+            }  else
+            { 
+                Application.Run(new MainForm());
+            }
         }
     }
 }
