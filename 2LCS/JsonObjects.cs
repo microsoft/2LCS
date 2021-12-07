@@ -550,7 +550,7 @@ namespace LCS.JsonObjects
         public List<Plan> Plans { get; set; }
     }
 
-    public class Datum
+    public class UpcomingCalendarViewModels
     {
         public string EnvironmentName { get; set; }
         public int StatusEnum { get; set; }
@@ -561,7 +561,7 @@ namespace LCS.JsonObjects
         public string Month { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
-        public int DownTime { get; set; }
+        public int DownTimeInMinutes { get; set; }
         public string EventName { get; set; }
         public string Status { get; set; }
         public bool IsModified { get; set; }

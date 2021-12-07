@@ -9,7 +9,7 @@ namespace LCS.Forms
 {
     public partial class UpcomingUpdates : Form
     {
-        public List<Datum> Calendar;
+        public List<UpcomingCalendarViewModels> Calendar;
         private readonly BindingSource _calendarSource = new BindingSource();
         private bool _sortAscending;
 
