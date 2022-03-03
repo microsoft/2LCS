@@ -766,7 +766,7 @@
             // 
             this.currentProjectUsersExportMenuItem.Name = "currentProjectUsersExportMenuItem";
             this.currentProjectUsersExportMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.currentProjectUsersExportMenuItem.Text = "Current projects";
+            this.currentProjectUsersExportMenuItem.Text = "Current project";
             this.currentProjectUsersExportMenuItem.Click += new System.EventHandler(this.currentProjectUsersExportMenuItem_Click);
             // 
             // allProjectUsersExportMenuItem
