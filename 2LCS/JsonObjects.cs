@@ -219,6 +219,23 @@ namespace LCS.JsonObjects
         public string TopologyVersion { get; set; }
     }
 
+    public class ExportedUser
+    {
+        public string Organization { get; set; }
+        public string ProjectId { get; set; }
+        public string ProjectName { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string OrganizationName { get; set; }
+        public string UserRoleDisplayName { get; set; }
+        public string FunctionalRoleDisplayName { get; set; }
+        public string AllowContactByMicrosoft { get; set; }
+        public string InvitedByName { get; set; }
+        public string InvitedByOrganisation { get; set; }
+        public string CreatedDate { get; set; }
+        public string InvitationStatusDisplayText { get; set; }
+    }
+
     public class Hotfix
     {
         public object Area { get; set; }

@@ -1296,6 +1296,89 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
+        private void ExportListOfUsers(LCSProjectAllCurrent _LCSProjectAllCurrent)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of users for {_LCSProjectAllCurrent} LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = $"Exporting list of LCS users";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
+            Cursor = Cursors.WaitCursor;
+            var previousProject = _selectedProject;
+            var exportedUsers = new List<ExportedUser>();
+
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
+
+            foreach (var _project in Projects)
+            {
+                if (_project.RequestPending == true) continue;
+                _selectedProject = _project;
+                _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
+                SetLcsProjectText();
+
+                var projectUsers = _httpClientHelper.GetAllProjectUsers();
+                if (projectUsers != null && projectUsers.Count > 0)
+                {
+                    foreach (var user in projectUsers)
+                    {                    
+                        var exportedUser = new ExportedUser
+                        {
+                            ProjectId = _project.Id.ToString(),
+                            ProjectName = _project.Name,
+                            Organization = _project.OrganizationName,
+                            UserName = user.UserProfile == null ? null : user.UserProfile.DisplayName,
+                            Email = user.UserProfile == null ? user.InvitationEmail : user.UserProfile.Email,
+                            OrganizationName = user.UserProfile == null ? null : user.UserProfile.Organization.Name,
+                            UserRoleDisplayName = user.UserRoleDisplayText,
+                            FunctionalRoleDisplayName = user.FunctionalRoleDisplayText,
+                            AllowContactByMicrosoft = user.AllowContactByMicrosoft.ToString(),
+                            InvitedByName = user.InvitedBy.DisplayName,
+                            InvitedByOrganisation = user.InvitedBy.DisplayName,
+                            CreatedDate = user.CreatedDate,
+                            InvitationStatusDisplayText = user.InvitationStatusDisplayText
+                        };
+                        exportedUsers.Add(exportedUser);
+                    }
+                }
+            }
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = $"D365FO users - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedUsers);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            SetLcsProjectText();
+            RefreshChe(false);
+            RefreshSaas(false);
+        }
+
         private LcsProject GetLcsProjectFromCookie()
         {
             var cookies = _cookies.GetCookies(new Uri(_lcsUrl));
@@ -2443,6 +2526,16 @@ namespace LCS.Forms
         private void saasInstancesExportChangesTSM_Click(object sender, EventArgs e)
         {
             ExportEnvironmentUpdates(LCSEnvironments.SAAS);
+        }
+
+        private void currentProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfUsers(LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfUsers(LCSProjectAllCurrent.ALL);
         }
     }
 
