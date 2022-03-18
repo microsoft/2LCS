@@ -2292,6 +2292,9 @@ namespace LCS.Forms
                 {
                     foreach (var _updateRow in calendar)
                     {
+                        _updateRow.LcsProjectId = _project.Id;
+                        _updateRow.LcsProjectName = _project.Name;
+                        _updateRow.OrganizationName = _project.OrganizationName;
                         exportedUpdates.Add(_updateRow);
                     }
                 }

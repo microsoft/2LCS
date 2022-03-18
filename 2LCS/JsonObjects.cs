@@ -552,6 +552,9 @@ namespace LCS.JsonObjects
 
     public class UpcomingCalendarViewModels
     {
+        public int LcsProjectId { get; set; }
+        public string LcsProjectName { get; set; }
+        public string OrganizationName { get; set; }
         public string EnvironmentName { get; set; }
         public int StatusEnum { get; set; }
         public int EventNameEnum { get; set; }
