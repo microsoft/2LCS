@@ -29,14 +29,14 @@ jobs:
     - name: Build
       run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release
 
-    - name: Upload 2LCS_{{ github.event.release.name }}.zip
+    - name: Upload 2LCS_${{ github.event.release.tag_name }} .zip
       uses: actions/upload-artifact@v3
       with:
-        name: 2LCS_{{ github.event.release.name }}
+        name: 2LCS_${{ github.event.release.tag_name }}
         path: 2LCS/bin/Release
 
     - name: Create zip file from content of release folder
-      run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_{{ github.event.release.name }}.zip
+      run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_${{ github.event.release.tag_name }}.zip
 
     - name: Upload 2LCS .zip to release ${{ github.event.release.name }}
       uses: actions/upload-release-asset@v1
