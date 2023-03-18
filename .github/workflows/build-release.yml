@@ -11,6 +11,8 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
     - name: Build
       run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
     - name: Upload 2LCS.zip
