@@ -12,12 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build
-      run: dotnet build --configuration Release 2LCS
-    - name: Publish
-      run: dotnet publish --configuration Release 2LCS --output zip
+      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:DeployOnBuild=true /p:PublishProfile=FolderProfile
     - name: Upload 2LCS.zip
       uses: actions/upload-artifact@v3
       with:
         name: 2LCS
-        path: zip
-    
+        path: bin/Release/Publish    
