@@ -12,7 +12,7 @@ namespace LCS.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.5.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -176,6 +176,54 @@ namespace LCS.Properties {
             }
             set {
                 this["uriSchemeEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://lcs.dynamics.com")]
+        public string lcsURL {
+            get {
+                return ((string)(this["lcsURL"]));
+            }
+            set {
+                this["lcsURL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://diag.lcs.dynamics.com")]
+        public string lcsDiagURL {
+            get {
+                return ((string)(this["lcsDiagURL"]));
+            }
+            set {
+                this["lcsDiagURL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://update.lcs.dynamics.com")]
+        public string lcsUpdateURL {
+            get {
+                return ((string)(this["lcsUpdateURL"]));
+            }
+            set {
+                this["lcsUpdateURL"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://fix.lcs.dynamics.com")]
+        public string lcsFixURL {
+            get {
+                return ((string)(this["lcsFixURL"]));
+            }
+            set {
+                this["lcsFixURL"] = value;
             }
         }
     }

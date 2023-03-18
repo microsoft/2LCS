@@ -41,5 +41,17 @@
     <Setting Name="uriSchemeEnabled" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="lcsURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://lcs.dynamics.com</Value>
+    </Setting>
+    <Setting Name="lcsDiagURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://diag.lcs.dynamics.com</Value>
+    </Setting>
+    <Setting Name="lcsUpdateURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://update.lcs.dynamics.com</Value>
+    </Setting>
+    <Setting Name="lcsFixURL" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://fix.lcs.dynamics.com</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
