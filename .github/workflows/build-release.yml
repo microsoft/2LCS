@@ -1,0 +1,23 @@
+# Build the C# windows form application when receiving a pull request
+
+name: Build for pull request
+
+on:
+  pull_request:
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build
+      run: dotnet build --configuration Release 2LCS
+    - name: Publish
+      run: dotnet publish --configuration Release 2LCS --output zip
+    - name: Upload 2LCS.zip
+      uses: actions/upload-artifact@v3
+      with:
+        name: 2LCS
+        path: zip
+    
