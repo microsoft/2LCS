@@ -798,7 +798,7 @@ namespace LCS.Forms
             RefreshSaas(false);
         }
 
-        private void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
+        private async void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
         {
             notifyIcon.BalloonTipText = $"Exporting list of {_LCSEnvironments} instances for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of {_LCSEnvironments} instances";
@@ -811,7 +811,7 @@ namespace LCS.Forms
 
             if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
             {
-                Projects = _httpClientHelper.GetAllProjects();
+                Projects = await _httpClientHelper.GetAllProjectsAsync();
             }
             else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
             {
@@ -2266,7 +2266,7 @@ namespace LCS.Forms
             }
         }
 
-        private void ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void ExportUpdateScheduleForAllProjectsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             notifyIcon.BalloonTipText = $"Exporting updates schedule for all LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = "Exporting updates schedule list";
@@ -2277,7 +2277,7 @@ namespace LCS.Forms
             var previousProject = _selectedProject;
             var exportedUpdates = new List<UpcomingCalendarViewModels>();
 
-            Projects = _httpClientHelper.GetAllProjects();
+            Projects = await _httpClientHelper.GetAllProjectsAsync();
             Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
 
             foreach (var _project in Projects)

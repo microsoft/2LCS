@@ -213,7 +213,7 @@ namespace LCS
             }
         }
 
-        internal List<LcsProject> GetAllProjects()
+        internal async Task<List<LcsProject>> GetAllProjectsAsync()
         {
             const int numberOfProjectsRequested = 50;
             int numberOfProjectReturned;
@@ -235,10 +235,10 @@ namespace LCS
 
                 using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
                 {
-                    var result = _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent).Result;
+                    var result = await _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent);
                     result.EnsureSuccessStatusCode();
 
-                    var responseBody = result.Content.ReadAsStringAsync().Result;
+                    var responseBody = await result.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<Response>(responseBody);
                     if (response.Success && response.Data != null)
                     {
