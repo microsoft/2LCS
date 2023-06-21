@@ -204,7 +204,7 @@ namespace LCS.Forms
             Process.Start($"https://lcs.dynamics.com/V2/AssetLibrary/{_selectedProject.Id}");
         }
 
-        private void ChangeProjectMenuItem_Click(object sender, EventArgs e)
+        private async void ChangeProjectMenuItem_Click(object sender, EventArgs e)
         {
             using var form = new ChooseProject
             {
@@ -240,8 +240,8 @@ namespace LCS.Forms
                 SetLcsProjectText();
                 CreateProjectLinksMenuItems();
                 EnableDisableMenuItems();
-                RefreshChe(Properties.Settings.Default.autorefresh);
-                RefreshSaas(Properties.Settings.Default.autorefresh);
+                await RefreshChe(Properties.Settings.Default.autorefresh);
+                await RefreshSaas(Properties.Settings.Default.autorefresh);
             }
         }
 
@@ -722,7 +722,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void ExportEnvironmentUpdates(LCSEnvironments _LCSEnvironments)
+        private async void ExportEnvironmentUpdates(LCSEnvironments _LCSEnvironments)
         {
             notifyIcon.BalloonTipText = $"Exporting list of Environment Updates to {_LCSEnvironments} environments for current project. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of Environment Updates";
@@ -734,15 +734,15 @@ namespace LCS.Forms
            
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
-            RefreshChe();
-            RefreshSaas();
+            await RefreshChe();
+            await RefreshSaas();
 
             if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
                 if (_saasInstancesList != null && _saasInstancesList.Count > 0)
                 {
                     foreach (var _instance in _saasInstancesList)
                     {
-                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        List<ActionDetails> actions = await _httpClientHelper.GetEnvironmentHistoryDetailsAsync(_instance);
                         if (actions != null)
                         {
                             foreach (ActionDetails _action in actions)
@@ -758,7 +758,7 @@ namespace LCS.Forms
                 {
                     foreach (var _instance in _cheInstancesList)
                     {
-                        List<ActionDetails> actions = _httpClientHelper.GetEnvironmentHistoryDetails(_instance);
+                        List<ActionDetails> actions = await _httpClientHelper.GetEnvironmentHistoryDetailsAsync(_instance);
                         if (actions != null)
                         {
                             foreach (ActionDetails _action in actions)
@@ -794,8 +794,8 @@ namespace LCS.Forms
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
 
-            RefreshChe(false);
-            RefreshSaas(false);
+            await RefreshChe(false);
+            await RefreshSaas(false);
         }
 
         private async void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
@@ -828,8 +828,8 @@ namespace LCS.Forms
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
                 SetLcsProjectText();
-                RefreshChe();
-                RefreshSaas();
+                await RefreshChe();
+                await RefreshSaas();
 
                 if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
                     if (_saasInstancesList != null && _saasInstancesList.Count > 0)
@@ -908,8 +908,8 @@ namespace LCS.Forms
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
-            RefreshChe(false);
-            RefreshSaas(false);
+            await RefreshChe(false);
+            await RefreshSaas(false);
         }
 
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1682,12 +1682,12 @@ namespace LCS.Forms
             Process.Start($"https://lcs.dynamics.com/V2/ProjectUserManagement/{_selectedProject.Id}");
         }
 
-        private void RefreshChe(bool reloadFromLcs = true)
+        private async Task RefreshChe(bool reloadFromLcs = true)
         {
             Cursor = Cursors.WaitCursor;
             if (reloadFromLcs)
             {
-                _cheInstancesList = _httpClientHelper.GetCheInstances();
+                _cheInstancesList = await _httpClientHelper.GetCheInstancesAsync();
                 if (_cheInstancesList != null)
                 {
                     _cheInstancesSource.DataSource = _cheInstancesList;
@@ -1712,8 +1712,9 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void RefreshMenuItem_Click(object sender, EventArgs e)
+        private async void RefreshMenuItem_Click(object sender, EventArgs e)
         {
+            refreshMenuItem.Enabled = false;
             notifyIcon.BalloonTipText = $"Fetching list of environments for project {_selectedProject.Name} from LCS. Please wait...";
             notifyIcon.BalloonTipTitle = "Fetching environments";
 
@@ -1721,22 +1722,23 @@ namespace LCS.Forms
 
             if (tabControl.SelectedTab == tabControl.TabPages["cheTabPage"])
             {
-                RefreshChe();
-                RefreshSaas();
+                await RefreshChe();
+                await RefreshSaas();
             }
             else if (tabControl.SelectedTab == tabControl.TabPages["saasTabPage"])
             {
-                RefreshSaas();
-                RefreshChe();
+                await RefreshSaas();
+                await RefreshChe();
             }
+            refreshMenuItem.Enabled = true;
         }
 
-        private void RefreshSaas(bool reloadFromLcs = true)
+        private async Task RefreshSaas(bool reloadFromLcs = true)
         {
             Cursor = Cursors.WaitCursor;
             if (reloadFromLcs)
             {
-                _saasInstancesList = _httpClientHelper.GetHostedInstances();
+                _saasInstancesList = await _httpClientHelper.GetHostedInstancesAsync();
 
                 if (_saasInstancesList != null)
                 {
@@ -2321,8 +2323,8 @@ namespace LCS.Forms
             _selectedProject = previousProject;
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             SetLcsProjectText();
-            RefreshChe(false);
-            RefreshSaas(false);
+            await RefreshChe(false);
+            await RefreshSaas(false);
         }
         
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2335,7 +2337,7 @@ namespace LCS.Forms
             ExportListOfInstancesForAllProjects(LCSEnvironments.SAAS, LCSProjectAllCurrent.ALL);
         }
 
-        private void SaasRestartService_Click(object sender, EventArgs e)
+        private async void SaasRestartService_Click(object sender, EventArgs e)
         {
             using var form = new ChooseService
             {
@@ -2356,7 +2358,7 @@ namespace LCS.Forms
                     var attempt = 1;
                     do
                     {
-                        actions = _httpClientHelper.GetOngoingActionDetails(instance);
+                        actions = await _httpClientHelper.GetOngoingActionDetailsAsync(instance);
                         if (actions != null)
                         {
                             log.AppendLine($"Attempt {attempt}. Ongoing action found! Delaying next attempt for 30 seconds...");
@@ -2399,13 +2401,13 @@ namespace LCS.Forms
             }
         }
 
-        private void EnvironmentChangesToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void EnvironmentChangesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
-                var actions = _httpClientHelper.GetEnvironmentHistoryDetails(instance);
+                var actions = await _httpClientHelper.GetEnvironmentHistoryDetailsAsync(instance);
                 if (actions != null)
                 {
                     using var form = new EnvironmentChanges
