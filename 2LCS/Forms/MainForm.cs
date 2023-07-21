@@ -240,8 +240,7 @@ namespace LCS.Forms
                 SetLcsProjectText();
                 CreateProjectLinksMenuItems();
                 EnableDisableMenuItems();
-                await RefreshChe(Properties.Settings.Default.autorefresh);
-                await RefreshSaas(Properties.Settings.Default.autorefresh);
+                await RefreshEnvironmentsAsync(Properties.Settings.Default.autorefresh);
             }
         }
 
@@ -734,8 +733,7 @@ namespace LCS.Forms
            
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
-            await RefreshChe();
-            await RefreshSaas();
+            await RefreshEnvironmentsAsync();
 
             if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
                 if (_saasInstancesList != null && _saasInstancesList.Count > 0)
@@ -793,9 +791,7 @@ namespace LCS.Forms
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
-
-            await RefreshChe(false);
-            await RefreshSaas(false);
+            await RefreshEnvironmentsAsync(false);
         }
 
         private async void ExportListOfInstancesForAllProjects(LCSEnvironments _LCSEnvironments, LCSProjectAllCurrent _LCSProjectAllCurrent)
@@ -828,8 +824,7 @@ namespace LCS.Forms
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
                 SetLcsProjectText();
-                await RefreshChe();
-                await RefreshSaas();
+                await RefreshEnvironmentsAsync();
 
                 if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.SAAS)
                     if (_saasInstancesList != null && _saasInstancesList.Count > 0)
@@ -908,8 +903,7 @@ namespace LCS.Forms
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
-            await RefreshChe(false);
-            await RefreshSaas(false);
+            await RefreshEnvironmentsAsync(false);
         }
 
         private void ExportProjectDataToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1720,16 +1714,7 @@ namespace LCS.Forms
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
 
-            if (tabControl.SelectedTab == tabControl.TabPages["cheTabPage"])
-            {
-                await RefreshChe();
-                await RefreshSaas();
-            }
-            else if (tabControl.SelectedTab == tabControl.TabPages["saasTabPage"])
-            {
-                await RefreshSaas();
-                await RefreshChe();
-            }
+            await RefreshEnvironmentsAsync();
             refreshMenuItem.Enabled = true;
         }
 
@@ -1762,6 +1747,12 @@ namespace LCS.Forms
             }
             _saasInstancesSource.ResetBindings(false);
             Cursor = Cursors.Default;
+        }
+
+        public async Task RefreshEnvironmentsAsync(bool reloadFromLcs = true)
+        {
+            var tasks = new List<Task> { RefreshChe(reloadFromLcs), RefreshSaas(reloadFromLcs) };
+            await Task.WhenAll(tasks);
         }
 
         private void RemoveCustomLinksMenuItems()
@@ -2323,8 +2314,8 @@ namespace LCS.Forms
             _selectedProject = previousProject;
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             SetLcsProjectText();
-            await RefreshChe(false);
-            await RefreshSaas(false);
+
+            await RefreshEnvironmentsAsync(false);
         }
         
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
