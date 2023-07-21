@@ -2226,11 +2226,11 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void SaasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
+        private async void SaasUpcomingUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
-            var calendar = _httpClientHelper.GetUpcomingCalendars();
+            var calendar = await _httpClientHelper.GetUpcomingCalendarsAsync();
             if (calendar == null || calendar.Count == 0)
             {
                 Cursor = Cursors.Default;
@@ -2289,7 +2289,7 @@ namespace LCS.Forms
                 _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
                 SetLcsProjectText();
 
-                List<UpcomingCalendarViewModels> calendar = _httpClientHelper.GetUpcomingCalendars();
+                List<UpcomingCalendarViewModels> calendar = await _httpClientHelper.GetUpcomingCalendarsAsync();
                 if (calendar != null && calendar.Any())
                 {
                     foreach (var _updateRow in calendar)

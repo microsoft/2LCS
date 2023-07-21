@@ -771,14 +771,14 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<PlanData>(response.Data.ToString());
         }
 
-        internal List<UpcomingCalendarViewModels> GetUpcomingCalendars()
+        internal async Task<List<UpcomingCalendarViewModels>> GetUpcomingCalendarsAsync()
         {
             try
             {
-                var result = _httpClient.GetAsync($"{LcsUrl}/RainierSettings/GetUpcomingCalendars/{LcsProjectId}/?id={LcsProjectId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+                var result = await _httpClient.GetAsync($"{LcsUrl}/RainierSettings/GetUpcomingCalendars/{LcsProjectId}/?id={LcsProjectId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}");
                 result.EnsureSuccessStatusCode();
 
-                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var responseBody = await result.Content.ReadAsStringAsync();
                 dynamic response = JsonConvert.DeserializeObject<Response>(responseBody);
                 return !response.Success
                     ? null
