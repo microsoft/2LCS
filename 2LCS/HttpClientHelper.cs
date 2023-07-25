@@ -213,7 +213,7 @@ namespace LCS
             }
         }
 
-        internal List<LcsProject> GetAllProjects()
+        internal async Task<List<LcsProject>> GetAllProjectsAsync()
         {
             const int numberOfProjectsRequested = 50;
             int numberOfProjectReturned;
@@ -235,10 +235,10 @@ namespace LCS
 
                 using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
                 {
-                    var result = _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent).Result;
+                    var result = await _httpClient.PostAsync($"{LcsUrl}/RainierProject/AllProjectsList", _stringContent);
                     result.EnsureSuccessStatusCode();
 
-                    var responseBody = result.Content.ReadAsStringAsync().Result;
+                    var responseBody = await result.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<Response>(responseBody);
                     if (response.Success && response.Data != null)
                     {
@@ -341,14 +341,14 @@ namespace LCS
             }
         }
 
-        internal List<CloudHostedInstance> GetCheInstances()
+        internal async Task<List<CloudHostedInstance>> GetCheInstancesAsync()
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetDeployementDetails/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            var result = await _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetDeployementDetails/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}");
             var list = new List<CloudHostedInstance>();
             if (!result.IsSuccessStatusCode) return list;
             result.EnsureSuccessStatusCode();
 
-            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var responseBody = await result.Content.ReadAsStringAsync();
             responseBody = responseBody.TrimStart('(');
             responseBody = responseBody.TrimEnd(')');
 
@@ -367,12 +367,12 @@ namespace LCS
             return list;
         }
 
-        internal List<CloudHostedInstance> GetCheInstancesV2()
+        internal async Task<List<CloudHostedInstance>> GetCheInstancesV2Async()
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetAllCheDeploymentsMetadata/{LcsProjectId}?filterBy=null&filterValue=null&?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+            var result = await _httpClient.GetAsync($"{LcsUrl}/DeploymentPortal/GetAllCheDeploymentsMetadata/{LcsProjectId}?filterBy=null&filterValue=null&?_={DateTimeOffset.Now.ToUnixTimeSeconds()}");
             result.EnsureSuccessStatusCode();
 
-            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var responseBody = await result.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
 
             var list = new List<CloudHostedInstance>();
@@ -619,46 +619,46 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<ProjectData>(response.Data.ToString());
         }
 
-        internal CloudHostedInstance GetHostedDeploymentDetail(HostedDeploymentInstance instance)
+        internal async Task<CloudHostedInstance> GetHostedDeploymentDetailAsync(HostedDeploymentInstance instance)
         {
             if (instance.DeploymentEnvironmentType != DeploymentEnvironmentType.MicrosoftManagedServiceFabric)
             {
-                return GetHostedDeploymentDetail(_httpClient.GetAsync($"{LcsUrl}/SaaSDeployment/GetDeploymentDetail/{LcsProjectId}/?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return await GetHostedDeploymentDetailAsync(await _httpClient.GetAsync($"{LcsUrl}/SaaSDeployment/GetDeploymentDetail/{LcsProjectId}/?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}"));
             }
             else
             {
-                return GetHostedDeploymentDetail(_httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetEnvironmentDetails/{LcsProjectId}/?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return await GetHostedDeploymentDetailAsync(await _httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetEnvironmentDetails/{LcsProjectId}/?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}"));
             }
         }
 
-        private CloudHostedInstance GetHostedDeploymentDetail(HttpResponseMessage result)
+        private async Task<CloudHostedInstance> GetHostedDeploymentDetailAsync(HttpResponseMessage result)
         {
             result.EnsureSuccessStatusCode();
 
-            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var responseBody = await result.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
             return !response.Success
                 ? null
                 : response.Data == null ? null : JsonConvert.DeserializeObject<CloudHostedInstance>(response.Data.ToString());
         }
 
-        internal List<CloudHostedInstance> GetHostedInstances()
+        internal async Task<List<CloudHostedInstance>> GetHostedInstancesAsync()
         {
             if (LcsProjectTypeId != ProjectType.ServiceFabricImplementation)
             {
-                return GetHostedInstances(_httpClient.GetAsync($"{LcsUrl}/SaasDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return await GetHostedInstancesAsync(await _httpClient.GetAsync($"{LcsUrl}/SaasDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}"));
             }
             else
             {
-                return GetHostedInstances(_httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result);
+                return await GetHostedInstancesAsync(await _httpClient.GetAsync($"{LcsUrl}/ServiceFabricDeployment/GetDeploymentSummary/{LcsProjectId}?_={DateTimeOffset.Now.ToUnixTimeSeconds()}"));
             }
         }
 
-        private List<CloudHostedInstance> GetHostedInstances(HttpResponseMessage result)
+        private async Task<List<CloudHostedInstance>> GetHostedInstancesAsync(HttpResponseMessage result)
         {
             result.EnsureSuccessStatusCode();
 
-            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var responseBody = await result.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
             var settings = new JsonSerializerSettings
             {
@@ -679,7 +679,7 @@ namespace LCS
                     foreach (var instance in item.DeploymentInstances)
                     {
                         if (!instance.IsDeployed) continue;
-                        var details = GetHostedDeploymentDetail(instance);
+                        var details = await GetHostedDeploymentDetailAsync(instance);
                         if (details != null)
                         {
                             list.Add(details);
@@ -771,14 +771,14 @@ namespace LCS
                 : response.Data == null ? null : JsonConvert.DeserializeObject<PlanData>(response.Data.ToString());
         }
 
-        internal List<UpcomingCalendarViewModels> GetUpcomingCalendars()
+        internal async Task<List<UpcomingCalendarViewModels>> GetUpcomingCalendarsAsync()
         {
             try
             {
-                var result = _httpClient.GetAsync($"{LcsUrl}/RainierSettings/GetUpcomingCalendars/{LcsProjectId}/?id={LcsProjectId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}").Result;
+                var result = await _httpClient.GetAsync($"{LcsUrl}/RainierSettings/GetUpcomingCalendars/{LcsProjectId}/?id={LcsProjectId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}");
                 result.EnsureSuccessStatusCode();
 
-                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var responseBody = await result.Content.ReadAsStringAsync();
                 dynamic response = JsonConvert.DeserializeObject<Response>(responseBody);
                 return !response.Success
                     ? null
@@ -840,18 +840,18 @@ namespace LCS
             }
         }
 
-        internal ActionDetails GetOngoingActionDetails(CloudHostedInstance instance)
+        internal async Task<ActionDetails> GetOngoingActionDetailsAsync(CloudHostedInstance instance)
         {
-            var result = _httpClient.GetAsync($"{LcsUrl}/Environment/GetOngoingActionDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}").Result;
+            var result = await _httpClient.GetAsync($"{LcsUrl}/Environment/GetOngoingActionDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}");
             result.EnsureSuccessStatusCode();
-            var responseBody = result.Content.ReadAsStringAsync().Result;
+            var responseBody = await result.Content.ReadAsStringAsync();
             var response = JsonConvert.DeserializeObject<Response>(responseBody);
             return !response.Success
                     ? null
                     : response.Data == null ? null : JsonConvert.DeserializeObject<ActionDetails>(response.Data.ToString());
         }
 
-        internal List<ActionDetails> GetEnvironmentHistoryDetails(CloudHostedInstance instance)
+        internal async Task<List<ActionDetails>> GetEnvironmentHistoryDetailsAsync(CloudHostedInstance instance)
         {
             const int historyItemsCount = 40;
 
@@ -868,7 +868,7 @@ namespace LCS
             using (_stringContent = new StringContent(pagingParamsJson, Encoding.UTF8, "application/json"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
-                var result = _httpClient.PostAsync($"{LcsUrl}/Environment/GetEnvironmentHistoryDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}", _stringContent).Result;
+                var result = await _httpClient.PostAsync($"{LcsUrl}/Environment/GetEnvironmentHistoryDetails/{LcsProjectId}?environmentId={instance.EnvironmentId}&_={DateTimeOffset.Now.ToUnixTimeSeconds()}", _stringContent);
                 result.EnsureSuccessStatusCode();
                 var settings = new JsonSerializerSettings
                 {
@@ -876,7 +876,7 @@ namespace LCS
                     MissingMemberHandling = MissingMemberHandling.Ignore
                 };
 
-                var responseBody = result.Content.ReadAsStringAsync().Result;
+                var responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<Response>(responseBody);
                 if (response.Success)
                 {

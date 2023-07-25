@@ -94,7 +94,7 @@ namespace LCS.Forms
             this.SetProgress(e.ProgressPercentage, e.UserState as string);
         }
 
-        private void OnWorkerDoWork(object sender, DoWorkEventArgs e)
+        private async void OnWorkerDoWork(object sender, DoWorkEventArgs e)
         {
             worker.ReportProgress(25, "Initializing LCS connections");
 
@@ -119,7 +119,9 @@ namespace LCS.Forms
 
                 worker.ReportProgress(50, "Loading cloud-hosted instances");
 
-                CloudHostedInstance chInstance = httpClientHelper.GetCheInstances().FirstOrDefault(e => e.DisplayName == rdpData.Environment);
+                var chInstances = await httpClientHelper.GetCheInstancesAsync();
+                
+                var chInstance = chInstances.FirstOrDefault(e => e.DisplayName == rdpData.Environment);
 
                 if (chInstance != null)
                 {

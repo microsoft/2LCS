@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -102,14 +103,24 @@ namespace LCS.Forms
             _sortAscending = !_sortAscending;
         }
 
-        private void RefreshButton_Click(object sender, EventArgs e)
+        private async void RefreshButton_Click(object sender, EventArgs e)
+        {
+            var refreshButtonText = refreshButton.Text;
+            refreshButton.Enabled = false;
+            refreshButton.Text = "Refreshing...";
+            await RefreshProjectsAsync();
+            refreshButton.Text = refreshButtonText;
+            refreshButton.Enabled = true;
+        }
+
+        private async Task RefreshProjectsAsync()
         {
             var favoritesSaved = new List<LcsProject>();
             if (Projects != null)
             {
                 favoritesSaved = Projects.Where(x => x.Favorite == true).ToList();
             }
-            Projects = HttpClientHelper.GetAllProjects();
+            Projects = await HttpClientHelper.GetAllProjectsAsync();
             foreach (var savedProject in favoritesSaved)
             {
                 Projects.Where(newProject => newProject.Id == savedProject.Id)
