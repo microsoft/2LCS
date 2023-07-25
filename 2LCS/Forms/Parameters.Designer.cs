@@ -42,10 +42,14 @@
             this.groupCHE = new System.Windows.Forms.GroupBox();
             this.uriSchemeEnabled = new System.Windows.Forms.CheckBox();
             this.alwaysLogAsAdmin = new System.Windows.Forms.CheckBox();
+            this.groupBoxCredentials = new System.Windows.Forms.GroupBox();
+            this.LocalCredentialsCheckbox = new System.Windows.Forms.CheckBox();
+            this.RDPCredentialsCheckbox = new System.Windows.Forms.CheckBox();
             this.groupBoxExportConfig.SuspendLayout();
             this.groupBoxUIConfig.SuspendLayout();
             this.groupBoxCaching.SuspendLayout();
             this.groupCHE.SuspendLayout();
+            this.groupBoxCredentials.SuspendLayout();
             this.SuspendLayout();
             // 
             // AutoRefreshCheckBox
@@ -62,7 +66,7 @@
             // closeButton
             // 
             this.closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.closeButton.Location = new System.Drawing.Point(234, 290);
+            this.closeButton.Location = new System.Drawing.Point(234, 362);
             this.closeButton.Margin = new System.Windows.Forms.Padding(2);
             this.closeButton.Name = "closeButton";
             this.closeButton.Size = new System.Drawing.Size(122, 21);
@@ -95,7 +99,7 @@
             // 
             // textBoxProjectExcl
             // 
-            this.textBoxProjectExcl.Location = new System.Drawing.Point(188, 32);
+            this.textBoxProjectExcl.Location = new System.Drawing.Point(188, 25);
             this.textBoxProjectExcl.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxProjectExcl.Name = "textBoxProjectExcl";
             this.textBoxProjectExcl.Size = new System.Drawing.Size(158, 20);
@@ -117,7 +121,7 @@
             // minimizeToNotificationArea
             // 
             this.minimizeToNotificationArea.AutoSize = true;
-            this.minimizeToNotificationArea.Location = new System.Drawing.Point(5, 37);
+            this.minimizeToNotificationArea.Location = new System.Drawing.Point(6, 37);
             this.minimizeToNotificationArea.Name = "minimizeToNotificationArea";
             this.minimizeToNotificationArea.Size = new System.Drawing.Size(254, 17);
             this.minimizeToNotificationArea.TabIndex = 2;
@@ -151,7 +155,7 @@
             // StoreCacheCheckBox
             // 
             this.StoreCacheCheckBox.AutoSize = true;
-            this.StoreCacheCheckBox.Location = new System.Drawing.Point(4, 37);
+            this.StoreCacheCheckBox.Location = new System.Drawing.Point(6, 37);
             this.StoreCacheCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.StoreCacheCheckBox.Name = "StoreCacheCheckBox";
             this.StoreCacheCheckBox.Size = new System.Drawing.Size(212, 17);
@@ -162,7 +166,7 @@
             // CachingEnabledCheckbox
             // 
             this.CachingEnabledCheckbox.AutoSize = true;
-            this.CachingEnabledCheckbox.Location = new System.Drawing.Point(4, 16);
+            this.CachingEnabledCheckbox.Location = new System.Drawing.Point(6, 16);
             this.CachingEnabledCheckbox.Margin = new System.Windows.Forms.Padding(2);
             this.CachingEnabledCheckbox.Name = "CachingEnabledCheckbox";
             this.CachingEnabledCheckbox.Size = new System.Drawing.Size(110, 17);
@@ -175,7 +179,7 @@
             // 
             this.groupCHE.Controls.Add(this.uriSchemeEnabled);
             this.groupCHE.Controls.Add(this.alwaysLogAsAdmin);
-            this.groupCHE.Location = new System.Drawing.Point(10, 210);
+            this.groupCHE.Location = new System.Drawing.Point(8, 281);
             this.groupCHE.Name = "groupCHE";
             this.groupCHE.Size = new System.Drawing.Size(346, 70);
             this.groupCHE.TabIndex = 9;
@@ -184,7 +188,7 @@
             // 
             // uriSchemeEnabled
             // 
-            this.uriSchemeEnabled.Location = new System.Drawing.Point(5, 42);
+            this.uriSchemeEnabled.Location = new System.Drawing.Point(6, 42);
             this.uriSchemeEnabled.Margin = new System.Windows.Forms.Padding(2);
             this.uriSchemeEnabled.Name = "uriSchemeEnabled";
             this.uriSchemeEnabled.Size = new System.Drawing.Size(169, 20);
@@ -194,18 +198,50 @@
             // 
             // alwaysLogAsAdmin
             // 
-            this.alwaysLogAsAdmin.Location = new System.Drawing.Point(5, 18);
+            this.alwaysLogAsAdmin.Location = new System.Drawing.Point(6, 18);
             this.alwaysLogAsAdmin.Margin = new System.Windows.Forms.Padding(2);
             this.alwaysLogAsAdmin.Name = "alwaysLogAsAdmin";
             this.alwaysLogAsAdmin.Size = new System.Drawing.Size(153, 20);
             this.alwaysLogAsAdmin.TabIndex = 0;
             this.alwaysLogAsAdmin.Text = "Always log as admin user";
             // 
+            // groupBoxCredentials
+            // 
+            this.groupBoxCredentials.Controls.Add(this.LocalCredentialsCheckbox);
+            this.groupBoxCredentials.Controls.Add(this.RDPCredentialsCheckbox);
+            this.groupBoxCredentials.Location = new System.Drawing.Point(8, 208);
+            this.groupBoxCredentials.Margin = new System.Windows.Forms.Padding(2);
+            this.groupBoxCredentials.Name = "groupBoxCredentials";
+            this.groupBoxCredentials.Padding = new System.Windows.Forms.Padding(2);
+            this.groupBoxCredentials.Size = new System.Drawing.Size(347, 68);
+            this.groupBoxCredentials.TabIndex = 6;
+            this.groupBoxCredentials.TabStop = false;
+            this.groupBoxCredentials.Text = "Export project data";
+            // 
+            // LocalCredentialsCheckbox
+            // 
+            this.LocalCredentialsCheckbox.Location = new System.Drawing.Point(6, 41);
+            this.LocalCredentialsCheckbox.Margin = new System.Windows.Forms.Padding(2);
+            this.LocalCredentialsCheckbox.Name = "LocalCredentialsCheckbox";
+            this.LocalCredentialsCheckbox.Size = new System.Drawing.Size(153, 20);
+            this.LocalCredentialsCheckbox.TabIndex = 2;
+            this.LocalCredentialsCheckbox.Text = "Include local credentials";
+            // 
+            // RDPCredentialsCheckbox
+            // 
+            this.RDPCredentialsCheckbox.Location = new System.Drawing.Point(6, 17);
+            this.RDPCredentialsCheckbox.Margin = new System.Windows.Forms.Padding(2);
+            this.RDPCredentialsCheckbox.Name = "RDPCredentialsCheckbox";
+            this.RDPCredentialsCheckbox.Size = new System.Drawing.Size(153, 20);
+            this.RDPCredentialsCheckbox.TabIndex = 1;
+            this.RDPCredentialsCheckbox.Text = "Include RDP credentials";
+            // 
             // Parameters
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(389, 321);
+            this.ClientSize = new System.Drawing.Size(389, 393);
+            this.Controls.Add(this.groupBoxCredentials);
             this.Controls.Add(this.groupBoxUIConfig);
             this.Controls.Add(this.groupBoxCaching);
             this.Controls.Add(this.groupBoxExportConfig);
@@ -228,6 +264,7 @@
             this.groupBoxCaching.ResumeLayout(false);
             this.groupBoxCaching.PerformLayout();
             this.groupCHE.ResumeLayout(false);
+            this.groupBoxCredentials.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -253,5 +290,8 @@
         private System.Windows.Forms.GroupBox groupCHE;
         private System.Windows.Forms.CheckBox alwaysLogAsAdmin;
         private System.Windows.Forms.CheckBox uriSchemeEnabled;
+        private System.Windows.Forms.GroupBox groupBoxCredentials;
+        private System.Windows.Forms.CheckBox RDPCredentialsCheckbox;
+        private System.Windows.Forms.CheckBox LocalCredentialsCheckbox;
     }
 }

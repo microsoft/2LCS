@@ -106,7 +106,37 @@ namespace LCS.Properties {
                 this["projOrgExcl"] = value;
             }
         }
-        
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RDPCredentialsEnabled
+        {
+            get
+            {
+                return ((bool)(this["RDPCredentialsEnabled"]));
+            }
+            set
+            {
+                this["RDPCredentialsEnabled"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool LocalCredentialsEnabled
+        {
+            get
+            {
+                return ((bool)(this["LocalCredentialsEnabled"]));
+            }
+            set
+            {
+                this["LocalCredentialsEnabled"] = value;
+            }
+        }
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]

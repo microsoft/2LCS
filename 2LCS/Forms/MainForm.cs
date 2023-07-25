@@ -917,6 +917,9 @@ namespace LCS.Forms
             RefreshMenuItem_Click(null, null);
             var projectUsers = _httpClientHelper.GetAllProjectUsers();
 
+            bool includeRdpEntryPassword = Properties.Settings.Default.RDPCredentialsEnabled;
+            bool exportCHECredentials = Properties.Settings.Default.LocalCredentialsEnabled;
+
             notifyIcon.BalloonTipText = $"Exporting data for {_selectedProject.Name} project. Please wait...";
             notifyIcon.BalloonTipTitle = "Exporting LCS project data";
 
@@ -1087,33 +1090,36 @@ namespace LCS.Forms
                         }
 
                         instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
-
-                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(saasInstance);
-                        if (rdpList.Count > 0)
+                        if (includeRdpEntryPassword)
                         {
-                            var vms = document.InsertParagraph("RDP connections: " + saasInstance.DisplayName.ToUpper()).FontSize(14d);
-                            vms.SpacingBefore(20d);
-                            vms.SpacingAfter(10d);
-                            foreach (var rdpEntry in rdpList)
+                            var rdpList = _httpClientHelper.GetRdpConnectionDetails(saasInstance);
+                            if (rdpList.Count > 0)
                             {
-                                //RDP details table
-                                var columnWidths = new float[] { 300f, 400f };
-                                var rdpTable = document.AddTable(4, columnWidths.Length);
-                                rdpTable.SetWidths(columnWidths);
-                                rdpTable.Design = TableDesign.LightListAccent1;
-                                rdpTable.Alignment = Alignment.left;
-                                rdpTable.AutoFit = AutoFit.Contents;
-                                rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("Machine name");
-                                rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Machine);
-                                rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("RDP address");
-                                rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
-                                rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("User name");
-                                rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
-                                rdpTable.Rows[3].Cells[0].Paragraphs[0].Append("Password");
-                                rdpTable.Rows[3].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
+                                var vms = document.InsertParagraph("RDP connections: " + saasInstance.DisplayName.ToUpper()).FontSize(14d);
+                                vms.SpacingBefore(20d);
+                                vms.SpacingAfter(10d);
+                                foreach (var rdpEntry in rdpList)
+                                {
+                                    //RDP details table
+                                    var columnWidths = new float[] { 300f, 400f };
+                                    var rdpTable = document.AddTable(4, columnWidths.Length);
+                                    rdpTable.SetWidths(columnWidths);
+                                    rdpTable.Design = TableDesign.LightListAccent1;
+                                    rdpTable.Alignment = Alignment.left;
+                                    rdpTable.AutoFit = AutoFit.Contents;
+                                    rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("Machine name");
+                                    rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Machine);
+                                    rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("RDP address");
+                                    rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
+                                    rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("User name");
+                                    rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
+                                    rdpTable.Rows[3].Cells[0].Paragraphs[0].Append("Password");
+                                    rdpTable.Rows[3].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
+                        
                                 document.InsertTable(rdpTable);
                                 document.InsertParagraph();
                             }
+                        }
                         }
                         foreach (var vm in saasInstance.Instances)
                         {
@@ -1206,69 +1212,77 @@ namespace LCS.Forms
                         }
 
                         instanceHeader.InsertTableAfterSelf(instanceDetailsTable);
-                        var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
-                        if (rdpList.Count > 0)
+                        if (includeRdpEntryPassword)
                         {
-                            var vms = document.InsertParagraph("RDP connections: " + instance.DisplayName.ToUpper()).FontSize(14d);
-                            vms.SpacingBefore(20d);
-                            vms.SpacingAfter(10d);
-                            foreach (var rdpEntry in rdpList)
+                            var rdpList = _httpClientHelper.GetRdpConnectionDetails(instance);
+                            if (rdpList.Count > 0)
                             {
-                                //RDP details table
-                                var columnWidths = new float[] { 300f, 400f };
-                                var rdpTable = document.AddTable(3, columnWidths.Length);
-                                rdpTable.SetWidths(columnWidths);
-                                rdpTable.Design = TableDesign.LightListAccent1;
-                                rdpTable.Alignment = Alignment.left;
-                                rdpTable.AutoFit = AutoFit.Contents;
-                                rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("RDP address");
-                                rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
-                                rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("User name");
-                                rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
-                                rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("Password");
-                                rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
-                                document.InsertTable(rdpTable);
-                                document.InsertParagraph();
+                                var vms = document.InsertParagraph("RDP connections: " + instance.DisplayName.ToUpper()).FontSize(14d);
+                                vms.SpacingBefore(20d);
+                                vms.SpacingAfter(10d);
+                                foreach (var rdpEntry in rdpList)
+                                {
+                                    //RDP details table
+                                    var columnWidths = new float[] { 300f, 400f };
+                                    var rdpTable = document.AddTable(3, columnWidths.Length);
+                                    rdpTable.SetWidths(columnWidths);
+                                    rdpTable.Design = TableDesign.LightListAccent1;
+                                    rdpTable.Alignment = Alignment.left;
+                                    rdpTable.AutoFit = AutoFit.Contents;
+                                    rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("RDP address");
+                                    rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
+                                    rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("User name");
+                                    rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);                             
+                                    rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("Password");                            
+                                    rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
+
+                                    document.InsertTable(rdpTable);
+                                    document.InsertParagraph();
+                                }
                             }
                         }
-                        foreach (var vm in instance.Instances)
-                        {
-                            var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
-                            if (CredentialsDict.Count > 0)
-                            {
-                                var credentialsParagraph = document.InsertParagraph("Credentials").FontSize(14d);
-                                credentialsParagraph.SpacingBefore(20d);
-                                credentialsParagraph.SpacingAfter(10d);
-                                // CHE credentials table
-                                var columnWidths = new float[] { 150f, 150f };
-                                var credentialsTable = document.AddTable(1, columnWidths.Length);
-                                credentialsTable.SetWidths(columnWidths);
-                                credentialsTable.Design = TableDesign.LightListAccent3;
-                                credentialsTable.Alignment = Alignment.left;
-                                credentialsTable.AutoFit = AutoFit.Contents;
-                                credentialsTable.Rows[0].Cells[0].Paragraphs[0].Append("User name");
-                                credentialsTable.Rows[0].Cells[1].Paragraphs[0].Append("Password");
 
-                                foreach (var credential in CredentialsDict)
+                        if (exportCHECredentials)
+                        {
+                            foreach (var vm in instance.Instances)
+                            {
+                                var CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName);
+                                if (CredentialsDict.Count > 0)
                                 {
-                                    var r = credentialsTable.InsertRow();
-                                    r.Cells[0].Paragraphs[0].Append(credential.Key
-                                        .Replace("Dev-Local admin-", "")
-                                        .Replace("Dev-Local user-", "")
-                                        .Replace("Dev-Sql server login-", "")
-                                        .Replace("Build-Local user-", "")
-                                        .Replace("Build-Sql server login-", "")
-                                        .Replace("AOS-Local admin-", "")
-                                        .Replace("BI-Local admin-", "")
-                                        .Replace("AD-AosServiceUser-", "")
-                                        .Replace("AD-SqlServiceUser-", "")
-                                        .Replace("AD-DynamicsInstallUser-", "")
-                                        .Replace("AD-SPServiceUser-", "")
-                                        .Replace("AD-BCProxyUser-", "")
-                                        .Replace("AD-Local admin-", ""));
-                                    r.Cells[1].Paragraphs[0].Append(credential.Value);
+                                    var credentialsParagraph = document.InsertParagraph("Credentials").FontSize(14d);
+                                    credentialsParagraph.SpacingBefore(20d);
+                                    credentialsParagraph.SpacingAfter(10d);
+                                    // CHE credentials table
+                                    var columnWidths = new float[] { 150f, 150f };
+                                    var credentialsTable = document.AddTable(1, columnWidths.Length);
+                                    credentialsTable.SetWidths(columnWidths);
+                                    credentialsTable.Design = TableDesign.LightListAccent3;
+                                    credentialsTable.Alignment = Alignment.left;
+                                    credentialsTable.AutoFit = AutoFit.Contents;
+                                    credentialsTable.Rows[0].Cells[0].Paragraphs[0].Append("User name");
+                                    credentialsTable.Rows[0].Cells[1].Paragraphs[0].Append("Password");
+
+                                    foreach (var credential in CredentialsDict)
+                                    {
+                                        var r = credentialsTable.InsertRow();
+                                        r.Cells[0].Paragraphs[0].Append(credential.Key
+                                            .Replace("Dev-Local admin-", "")
+                                            .Replace("Dev-Local user-", "")
+                                            .Replace("Dev-Sql server login-", "")
+                                            .Replace("Build-Local user-", "")
+                                            .Replace("Build-Sql server login-", "")
+                                            .Replace("AOS-Local admin-", "")
+                                            .Replace("BI-Local admin-", "")
+                                            .Replace("AD-AosServiceUser-", "")
+                                            .Replace("AD-SqlServiceUser-", "")
+                                            .Replace("AD-DynamicsInstallUser-", "")
+                                            .Replace("AD-SPServiceUser-", "")
+                                            .Replace("AD-BCProxyUser-", "")
+                                            .Replace("AD-Local admin-", ""));
+                                        r.Cells[1].Paragraphs[0].Append(credential.Value);
+                                    }
+                                    credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
                                 }
-                                credentialsParagraph.InsertTableAfterSelf(credentialsTable).InsertPageBreakAfterSelf();
                             }
                         }
                     }
@@ -1294,6 +1308,89 @@ namespace LCS.Forms
                 }
             }
             Cursor = Cursors.Default;
+        }
+
+        private void ExportListOfUsers(LCSProjectAllCurrent _LCSProjectAllCurrent)
+        {
+            notifyIcon.BalloonTipText = $"Exporting list of users for {_LCSProjectAllCurrent} LCS projects. Please wait...";
+            notifyIcon.BalloonTipTitle = $"Exporting list of LCS users";
+
+            notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
+
+            Cursor = Cursors.WaitCursor;
+            var previousProject = _selectedProject;
+            var exportedUsers = new List<ExportedUser>();
+
+            if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
+            {
+                Projects = _httpClientHelper.GetAllProjects();
+            }
+            else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
+            {
+                Projects = new List<LcsProject>();
+                Projects.Add(previousProject);
+            }
+
+            Projects = ExcludeProjectsForOrganization(Projects); //remove all internal projects for export.
+
+            foreach (var _project in Projects)
+            {
+                if (_project.RequestPending == true) continue;
+                _selectedProject = _project;
+                _httpClientHelper.ChangeLcsProjectId(_project.Id.ToString());
+                _httpClientHelper.LcsProjectTypeId = _project.ProjectTypeId;
+                SetLcsProjectText();
+
+                var projectUsers = _httpClientHelper.GetAllProjectUsers();
+                if (projectUsers != null && projectUsers.Count > 0)
+                {
+                    foreach (var user in projectUsers)
+                    {                    
+                        var exportedUser = new ExportedUser
+                        {
+                            ProjectId = _project.Id.ToString(),
+                            ProjectName = _project.Name,
+                            Organization = _project.OrganizationName,
+                            UserName = user.UserProfile == null ? null : user.UserProfile.DisplayName,
+                            Email = user.UserProfile == null ? user.InvitationEmail : user.UserProfile.Email,
+                            OrganizationName = user.UserProfile == null ? null : user.UserProfile.Organization.Name,
+                            UserRoleDisplayName = user.UserRoleDisplayText,
+                            FunctionalRoleDisplayName = user.FunctionalRoleDisplayText,
+                            AllowContactByMicrosoft = user.AllowContactByMicrosoft.ToString(),
+                            InvitedByName = user.InvitedBy.DisplayName,
+                            InvitedByOrganisation = user.InvitedBy.DisplayName,
+                            CreatedDate = user.CreatedDate,
+                            InvitationStatusDisplayText = user.InvitationStatusDisplayText
+                        };
+                        exportedUsers.Add(exportedUser);
+                    }
+                }
+            }
+            SaveFileDialog savefile = new SaveFileDialog
+            {
+                FileName = $"D365FO users - 2LCS generated.csv",
+                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
+            };
+
+            if (savefile.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using StreamWriter sw = new StreamWriter(savefile.FileName, false, Encoding.Unicode);
+                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
+                    csv.WriteRecords(exportedUsers);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+            _selectedProject = previousProject;
+            _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
+            _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
+            SetLcsProjectText();
+            RefreshChe(false);
+            RefreshSaas(false);
         }
 
         private LcsProject GetLcsProjectFromCookie()
@@ -2443,6 +2540,16 @@ namespace LCS.Forms
         private void saasInstancesExportChangesTSM_Click(object sender, EventArgs e)
         {
             ExportEnvironmentUpdates(LCSEnvironments.SAAS);
+        }
+
+        private void currentProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfUsers(LCSProjectAllCurrent.CURRENT);
+        }
+
+        private void allProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportListOfUsers(LCSProjectAllCurrent.ALL);
         }
     }
 

@@ -37,6 +37,8 @@ namespace LCS.Forms
             AutoRefreshCheckBox.Checked = Properties.Settings.Default.autorefresh;
             minimizeToNotificationArea.Checked = Properties.Settings.Default.minimizeToNotificationArea;
             textBoxProjectExcl.Text = Properties.Settings.Default.projOrgExcl;
+            RDPCredentialsCheckbox.Checked = Properties.Settings.Default.RDPCredentialsEnabled;
+            LocalCredentialsCheckbox.Checked = Properties.Settings.Default.LocalCredentialsEnabled;
             CachingEnabledCheckbox.Checked = Properties.Settings.Default.cachingEnabled;
             StoreCacheCheckBox.Checked = Properties.Settings.Default.keepCache;
             alwaysLogAsAdmin.Checked = Properties.Settings.Default.alwaysLogAsAdmin;
@@ -49,6 +51,8 @@ namespace LCS.Forms
             Properties.Settings.Default.autorefresh = AutoRefreshCheckBox.Checked;
             Properties.Settings.Default.minimizeToNotificationArea = minimizeToNotificationArea.Checked;
             Properties.Settings.Default.projOrgExcl = textBoxProjectExcl.Text;
+            Properties.Settings.Default.RDPCredentialsEnabled = RDPCredentialsCheckbox.Checked;
+            Properties.Settings.Default.LocalCredentialsEnabled = LocalCredentialsCheckbox.Checked;
             Properties.Settings.Default.cachingEnabled = CachingEnabledCheckbox.Checked;
             Properties.Settings.Default.keepCache = StoreCacheCheckBox.Checked;
             Properties.Settings.Default.alwaysLogAsAdmin = alwaysLogAsAdmin.Checked;
