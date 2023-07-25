@@ -1304,7 +1304,7 @@ namespace LCS.Forms
             Cursor = Cursors.Default;
         }
 
-        private void ExportListOfUsers(LCSProjectAllCurrent _LCSProjectAllCurrent)
+        private async Task ExportListOfUsers(LCSProjectAllCurrent _LCSProjectAllCurrent)
         {
             notifyIcon.BalloonTipText = $"Exporting list of users for {_LCSProjectAllCurrent} LCS projects. Please wait...";
             notifyIcon.BalloonTipTitle = $"Exporting list of LCS users";
@@ -1317,7 +1317,7 @@ namespace LCS.Forms
 
             if (_LCSProjectAllCurrent == LCSProjectAllCurrent.ALL)
             {
-                Projects = _httpClientHelper.GetAllProjects();
+                Projects = await _httpClientHelper.GetAllProjectsAsync();
             }
             else if (_LCSProjectAllCurrent == LCSProjectAllCurrent.CURRENT)
             {
@@ -1383,8 +1383,7 @@ namespace LCS.Forms
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             SetLcsProjectText();
-            RefreshChe(false);
-            RefreshSaas(false);
+            await RefreshEnvironmentsAsync(false);
         }
 
         private LcsProject GetLcsProjectFromCookie()
@@ -2538,14 +2537,14 @@ namespace LCS.Forms
             ExportEnvironmentUpdates(LCSEnvironments.SAAS);
         }
 
-        private void currentProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        private async void currentProjectUsersExportMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfUsers(LCSProjectAllCurrent.CURRENT);
+            await ExportListOfUsers(LCSProjectAllCurrent.CURRENT);
         }
 
-        private void allProjectUsersExportMenuItem_Click(object sender, EventArgs e)
+        private async void allProjectUsersExportMenuItem_Click(object sender, EventArgs e)
         {
-            ExportListOfUsers(LCSProjectAllCurrent.ALL);
+            await ExportListOfUsers(LCSProjectAllCurrent.ALL);
         }
     }
 
