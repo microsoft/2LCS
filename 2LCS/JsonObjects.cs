@@ -38,6 +38,7 @@ namespace LCS.JsonObjects
         public bool CanCleanup { get; set; }
         public bool CanDeallocate { get; set; }
         public bool CanDelete { get; set; }
+        public bool CanDeleteCheMetadata { get; set; }
         public bool CanDseCreateStaging { get; set; }
         public bool CanEdit { get; set; }
         public bool CanEnableDR { get; set; }
@@ -100,23 +101,19 @@ namespace LCS.JsonObjects
         public bool IsMaintainVisible { get; set; }
         public bool IsManualUpgradeInProgress { get; set; }
         public bool IsNotificationListVisible { get; set; }
-        public bool IsPinToD365Enabled { get; set; }
-        public bool IsPinToD365Visible { get; set; }
         public bool IsPreparationFailed { get; set; }
-        public bool IsPublishedToD365 { get; set; }
         public bool IsSandboxUpgradeEnvironment { get; set; }
-        public bool IsServicingEstimationEnabled { get; set; }
         public bool IsStagingDeploymentFailed { get; set; }
         public bool IsStagingDeploymentSucceeded { get; set; }
         public bool IsUpgradeSelfServeCancelledOrCompleted { get; set; }
         public bool IsUpgradeSelfServeInProgress { get; set; }
         public bool IsUpgradeTimeExpired { get; set; }
-        public object JITExpireTimeRemaining { get; set; }
+        public string JITDetailsText { get; set; }
+        public string JITErrorText { get; set; }
         public JITOptions[] JITOptions { get; set; }
+        public string JITOptionsText { get; set; }
         public bool JITRequestAccessEnabledState { get; set; }
         public object JITRequestActivityId { get; set; }
-        public bool JITRequestShowError { get; set; }
-        public object JITWorkItemDetails { get; set; }
         public string LicenseLink { get; set; }
         public Credentials[] LocalCredentials { get; set; }
         public object Location { get; set; }
@@ -131,6 +128,7 @@ namespace LCS.JsonObjects
         public string ResourceGroupName { get; set; }
         public SaasEnvironmentType SaasEnvironmentType { get; set; }
         public object ServiceIds { get; set; }
+        public bool ShowJITExpiryWithReasonForAccess { get; set; }
         public bool ShowRetailComponents { get; set; }
         public bool ShowSslCertRotateWarning { get; set; }
         public bool ShowUpgradeEnvironmentDetails { get; set; }
@@ -278,7 +276,7 @@ namespace LCS.JsonObjects
         public object ADOauthCode { get; set; }
         public string ADUserId { get; set; }
         public List<string> AllEmails { get; set; }
-        public string AlternateEmails { get; set; }
+        public List<string> AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
@@ -340,6 +338,9 @@ namespace LCS.JsonObjects
     public class Organization
     {
         public string ADTenantId { get; set; }
+        public string Country { get; set; }
+        public string CountryCode { get; set; }
+        public string DataBoundary { get; set; }
         public int ExternalId { get; set; }
         public bool IsTemporary { get; set; }
         public object LicenseSerialNumber { get; set; }
@@ -436,6 +437,7 @@ namespace LCS.JsonObjects
         public string ModifiedDate { get; set; }//Todo
         public int ProjectId { get; set; }
         public int ProjectUserId { get; set; }
+        public int SystemRoleId { get; set; }
         public string UserLastAccess { get; set; }//Todo
         public UserProfile UserProfile { get; set; }
         public int UserProfileId { get; set; }
@@ -531,7 +533,7 @@ namespace LCS.JsonObjects
         public object ADOauthCode { get; set; }
         public string ADUserId { get; set; }
         public List<string> AllEmails { get; set; }
-        public string AlternateEmails { get; set; }
+        public List<string> AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
@@ -646,11 +648,19 @@ namespace LCS.JsonObjects
         public string AdditionalInfoMessage { get; set; }
         public object AdditionalResourceLinks { get; set; }
         public bool AllowCDSResume { get; set; }
+        public bool AllowDualWriteSetup { get; set; }
         public bool AllowNewCDSConfiguration { get; set; }
+        public string CDSEnvironmentId { get; set; }
+        public object CdsInfoMisMatchMessage { get; set; }
+        public object CdsInfoMissingOnNonCHEMessage { get; set; }
         public string CDSInstanceName { get; set; }
+        public string CDSInstanceUri { get; set; }
         public object CurrentConfigurationState { get; set; }
         public object DisplayErrorMessage { get; set; }
         public bool IsCDSInstanceConfigured { get; set; }
+        public bool ShowCdsInfoMisMatchMessage { get; set; }
+        public bool ShowCdsInfoMissingOnCHEMessage { get; set; }
+        public bool ShowCdsInfoMissingOnNonCHEMessage { get; set; }
         public bool ShowProvisioningResumedMessage { get; set; }
         public bool ShowProvisioningTriggeredMessage { get; set; }
     }

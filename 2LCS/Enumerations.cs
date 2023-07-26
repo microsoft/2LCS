@@ -51,7 +51,7 @@
 
     public enum EnvironmentActionCategoryType { None = 0, PureCategory = 1, ActionableCategory = 2 }
 
-    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; public const string SouthAfrica = "SouthAfrica"; public const string UAE = "UAE"; public const string Switzerland = "Switzerland"; }
+    public struct LcsRegion { public const string None = "None"; public const string UnitedStates = "UnitedStates"; public const string Europe = "Europe"; public const string Canada = "Canada"; public const string UnitedKingdom = "UnitedKingdom"; public const string China = "China"; public const string USGov = "USGov"; public const string Germany = "Germany"; public const string France = "France"; public const string SouthAfrica = "SouthAfrica"; public const string UAE = "UAE"; public const string Switzerland = "Switzerland"; public const string Norway = "Norway"; public const string USGovHigh = "USGovHigh"; }
 
     public enum MethodologyPinScopes { None = 0, GettingStarted = 1, Task = 2, Phase = 4 }
 
@@ -69,7 +69,7 @@
 
     public enum OrgUserRoleType { None = 0, SystemAdmin = 1, Admin = 2, Contributor = 3, Prospect = 4, DelegatedAdmin = 5, SupportAdmin = 6, OpsAdmin = 7, DriAdmin = 8, SreTier1Admin = 9 }
 
-    public enum OrganizationType { None = 0, Partner = 1, Customer = 2, Prospect = 3, Employee = 4 }
+    public enum OrganizationType { None = 0, Partner = 1, Customer = 2, Prospect = 3, Employee = 4, Unknown = 5 }
 
     public enum IssueStorage { None = 0, Legacy = 1, Tfs = 2 }
 
@@ -79,11 +79,11 @@
 
     public enum Product { None = 0, AX2012 = 2, Nav = 3, AX7 = 4, Crm = 5, Dynamics365ForRetail = 6, Dynamics365Talent = 7 }
 
-    public enum TileEnum { None = 0, AllProjects = 4, NewProject = 5, ProjectRequests = 6, UserRequests = 7, Users = 8, Messages = 9, Announcements = 10, ProjectTeam = 13, IssuesTracking = 15, Documents = 17, ProjectMessages = 19, CodeAnalysisTool = 20, DiagnosticFramework = 21, ProjectRole = 23, Entitlement = 24, BusinessProcessModeler = 26, License = 27, UsageProfiler = 28, IssueSearch = 29, UpgradeService = 30, ProjectSettings = 31, ProjectHealth = 34, KeyWins = 37, Checkpoints = 38, RisksAndMitigations = 39, ApplicationModules = 40, CompletedCheckpoints = 41, MediumRisk = 42, LowRisk = 43, AllRisk = 44, Metering = 45, SupportIncident = 46, IsComService = 47, MSSupportIncident = 48, LcsBlog = 50, DeploymentPortal = 51, UpdateDownload = 52, ConfigurationManager = 53, InfraSizing = 54, DumpAnalysis = 55, OperationalInsight = 56, AX7CodeUpgrade = 57, TranslationService = 58, CRMInfraSizing = 59, ConfigurationAndDataManager = 60, AX7InfraSizing = 61, TotalEconomicImpactEstimatorForAX7 = 62, SubscriptionEstimator = 63, Dynamics365Talent = 64, AlertService = 65, MigrationAdminTemplate = 66, PerfbotAnalysis = 69, ImpactAnalysisReport = 71 }
+    public enum Tile { None = 0, AllProjects = 4, NewProject = 5, ProjectRequests = 6, UserRequests = 7, Users = 8, Messages = 9, Announcements = 10, ProjectTeam = 13, IssuesTracking = 15, Documents = 17, ProjectMessages = 19, CodeAnalysisTool = 20, DiagnosticFramework = 21, ProjectRole = 23, Entitlement = 24, BusinessProcessModeler = 26, License = 27, UsageProfiler = 28, IssueSearch = 29, UpgradeService = 30, ProjectSettings = 31, ProjectHealth = 34, KeyWins = 37, Checkpoints = 38, RisksAndMitigations = 39, ApplicationModules = 40, CompletedCheckpoints = 41, MediumRisk = 42, LowRisk = 43, AllRisk = 44, Metering = 45, SupportIncident = 46, IsComService = 47, MSSupportIncident = 48, LcsBlog = 50, DeploymentPortal = 51, UpdateDownload = 52, ConfigurationManager = 53, InfraSizing = 54, DumpAnalysis = 55, OperationalInsight = 56, AX7CodeUpgrade = 57, TranslationService = 58, CRMInfraSizing = 59, ConfigurationAndDataManager = 60, AX7InfraSizing = 61, TotalEconomicImpactEstimatorForAX7 = 62, SubscriptionEstimator = 63, Dynamics365Talent = 64, AlertService = 65, MigrationAdminTemplate = 66 }
 
     public enum ProjectType { None = 0, NotUsed1 = 1, NotUsed2 = 2, NotUsed3 = 3, NotUsed4 = 4, NotUsed5 = 5, Learn = 6, PreSales = 7, Implementation = 8, Partner = 9, OnPremImplementation = 10, ServiceFabricImplementation = 11 }
 
-    public enum ProjectSettingsTab { None = 0, ProjectOverview = 1, ProjectOwnership = 2, LegacySharePoint = 3, VSOnline = 4, AzureConnectors = 5, OneDriveSettings = 6, OnPremiseConnector = 7, UpdateSettings = 8, UpdateSettingsForRing3 = 9, OnPremTFS = 10 }
+    public enum ProjectSettingsTab { None = 0, ProjectOverview = 1, ProjectOwnership = 2, LegacySharePoint = 3, VSOnline = 4, AzureConnectors = 5, OneDriveSettings = 6, OnPremiseConnector = 7, UpdateSettings = 8, UpdateSettingsForRing3 = 9, OnPremTFS = 10, PQUSettings = 11 }
 
     public enum SolutionRequestStatus { None = 0, Pending = 1, Approved = 2, Rejected = 3, InReview = 4 }
 
@@ -127,7 +127,7 @@
 
     public enum StepDetailsType { Servicing = 0, Rollback = 1, DataMovement = 2 }
 
-    public enum LcsEnvironmentActionStatus { NotStarted = 0, InProgress = 1, Completed = 2, Failed = 3, Unknown = 4, SignedOff = 5, Aborted = 6, SignedOffWithIssues = 7, InProgressManually = 8, CompletedManually = 9, PreparationFailed = 10, PreparationSucceeded = 11, PreparingEnvironment = 12, RollbackInProgress = 13, RollbackCompleted = 14, RollbackFailed = 15, RollbackSignedOff = 16, RollbackAborted = 17, RollbackSignedOffWithIssues = 18, ValidationFailed = 19, ValidationSuccessful = 20, ReadyForValidation = 22, PostCompletionCleanup = 23, PostFailureCleanup = 24, PostCancellationCleanup = 25 }
+    public enum LcsEnvironmentActionStatus { NotStarted = 0, InProgress = 1, Completed = 2, Failed = 3, Unknown = 4, SignedOff = 5, Aborted = 6, SignedOffWithIssues = 7, InProgressManually = 8, CompletedManually = 9, PreparationFailed = 10, PreparationSucceeded = 11, PreparingEnvironment = 12, RollbackInProgress = 13, RollbackCompleted = 14, RollbackFailed = 15, RollbackSignedOff = 16, RollbackAborted = 17, RollbackSignedOffWithIssues = 18, ValidationFailed = 19, ValidationSuccessful = 20, ReadyForValidation = 22, PostCompletionCleanup = 23, PostFailureCleanup = 24, PostCancellationCleanup = 25, SucceededFailed = 26 }
 
     public enum DeploymentEnvironmentType { MicrosoftManagedIaas = 0, CustomerManagedIaas = 1, CustomerOnPrem = 2, MicrosoftManagedServiceFabric = 3 }
 
@@ -143,7 +143,9 @@
 
     public enum CRMOpToOlValidationRunStatus { Scheduled = 1, Running = 2, Completed = 3, PendingUpload = 4, Errored = 9 }
 
-    public enum CrmOptoOlProvisionEnvironment { CRM2011 = 0, CRM2013 = 1, CRM2015 = 2, CRM2016 = 3, CRMV09 = 4 }
+    public enum CrmOptoOlProvisionEnvironment { CRM2011 = 0, CRM2013 = 1, CRM2015 = 2, CRM2016 = 3, CRMV09 = 4, CRMV91 = 5 }
+
+    public enum Severity { Information = 0, Warning = 1, Error = 2 }
 
     public enum CrmDeploymentStatus { Undefined = 0, Succeded = 1, Failed = 2, Canceled = 3 }
 
@@ -151,7 +153,7 @@
 
     public enum CrmGetIdStatus { CrmVersion = 1, CrmStatus = 2 }
 
-    public struct PauseReasons { public const string Other = "Other"; public const string Holidays = "Holidays"; public const string UpComingGoLive = "UpComingGoLive"; public const string PendingUpgrade = "PendingUpgrade"; public const string IssueDuringValidation = "IssueDuringValidation"; public const string PendingValidation = "PendingValidation"; public const string CustomizationConflict = "CustomizationConflict"; public const string IsvReadiness = "IsvReadiness"; }
+    public struct PauseReasons { public const string Other = "Other"; public const string Holidays = "Holidays"; public const string UpComingGoLive = "UpComingGoLive"; public const string PendingUpgrade = "PendingUpgrade"; public const string IssueDuringValidation = "IssueDuringValidation"; public const string PendingValidation = "PendingValidation"; public const string CustomizationConflict = "CustomizationConflict"; public const string IsvReadiness = "IsvReadiness"; public const string DisableFeatureDegradation = "DisableFeatureDegradation"; public const string UpdateExtraSandboxLater = "UpdateExtraSandboxLater"; }
 
     public enum CDSSelectionValidationResult { Unknown = 0, Success = 1, Warning = 2, Error = 3 };
     #endregion

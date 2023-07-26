@@ -177,8 +177,8 @@
             this.projectDescriptionLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.notifyIconContextMenu = new System.Windows.Forms.ContextMenu();
-            this.notifyIconMenuClose = new System.Windows.Forms.MenuItem();
+            this.notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip();
+            this.notifyIconMenuClose = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.cheDataGridView)).BeginInit();
             this.cheInstanceContextMenu.SuspendLayout();
             this.mainMenuStrip.SuspendLayout();
@@ -1479,7 +1479,7 @@
             // notifyIcon
             // 
             this.notifyIcon.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon.ContextMenu = this.notifyIconContextMenu;
+            this.notifyIcon.ContextMenuStrip = this.notifyIconContextMenu;
             this.notifyIcon.Icon = global::LCS.Properties.Resources.favicon_white;
             this.notifyIcon.Text = "2LCS - Lightweight LCS";
             this.notifyIcon.Visible = true;
@@ -1487,12 +1487,12 @@
             // 
             // notifyIconContextMenu
             // 
-            this.notifyIconContextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.notifyIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripMenuItem[] {
             this.notifyIconMenuClose});
             // 
             // notifyIconMenuClose
             // 
-            this.notifyIconMenuClose.Index = 0;
+            //this.notifyIconMenuClose.Index = 0;
             this.notifyIconMenuClose.Text = "Close 2LCS";
             this.notifyIconMenuClose.Click += new System.EventHandler(this.NotifyIconMenuClose_Click);
             // 
@@ -1595,8 +1595,8 @@
         private System.Windows.Forms.ToolStripMenuItem saasSystemDiagnosticsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheOpenRDPConnectionToolStripMenuItem;
         private System.Windows.Forms.NotifyIcon notifyIcon;
-        private System.Windows.Forms.ContextMenu notifyIconContextMenu;
-        private System.Windows.Forms.MenuItem notifyIconMenuClose;
+        private System.Windows.Forms.ContextMenuStrip notifyIconContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem notifyIconMenuClose;
         private System.Windows.Forms.ToolStripMenuItem cheShowRDPDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saasShowRDPDetailsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem cheAvailableHotfixesToolStripMenuItem;
