@@ -1,0 +1,26 @@
+# Build the C# windows form application when receiving a pull request
+
+name: Build for pull request
+
+on:
+  pull_request:
+  workflow_dispatch:
+    
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+    - name: Restore NuGet packages
+      run: nuget restore 2LCS/2LCS.csproj
+    - name: Build
+      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release
+    - name: Upload 2LCS.zip
+      uses: actions/upload-artifact@v3
+      with:
+        name: 2LCS
+        path: 2LCS/bin/Release    
