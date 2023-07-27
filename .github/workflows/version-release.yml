@@ -30,8 +30,8 @@ jobs:
       run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release
 
     - name: Upload 2LCS_${{ github.event.release.tag_name }} .zip
-      # uses: actions/upload-artifact@v3
-      uses: softprops/action-gh-release@v1
+      uses: actions/upload-artifact@v3
+      # uses: softprops/action-gh-release@v1
       with:
         name: 2LCS_${{ github.event.release.tag_name }}
         path: 2LCS/bin/Release
