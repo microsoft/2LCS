@@ -106,10 +106,12 @@ jobs:
     # Remove the pfx
     # - name: Remove the pfx
     #  run: Remove-Item -path $env:Wap_Project_Directory\GitHubActionsWorkflow.pfx
-
+    - uses: montudor/action-zip@v1
+      with:
+        args: zip -qq -r 2LCS.zip 2LCS\bin
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: MSIX Package
-        path: \bin
+        path: 2LCS.zip
