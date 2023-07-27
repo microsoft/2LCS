@@ -1,0 +1,49 @@
+# Action to build and release a new version of the project
+# The workflow is triggered when a new release is created. 
+# The workflow builds the project and uploads the 2LCS.zip file to the release.
+# The workflow uses the GitHub Actions upload-release-asset action to upload the 2LCS.zip file to the release. 
+# The action takes a number of parameters, which are documented in the action's repository. 
+
+name: Build and add to release
+
+# trigger on a release
+on: 
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+
+    - name: Restore NuGet packages
+      run: nuget restore 2LCS/2LCS.csproj
+
+    - name: Build
+      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release
+
+    - name: Upload 2LCS_${{ github.event.release.tag_name }} .zip
+      uses: actions/upload-artifact@v3
+      with:
+        name: 2LCS_${{ github.event.release.tag_name }}
+        path: 2LCS/bin/Release
+
+    - name: Create zip file from content of release folder
+      run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_${{ github.event.release.tag_name }}.zip
+
+    - name: Upload 2LCS .zip to release ${{ github.event.release.name }}
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}/assets?name=2LCS_${{ github.event.release.tag_name }}.zip
+        asset_path: 2LCS_${{ github.event.release.tag_name }}.zip
+        asset_name: 2LCS_${{ github.event.release.tag_name }}.zip
+        asset_content_type: application/zip
