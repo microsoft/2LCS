@@ -313,7 +313,7 @@ namespace LCS
                 var kbs = JsonConvert.DeserializeObject<List<Hotfix>>(allResults.ToString());
                 foreach (var kb in kbs)
                 {
-                    kb.Url = $"https://fix.lcs.dynamics.com/Issue/Details/{LcsProjectId}?kb={kb.KBNumber}&bugId={kb.BugNumber}";
+                    kb.Url = $"{URIHandler.LCS_FIX_URL}/Issue/Details/{LcsProjectId}?kb={kb.KBNumber}&bugId={kb.BugNumber}";
                     kb.Solution = RemoveUnwantedTags(kb.Solution);
                     kb.Title = RemoveUnwantedTags(kb.Title);
                 }
