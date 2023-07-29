@@ -27,9 +27,9 @@ namespace LCS.Forms
     {
         private const int GW_HWNDPREV = 3;
         private const int InternetCookieHttponly = 0x2000;
-        private const string _lcsDiagUrl = "https://diag.lcs.dynamics.com";
-        private const string _lcsUpdateUrl = "https://update.lcs.dynamics.com";
-        private const string _lcsUrl = "https://lcs.dynamics.com";
+        private static readonly string _lcsDiagUrl = URIHandler.LCS_DIAG_URL;
+        private static readonly string _lcsUpdateUrl = URIHandler.LCS_UPDATE_URL;
+        private static readonly string _lcsUrl = URIHandler.LCS_URL;
         private readonly BindingSource _cheInstancesSource = new BindingSource();
         private readonly BindingSource _saasInstancesSource = new BindingSource();
         private List<CloudHostedInstance> _cheInstancesList;
@@ -201,7 +201,7 @@ namespace LCS.Forms
 
         private void AssetLibraryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/AssetLibrary/{_selectedProject.Id}");
+            Process.Start($"{URIHandler.LCS_URL}/V2/AssetLibrary/{_selectedProject.Id}");
         }
 
         private async void ChangeProjectMenuItem_Click(object sender, EventArgs e)
@@ -580,7 +580,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"https://lcs.dynamics.com/V2/ConfigurationAndDataManagementHistory/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
+                Process.Start($"{URIHandler.LCS_URL}/V2/ConfigurationAndDataManagementHistory/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }
@@ -694,7 +694,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"https://diag.lcs.dynamics.com/BuildInfo/Index/{_selectedProject.Id}?lcsEnvironmentId={item.EnvironmentId}");
+                Process.Start($"{URIHandler.LCS_DIAG_URL}/BuildInfo/Index/{_selectedProject.Id}?lcsEnvironmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }
@@ -705,7 +705,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"https://lcs.dynamics.com/V2/EnvironmentHistory/{_selectedProject.Id}?LcsEnvironmentName={item.DisplayName}&EnvironmentId={item.EnvironmentId}&EnvironmentType={item.SaasEnvironmentType}");
+                Process.Start($"{URIHandler.LCS_URL}/V2/EnvironmentHistory/{_selectedProject.Id}?LcsEnvironmentName={item.DisplayName}&EnvironmentId={item.EnvironmentId}&EnvironmentType={item.SaasEnvironmentType}");
             }
             Cursor = Cursors.Default;
         }
@@ -716,7 +716,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"https://diag.lcs.dynamics.com/Monitoring/Index/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
+                Process.Start($"{URIHandler.LCS_DIAG_URL}/Monitoring/Index/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }

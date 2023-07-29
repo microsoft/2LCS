@@ -15,12 +15,12 @@ namespace LCS.Forms
         private void Login_Load(object sender, EventArgs e)
         {
             Cancelled = true;
-            webBrowser1.Navigate("https://lcs.dynamics.com/Logon/AdLogon");
+            webBrowser1.Navigate($"{URIHandler.LCS_URL}/Logon/AdLogon");
         }
 
         private void WebBrowser1_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
-            if (e.Url.ToString().StartsWith("https://lcs.dynamics.com/v2"))
+            if (e.Url.ToString().StartsWith($"{URIHandler.LCS_URL}/v2"))
             {
                 Cancelled = false;
                 Close();

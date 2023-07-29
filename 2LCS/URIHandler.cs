@@ -19,9 +19,10 @@ namespace LCS
     {
         public const string URI_PROTOCOL_NAME = "MS-2LCS";
 
-        public const string LCS_DIAG_URL = "https://diag.lcs.dynamics.com";
-        public const string LCS_UPDATE_URL = "https://update.lcs.dynamics.com";
-        public const string LCS_URL = "https://lcs.dynamics.com";
+        public static string LCS_DIAG_URL = Properties.Settings.Default.lcsDiagURL;
+        public static string LCS_UPDATE_URL = Properties.Settings.Default.lcsUpdateURL;
+        public static string LCS_URL = Properties.Settings.Default.lcsURL;
+        public static string LCS_FIX_URL = Properties.Settings.Default.lcsFixURL;
 
         public static bool DetectURILaunch(string[] args)
         {
