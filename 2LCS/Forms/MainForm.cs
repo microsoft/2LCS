@@ -201,7 +201,7 @@ namespace LCS.Forms
 
         private void AssetLibraryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"{URIHandler.LCS_URL}/V2/AssetLibrary/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"{URIHandler.LCS_URL}/V2/AssetLibrary/{_selectedProject.Id}");
         }
 
         private async void ChangeProjectMenuItem_Click(object sender, EventArgs e)
@@ -551,7 +551,7 @@ namespace LCS.Forms
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
                 var link = ParseCustomLink(((ToolStripMenuItem)sender).ToolTipText, item);
-                Process.Start(link);
+                WebBrowserHelper.OpenUri(link);
             }
             Cursor = Cursors.Default;
         }
@@ -580,7 +580,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"{URIHandler.LCS_URL}/V2/ConfigurationAndDataManagementHistory/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
+                WebBrowserHelper.OpenUri($"{URIHandler.LCS_URL}/V2/ConfigurationAndDataManagementHistory/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }
@@ -694,7 +694,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"{URIHandler.LCS_DIAG_URL}/BuildInfo/Index/{_selectedProject.Id}?lcsEnvironmentId={item.EnvironmentId}");
+                WebBrowserHelper.OpenUri($"{URIHandler.LCS_DIAG_URL}/BuildInfo/Index/{_selectedProject.Id}?lcsEnvironmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }
@@ -705,7 +705,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"{URIHandler.LCS_URL}/V2/EnvironmentHistory/{_selectedProject.Id}?LcsEnvironmentName={item.DisplayName}&EnvironmentId={item.EnvironmentId}&EnvironmentType={item.SaasEnvironmentType}");
+                WebBrowserHelper.OpenUri($"{URIHandler.LCS_URL}/V2/EnvironmentHistory/{_selectedProject.Id}?LcsEnvironmentName={item.DisplayName}&EnvironmentId={item.EnvironmentId}&EnvironmentType={item.SaasEnvironmentType}");
             }
             Cursor = Cursors.Default;
         }
@@ -716,7 +716,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start($"{URIHandler.LCS_DIAG_URL}/Monitoring/Index/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
+                WebBrowserHelper.OpenUri($"{URIHandler.LCS_DIAG_URL}/Monitoring/Index/{_selectedProject.Id}?environmentId={item.EnvironmentId}");
             }
             Cursor = Cursors.Default;
         }
@@ -1482,7 +1482,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var item = (CloudHostedInstance)row.DataBoundItem;
-                Process.Start(_httpClientHelper.GetEnvironmentDetailsUrl(item));
+                WebBrowserHelper.OpenUri(_httpClientHelper.GetEnvironmentDetailsUrl(item));
             }
             Cursor = Cursors.Default;
         }
@@ -1530,7 +1530,7 @@ namespace LCS.Forms
                 {
                     if (link.DisplayName == "Log on to environment")
                     {
-                        Process.Start(link.NavigationUri);
+                        WebBrowserHelper.OpenUri(link.NavigationUri);
                         break;
                     }
                 }
@@ -1726,7 +1726,7 @@ namespace LCS.Forms
 
         private void OpenWorkItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}");
         }
 
         private void ParametersToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1759,17 +1759,17 @@ namespace LCS.Forms
         private void ProjectLinkClicked(object sender, EventArgs e)
         {
             var link = ((ToolStripMenuItem)sender).ToolTipText;
-            Process.Start(link);
+            WebBrowserHelper.OpenUri(link);
         }
 
         private void ProjectSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/ProjectSettings/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/ProjectSettings/{_selectedProject.Id}");
         }
 
         private void ProjectUsersToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/ProjectUserManagement/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/ProjectUserManagement/{_selectedProject.Id}");
         }
 
         private async Task RefreshChe(bool reloadFromLcs = true)
@@ -2153,7 +2153,7 @@ namespace LCS.Forms
 
         private void ServiceRequestsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}?ActiveVerticalPivot=3");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}?ActiveVerticalPivot=3");
         }
 
         private void SetInitialGridSettings()
@@ -2241,22 +2241,22 @@ namespace LCS.Forms
 
         private void SubscriptionEstimatorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://sizing.lcs.dynamics.com/SubscriptionEstimator/Estimate/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://sizing.lcs.dynamics.com/SubscriptionEstimator/Estimate/{_selectedProject.Id}");
         }
 
         private void SubscriptionsAvailableToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/OrganizationOfferDetail/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/OrganizationOfferDetail/{_selectedProject.Id}");
         }
 
         private void SupportIssuesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}?ActiveVerticalPivot=2");
+            WebBrowserHelper.OpenUri($"https://lcs.dynamics.com/V2/WorkItemsManagement/{_selectedProject.Id}?ActiveVerticalPivot=2");
         }
 
         private void SystemDiagnosticsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start($"https://diag.lcs.dynamics.com/Home/Index/{_selectedProject.Id}");
+            WebBrowserHelper.OpenUri($"https://diag.lcs.dynamics.com/Home/Index/{_selectedProject.Id}");
         }
 
         private void LogonToPointOfSaleToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2269,7 +2269,7 @@ namespace LCS.Forms
                 {
                     if (link.DisplayName == "Log on to Cloud Point of Sale")
                     {
-                        Process.Start(link.NavigationUri);
+                        WebBrowserHelper.OpenUri(link.NavigationUri);
                         break;
                     }
                 }
@@ -2287,7 +2287,7 @@ namespace LCS.Forms
                 {
                     if (link.DisplayName == "Launch Dynamics Retail Storefront")
                     {
-                        Process.Start(link.NavigationUri);
+                        WebBrowserHelper.OpenUri(link.NavigationUri);
                         break;
                     }
                 }
@@ -2305,7 +2305,7 @@ namespace LCS.Forms
                 {
                     if (link.DisplayName == "Retail Server URL")
                     {
-                        Process.Start(link.NavigationUri);
+                        WebBrowserHelper.OpenUri(link.NavigationUri);
                         break;
                     }
                 }
