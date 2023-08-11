@@ -1,6 +1,7 @@
 ﻿//Use latest version of Internet Explorer in the webbrowser control
 //https://stackoverflow.com/questions/17922308/use-latest-version-of-internet-explorer-in-the-webbrowser-control
 using System;
+using System.Diagnostics;
 
 namespace LCS
 {
@@ -81,5 +82,22 @@ namespace LCS
 
             return maxVer;
         } // End Function GetBrowserVersion
+
+        /// <summary>
+        /// Opens a web page.
+        /// </summary>
+        /// <param name="uri">Url of web page.</param>
+        /// <remarks>
+        /// See https://github.com/microsoft/2LCS/issues/77
+        /// </remarks>
+        public static void OpenUri(string uri)
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = uri,
+                UseShellExecute = true
+            };
+            Process.Start(processStartInfo);
+        }
     }
 }
