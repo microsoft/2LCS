@@ -19,7 +19,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
@@ -37,9 +37,8 @@
     <AssemblyTitle>2LCS</AssemblyTitle>
     <Company>Microsoft</Company>
     <Product>2LCS</Product>
+    <Version>0.42.0</Version>
     <Copyright>Copyright ©  2023</Copyright>
-    <AssemblyVersion>0.40.0.0</AssemblyVersion>
-    <FileVersion>0.40.0.0</FileVersion>
     <PackageProjectUrl>https://github.com/microsoft/2LCS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/microsoft/2LCS</RepositoryUrl>
   </PropertyGroup>
