@@ -705,7 +705,7 @@ namespace LCS
 
         internal async Task<bool> StartStopDeployment(CloudHostedInstance instance, string action)
         {
-            var parameters = $"{action}=&ActivityId={instance.ActivityId}&ProductName={WebUtility.UrlEncode(instance.ProductName)}&TopologyName={instance.TopologyName}&TopologyInstanceId={instance.InstanceId}&AzureSubscriptionId={instance.AzureSubscriptionId}&EnvironmentGroup=0";
+            var parameters = $"{action}=&ActivityId={instance.ActivityId}&ProductName={WebUtility.UrlEncode(instance.ProductName)}&TopologyName={instance.TopologyName}&TopologyInstanceId={instance.InstanceId}&AzureSubscriptionId={instance.AzureSubscriptionId}&EnvironmentGroup=0&EnvironmentId={instance.EnvironmentId}";
             using (_stringContent = new StringContent(parameters, Encoding.UTF8, "application/x-www-form-urlencoded"))
             {
                 SetRequestVerificationToken($"{LcsUrl}/V2");
