@@ -39,6 +39,7 @@
     <Product>2LCS</Product>
     <Version>0.42.0</Version>
     <Copyright>Copyright ©  2023</Copyright>
+	<Description>This small utility can help you manage D365FO instances deployed in your LCS project. Both cloud-hosted - in your Azure subscription and Microsoft-hosted sandboxes. It offers only a subset of functionalities that LCS offers, but you can execute them a bit faster.</Description>
     <PackageProjectUrl>https://github.com/microsoft/2LCS</PackageProjectUrl>
     <RepositoryUrl>https://github.com/microsoft/2LCS</RepositoryUrl>
   </PropertyGroup>
