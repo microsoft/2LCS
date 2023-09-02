@@ -727,10 +727,10 @@ namespace LCS.Forms
             notifyIcon.BalloonTipTitle = $"Exporting list of Environment Updates";
 
             notifyIcon.ShowBalloonTip(2000); //This setting might be overruled by the OS
-                       
+
             var previousProject = _selectedProject;
             var exportedActionDetailList = new List<ActionDetails>();
-           
+
             _httpClientHelper.ChangeLcsProjectId(_selectedProject.Id.ToString());
             _httpClientHelper.LcsProjectTypeId = _selectedProject.ProjectTypeId;
             await RefreshEnvironmentsAsync();
@@ -749,8 +749,8 @@ namespace LCS.Forms
                                 exportedActionDetailList.Add(_action);
                             }
                         }
-                    }                
-            }
+                    }
+                }
             if (_LCSEnvironments == LCSEnvironments.ALL || _LCSEnvironments == LCSEnvironments.CHE)
                 if (_cheInstancesList != null && _cheInstancesList.Count > 0)
                 {
@@ -766,7 +766,7 @@ namespace LCS.Forms
                             }
                         }
                     }
-            }
+                }
 
             SaveFileDialog savefile = new SaveFileDialog
             {
@@ -1109,11 +1109,11 @@ namespace LCS.Forms
                                     rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
                                     rdpTable.Rows[3].Cells[0].Paragraphs[0].Append("Password");
                                     rdpTable.Rows[3].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
-                        
-                                document.InsertTable(rdpTable);
-                                document.InsertParagraph();
+
+                                    document.InsertTable(rdpTable);
+                                    document.InsertParagraph();
+                                }
                             }
-                        }
                         }
                         foreach (var vm in saasInstance.Instances)
                         {
@@ -1226,8 +1226,8 @@ namespace LCS.Forms
                                     rdpTable.Rows[0].Cells[0].Paragraphs[0].Append("RDP address");
                                     rdpTable.Rows[0].Cells[1].Paragraphs[0].Append(rdpEntry.Address + ":" + rdpEntry.Port);
                                     rdpTable.Rows[1].Cells[0].Paragraphs[0].Append("User name");
-                                    rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);                             
-                                    rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("Password");                            
+                                    rdpTable.Rows[1].Cells[1].Paragraphs[0].Append(rdpEntry.Domain + "\\" + rdpEntry.Username);
+                                    rdpTable.Rows[2].Cells[0].Paragraphs[0].Append("Password");
                                     rdpTable.Rows[2].Cells[1].Paragraphs[0].Append(rdpEntry.Password);
 
                                     document.InsertTable(rdpTable);
@@ -1339,7 +1339,7 @@ namespace LCS.Forms
                 if (projectUsers != null && projectUsers.Count > 0)
                 {
                     foreach (var user in projectUsers)
-                    {                    
+                    {
                         var exportedUser = new ExportedUser
                         {
                             ProjectId = _project.Id.ToString(),
@@ -1610,7 +1610,7 @@ namespace LCS.Forms
 
         private void LoadFromCredentialsStore()
         {
-            if(CacheUtil.SaveCacheToStoreEnabled())
+            if (CacheUtil.SaveCacheToStoreEnabled())
             {
                 CredentialsCacheHelper.LoadOffLineCredentials();
             }
@@ -1623,7 +1623,7 @@ namespace LCS.Forms
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(CacheUtil.SaveCacheToStoreEnabled())
+            if (CacheUtil.SaveCacheToStoreEnabled())
             {
                 CredentialsCacheHelper.SaveCredentialsOffline();
             }
@@ -1697,7 +1697,7 @@ namespace LCS.Forms
                     MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
                     return;
                 }
-                else if(rdpList.Count > 1)
+                else if (rdpList.Count > 1)
                 {
                     rdpEntry = ChooseRdpLogonUser(rdpList);
                 }
@@ -2416,7 +2416,7 @@ namespace LCS.Forms
 
             await RefreshEnvironmentsAsync(false);
         }
-        
+
         private void CloudHostedInstancesExportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ExportListOfInstancesForAllProjects(LCSEnvironments.CHE, LCSProjectAllCurrent.ALL);
@@ -2510,7 +2510,7 @@ namespace LCS.Forms
             }
             Cursor = Cursors.Default;
         }
-            
+
         private void allProjectsTSMExportAllInstances_Click(object sender, EventArgs e)
         {
             ExportListOfInstancesForAllProjects(LCSEnvironments.ALL, LCSProjectAllCurrent.ALL);
@@ -2545,6 +2545,12 @@ namespace LCS.Forms
         private async void allProjectUsersExportMenuItem_Click(object sender, EventArgs e)
         {
             await ExportListOfUsers(LCSProjectAllCurrent.ALL);
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About2LCS about2LCS = new About2LCS();
+            about2LCS.ShowDialog();
         }
     }
 
