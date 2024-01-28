@@ -109,6 +109,7 @@
             logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             cookieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             parametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tabControl = new System.Windows.Forms.TabControl();
             cheTabPage = new System.Windows.Forms.TabPage();
             saasTabPage = new System.Windows.Forms.TabPage();
@@ -179,7 +180,9 @@
             notifyIcon = new System.Windows.Forms.NotifyIcon(components);
             notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
             notifyIconMenuClose = new System.Windows.Forms.ToolStripMenuItem();
-            aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            exportAssetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            sharedAssetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            nuGetPackagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)cheDataGridView).BeginInit();
             cheInstanceContextMenu.SuspendLayout();
             mainMenuStrip.SuspendLayout();
@@ -674,7 +677,7 @@
             // 
             // exportToolStripMenuItem
             // 
-            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem });
+            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem, exportAssetLibraryToolStripMenuItem });
             exportToolStripMenuItem.Enabled = false;
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             exportToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
@@ -806,6 +809,13 @@
             parametersToolStripMenuItem.Size = new System.Drawing.Size(96, 24);
             parametersToolStripMenuItem.Text = "Parameters";
             parametersToolStripMenuItem.Click += ParametersToolStripMenuItem_Click;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // tabControl
             // 
@@ -1358,12 +1368,26 @@
             notifyIconMenuClose.Text = "Close 2LCS";
             notifyIconMenuClose.Click += NotifyIconMenuClose_Click;
             // 
-            // aboutToolStripMenuItem
+            // exportAssetLibraryToolStripMenuItem
             // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
-            aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            exportAssetLibraryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { sharedAssetLibraryToolStripMenuItem });
+            exportAssetLibraryToolStripMenuItem.Name = "exportAssetLibraryToolStripMenuItem";
+            exportAssetLibraryToolStripMenuItem.Size = new System.Drawing.Size(445, 26);
+            exportAssetLibraryToolStripMenuItem.Text = "Export asset library";
+            // 
+            // sharedAssetLibraryToolStripMenuItem
+            // 
+            sharedAssetLibraryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { nuGetPackagesToolStripMenuItem });
+            sharedAssetLibraryToolStripMenuItem.Name = "sharedAssetLibraryToolStripMenuItem";
+            sharedAssetLibraryToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            sharedAssetLibraryToolStripMenuItem.Text = "Shared asset library";
+            // 
+            // nuGetPackagesToolStripMenuItem
+            // 
+            nuGetPackagesToolStripMenuItem.Name = "nuGetPackagesToolStripMenuItem";
+            nuGetPackagesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            nuGetPackagesToolStripMenuItem.Text = "NuGet packages";
+            nuGetPackagesToolStripMenuItem.Click += nuGetPackagesToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -1550,6 +1574,9 @@
         private System.Windows.Forms.ToolStripMenuItem currentProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportAssetLibraryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sharedAssetLibraryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nuGetPackagesToolStripMenuItem;
     }
 }
 

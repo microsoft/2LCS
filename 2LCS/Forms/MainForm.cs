@@ -20,6 +20,7 @@ using Xceed.Document.NET;
 using Xceed.Words.NET;
 using static LCS.NativeMethods;
 using System.Globalization;
+using LCS.AssetLibrary;
 
 namespace LCS.Forms
 {
@@ -2551,6 +2552,11 @@ namespace LCS.Forms
         {
             About2LCS about2LCS = new About2LCS();
             about2LCS.ShowDialog();
+        }
+
+        private void nuGetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _httpClientHelper.GetSharedAssetList(AssetFileType.NuGetPackage);
         }
     }
 
