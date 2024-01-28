@@ -56,6 +56,19 @@ namespace LCS
         public string LcsUrl { get; set; }
         public ProjectType LcsProjectTypeId { get; set; }
 
+        /// <summary>
+        /// Exposes the internal http client.
+        /// </summary>
+        /// <returns>The internal http client.</returns>
+        /// <remarks>
+        /// This should be considered a temporary solution until this class can be refactored into task specific classes.
+        /// It allows extension methods to access the http client. It should not be used otherwise.
+        /// </remarks>
+        public HttpClient GetHttpClient()
+        {
+            return _httpClient;
+        }
+
         public void ChangeLcsProjectId(string value)
         {
             LcsProjectId = value;
