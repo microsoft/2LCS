@@ -2565,10 +2565,11 @@ namespace LCS.Forms
             // sort the list by asset name and version
 
             var assetVersionsForExportList = new List<AssetVersionForExport>();
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<AssetVersion, AssetVersionForExport>());
+            var config = new MapperConfiguration(
+                cfg => cfg.CreateMap<AssetVersion, AssetVersionForExport>());
             var mapper = config.CreateMapper();
             assets
-                .Take(2)
+                .Take(4)
                 .ToList()
                 .ForEach(asset =>
             {
@@ -2578,6 +2579,9 @@ namespace LCS.Forms
                     .Select(assetVersionForExport =>
                     {
                         assetVersionForExport.AssetName = asset.Name;
+                        assetVersionForExport.ReleaseNotes = 
+                            _httpClientHelper.GetAssetReleaseDetails(
+                                assetVersionForExport.ReleaseDetailsLink);
                         return assetVersionForExport;
                     }));
             });
