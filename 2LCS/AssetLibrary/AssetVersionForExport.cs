@@ -2,8 +2,10 @@
 
 public class AssetVersionForExport
 {
-    public string Id { get; set; }
     public string AssetName { get; set; }
+    public string ReleaseNotes { get; set; }
+
+    public string Id { get; set; }
     public string FileName { get; set; }
     public string FileDescription { get; set; }
     public string DisplaySize { get; set; }
