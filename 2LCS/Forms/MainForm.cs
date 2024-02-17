@@ -2555,56 +2555,10 @@ namespace LCS.Forms
             about2LCS.ShowDialog();
         }
 
-        private void nuGetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportListOfNuGetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var assets = _httpClientHelper.GetSharedAssetList(AssetFileType.NuGetPackage);
-
-            // for each asset in 50 latest assets
-            // get the asset versions
-            // compile all versions into one list that includes the asset name
-            // sort the list by asset name and version
-
-            var assetVersionsForExportList = new List<AssetVersionForExport>();
-            var config = new MapperConfiguration(
-                cfg => cfg.CreateMap<AssetVersion, AssetVersionForExport>());
-            var mapper = config.CreateMapper();
-            assets
-                .Take(4)
-                .ToList()
-                .ForEach(asset =>
-            {
-                var assetVersions = _httpClientHelper.GetSharedAssetVersionList(asset.ParentAssetId);
-                assetVersionsForExportList.AddRange(assetVersions
-                    .Select(assetVersion => mapper.Map<AssetVersionForExport>(assetVersion))
-                    .Select(assetVersionForExport =>
-                    {
-                        assetVersionForExport.AssetName = asset.Name;
-                        assetVersionForExport.ReleaseNotes = 
-                            _httpClientHelper.GetAssetReleaseDetails(
-                                assetVersionForExport.ReleaseDetailsLink);
-                        return assetVersionForExport;
-                    }));
-            });
-
-            SaveFileDialog saveFile = new()
-            {
-                FileName = "D365FO NuGet Packages.csv",
-                Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
-            };
-
-            if (saveFile.ShowDialog() == DialogResult.OK)
-            {
-                try
-                {
-                    using StreamWriter sw = new(saveFile.FileName, false, Encoding.Unicode);
-                    var csv = new CsvWriter(sw, CultureInfo.CurrentCulture);
-                    csv.WriteRecords(assetVersionsForExportList);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            using var form = new AssetLibrarySearch(_httpClientHelper);
+            form.ShowDialog();
         }
     }
 

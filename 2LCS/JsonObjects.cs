@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LCS.JsonObjects
 {
@@ -67,6 +68,8 @@ namespace LCS.JsonObjects
 
     public class AssetVersion
     {
+        public string ApplicationOrPlatformVersion { get; set; }
+
         public string Id { get; set; }
         public string FileName { get; set; }
         public string FileDescription { get; set; }
@@ -110,9 +113,9 @@ namespace LCS.JsonObjects
         public int OriginalScope { get; set; }
         public string TelemetryId { get; set; }
         public int CreatedBy { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
         public int ModifiedBy { get; set; }
-        public string ModifiedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
         public string LocalCreatedDate { get; set; }
         public string LocalModifiedDate { get; set; }
     }

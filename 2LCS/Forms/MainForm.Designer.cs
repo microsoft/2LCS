@@ -180,9 +180,7 @@
             notifyIcon = new System.Windows.Forms.NotifyIcon(components);
             notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
             notifyIconMenuClose = new System.Windows.Forms.ToolStripMenuItem();
-            exportAssetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            sharedAssetLibraryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            nuGetPackagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            exportListOfNuGetPackagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)cheDataGridView).BeginInit();
             cheInstanceContextMenu.SuspendLayout();
             mainMenuStrip.SuspendLayout();
@@ -677,7 +675,7 @@
             // 
             // exportToolStripMenuItem
             // 
-            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem, exportAssetLibraryToolStripMenuItem });
+            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem, exportListOfNuGetPackagesToolStripMenuItem });
             exportToolStripMenuItem.Enabled = false;
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             exportToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
@@ -833,7 +831,7 @@
             cheTabPage.Controls.Add(cheDataGridView);
             cheTabPage.Location = new System.Drawing.Point(4, 29);
             cheTabPage.Name = "cheTabPage";
-            cheTabPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            cheTabPage.Padding = new System.Windows.Forms.Padding(3);
             cheTabPage.Size = new System.Drawing.Size(1307, 756);
             cheTabPage.TabIndex = 0;
             cheTabPage.Text = "Cloud-hosted instances";
@@ -844,8 +842,8 @@
             saasTabPage.Controls.Add(saasDataGridView);
             saasTabPage.Location = new System.Drawing.Point(4, 29);
             saasTabPage.Name = "saasTabPage";
-            saasTabPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            saasTabPage.Size = new System.Drawing.Size(1307, 741);
+            saasTabPage.Padding = new System.Windows.Forms.Padding(3);
+            saasTabPage.Size = new System.Drawing.Size(1307, 756);
             saasTabPage.TabIndex = 1;
             saasTabPage.Text = "MS-hosted environments";
             saasTabPage.UseVisualStyleBackColor = true;
@@ -866,7 +864,7 @@
             saasDataGridView.Name = "saasDataGridView";
             saasDataGridView.ReadOnly = true;
             saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            saasDataGridView.Size = new System.Drawing.Size(1301, 735);
+            saasDataGridView.Size = new System.Drawing.Size(1301, 750);
             saasDataGridView.TabIndex = 1;
             saasDataGridView.ColumnHeaderMouseClick += SaasDataGridView_ColumnHeaderMouseClick;
             saasDataGridView.MouseDown += DataGridView_MouseDown;
@@ -1368,26 +1366,12 @@
             notifyIconMenuClose.Text = "Close 2LCS";
             notifyIconMenuClose.Click += NotifyIconMenuClose_Click;
             // 
-            // exportAssetLibraryToolStripMenuItem
+            // exportListOfNuGetPackagesToolStripMenuItem
             // 
-            exportAssetLibraryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { sharedAssetLibraryToolStripMenuItem });
-            exportAssetLibraryToolStripMenuItem.Name = "exportAssetLibraryToolStripMenuItem";
-            exportAssetLibraryToolStripMenuItem.Size = new System.Drawing.Size(445, 26);
-            exportAssetLibraryToolStripMenuItem.Text = "Export asset library";
-            // 
-            // sharedAssetLibraryToolStripMenuItem
-            // 
-            sharedAssetLibraryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { nuGetPackagesToolStripMenuItem });
-            sharedAssetLibraryToolStripMenuItem.Name = "sharedAssetLibraryToolStripMenuItem";
-            sharedAssetLibraryToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            sharedAssetLibraryToolStripMenuItem.Text = "Shared asset library";
-            // 
-            // nuGetPackagesToolStripMenuItem
-            // 
-            nuGetPackagesToolStripMenuItem.Name = "nuGetPackagesToolStripMenuItem";
-            nuGetPackagesToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
-            nuGetPackagesToolStripMenuItem.Text = "NuGet packages";
-            nuGetPackagesToolStripMenuItem.Click += nuGetPackagesToolStripMenuItem_Click;
+            exportListOfNuGetPackagesToolStripMenuItem.Name = "exportListOfNuGetPackagesToolStripMenuItem";
+            exportListOfNuGetPackagesToolStripMenuItem.Size = new System.Drawing.Size(455, 26);
+            exportListOfNuGetPackagesToolStripMenuItem.Text = "Export list of NuGet packages from shared asset library";
+            exportListOfNuGetPackagesToolStripMenuItem.Click += exportListOfNuGetPackagesToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -1574,9 +1558,7 @@
         private System.Windows.Forms.ToolStripMenuItem currentProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem exportAssetLibraryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem sharedAssetLibraryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem nuGetPackagesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportListOfNuGetPackagesToolStripMenuItem;
     }
 }
 
