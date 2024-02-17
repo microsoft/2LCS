@@ -556,7 +556,7 @@ namespace LCS.JsonObjects
         public string ModifiedDate { get; set; }//Todo
         public int ProjectId { get; set; }
         public int ProjectUserId { get; set; }
-        public int SystemRoleId { get; set; }
+        public int? SystemRoleId { get; set; }
         public string UserLastAccess { get; set; }//Todo
         public UserProfile UserProfile { get; set; }
         public int UserProfileId { get; set; }
