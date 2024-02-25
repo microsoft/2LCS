@@ -23,7 +23,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <UseWPF>true</UseWPF>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -82,6 +82,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="CsvHelper">
       <Version>30.0.1</Version>
     </PackageReference>

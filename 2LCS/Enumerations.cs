@@ -156,5 +156,7 @@
     public struct PauseReasons { public const string Other = "Other"; public const string Holidays = "Holidays"; public const string UpComingGoLive = "UpComingGoLive"; public const string PendingUpgrade = "PendingUpgrade"; public const string IssueDuringValidation = "IssueDuringValidation"; public const string PendingValidation = "PendingValidation"; public const string CustomizationConflict = "CustomizationConflict"; public const string IsvReadiness = "IsvReadiness"; public const string DisableFeatureDegradation = "DisableFeatureDegradation"; public const string UpdateExtraSandboxLater = "UpdateExtraSandboxLater"; }
 
     public enum CDSSelectionValidationResult { Unknown = 0, Success = 1, Warning = 2, Error = 3 };
+
+    public enum AssetFileType { Model = 1, ProcessDataPackage = 4, SoftwareDeployablePackage = 10, GERConfiguration = 12, DataPackage = 15, PowerBIReportModel = 19, ECommercePackage = 26, NuGetPackage = 27, RetailSelfServicePackage = 28, CommerceCloudScaleUnitExtension = 29 }
     #endregion
 }

@@ -20,6 +20,8 @@ using Xceed.Document.NET;
 using Xceed.Words.NET;
 using static LCS.NativeMethods;
 using System.Globalization;
+using LCS.AssetLibrary;
+using AutoMapper;
 
 namespace LCS.Forms
 {
@@ -2551,6 +2553,12 @@ namespace LCS.Forms
         {
             About2LCS about2LCS = new About2LCS();
             about2LCS.ShowDialog();
+        }
+
+        private void exportListOfNuGetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using var form = new AssetLibrarySearch(_httpClientHelper);
+            form.ShowDialog();
         }
     }
 

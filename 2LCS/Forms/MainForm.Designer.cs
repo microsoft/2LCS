@@ -109,6 +109,7 @@
             logoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             cookieToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             parametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             tabControl = new System.Windows.Forms.TabControl();
             cheTabPage = new System.Windows.Forms.TabPage();
             saasTabPage = new System.Windows.Forms.TabPage();
@@ -179,7 +180,7 @@
             notifyIcon = new System.Windows.Forms.NotifyIcon(components);
             notifyIconContextMenu = new System.Windows.Forms.ContextMenuStrip(components);
             notifyIconMenuClose = new System.Windows.Forms.ToolStripMenuItem();
-            aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            exportListOfNuGetPackagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)cheDataGridView).BeginInit();
             cheInstanceContextMenu.SuspendLayout();
             mainMenuStrip.SuspendLayout();
@@ -674,7 +675,7 @@
             // 
             // exportToolStripMenuItem
             // 
-            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem });
+            exportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] { exportProjectDataToolStripMenuItem1, exportListOfUsersToolStripMenuItem, exportListOfInstancesForAllProjectsToolStripMenuItem, exportUpdateScheduleForAllProjectsToolStripMenuItem, exportListOfEnvChangesToolStripMenuItem, exportListOfNuGetPackagesToolStripMenuItem });
             exportToolStripMenuItem.Enabled = false;
             exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             exportToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
@@ -807,6 +808,13 @@
             parametersToolStripMenuItem.Text = "Parameters";
             parametersToolStripMenuItem.Click += ParametersToolStripMenuItem_Click;
             // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
+            aboutToolStripMenuItem.Text = "About";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
             // tabControl
             // 
             tabControl.Controls.Add(cheTabPage);
@@ -823,7 +831,7 @@
             cheTabPage.Controls.Add(cheDataGridView);
             cheTabPage.Location = new System.Drawing.Point(4, 29);
             cheTabPage.Name = "cheTabPage";
-            cheTabPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            cheTabPage.Padding = new System.Windows.Forms.Padding(3);
             cheTabPage.Size = new System.Drawing.Size(1307, 756);
             cheTabPage.TabIndex = 0;
             cheTabPage.Text = "Cloud-hosted instances";
@@ -834,8 +842,8 @@
             saasTabPage.Controls.Add(saasDataGridView);
             saasTabPage.Location = new System.Drawing.Point(4, 29);
             saasTabPage.Name = "saasTabPage";
-            saasTabPage.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            saasTabPage.Size = new System.Drawing.Size(1307, 741);
+            saasTabPage.Padding = new System.Windows.Forms.Padding(3);
+            saasTabPage.Size = new System.Drawing.Size(1307, 756);
             saasTabPage.TabIndex = 1;
             saasTabPage.Text = "MS-hosted environments";
             saasTabPage.UseVisualStyleBackColor = true;
@@ -856,7 +864,7 @@
             saasDataGridView.Name = "saasDataGridView";
             saasDataGridView.ReadOnly = true;
             saasDataGridView.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
-            saasDataGridView.Size = new System.Drawing.Size(1301, 735);
+            saasDataGridView.Size = new System.Drawing.Size(1301, 750);
             saasDataGridView.TabIndex = 1;
             saasDataGridView.ColumnHeaderMouseClick += SaasDataGridView_ColumnHeaderMouseClick;
             saasDataGridView.MouseDown += DataGridView_MouseDown;
@@ -1358,12 +1366,12 @@
             notifyIconMenuClose.Text = "Close 2LCS";
             notifyIconMenuClose.Click += NotifyIconMenuClose_Click;
             // 
-            // aboutToolStripMenuItem
+            // exportListOfNuGetPackagesToolStripMenuItem
             // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
-            aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            exportListOfNuGetPackagesToolStripMenuItem.Name = "exportListOfNuGetPackagesToolStripMenuItem";
+            exportListOfNuGetPackagesToolStripMenuItem.Size = new System.Drawing.Size(455, 26);
+            exportListOfNuGetPackagesToolStripMenuItem.Text = "Export list of NuGet packages from shared asset library";
+            exportListOfNuGetPackagesToolStripMenuItem.Click += exportListOfNuGetPackagesToolStripMenuItem_Click;
             // 
             // MainForm
             // 
@@ -1550,6 +1558,7 @@
         private System.Windows.Forms.ToolStripMenuItem currentProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem allProjectUsersExportMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportListOfNuGetPackagesToolStripMenuItem;
     }
 }
 
