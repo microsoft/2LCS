@@ -14,14 +14,18 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
+      uses: microsoft/setup-msbuild@v2
 
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v1
+      uses: nuget/setup-nuget@v2
 
     - name: Restore NuGet packages
       run: nuget restore 2LCS/2LCS.csproj
@@ -30,8 +34,7 @@ jobs:
       run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:Version=${{ github.event.release.name }}
 
     - name: Upload 2LCS_${{ github.event.release.tag_name }} .zip
-      uses: actions/upload-artifact@v3
-      # uses: softprops/action-gh-release@v1
+      uses: actions/upload-artifact@v4
       with:
         name: 2LCS_${{ github.event.release.tag_name }}
         path: 2LCS/bin/Release
