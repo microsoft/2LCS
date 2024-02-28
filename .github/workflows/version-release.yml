@@ -15,9 +15,14 @@ jobs:
   build:
     runs-on: windows-latest
     permissions:
-      contents: read
+      contents: write
+      checks: write
       actions: read
-      security-events: write
+      issues: read
+      packages: write
+      pull-requests: read
+      repository-projects: read
+      statuses: read
     steps:
     - uses: actions/checkout@v4
 
@@ -43,7 +48,7 @@ jobs:
       run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_${{ github.event.release.tag_name }}.zip
 
     - name: Upload 2LCS .zip to release ${{ github.event.release.name }}
-      uses: actions/upload-release-asset@v1
+      uses: shogo82148/actions-upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
