@@ -548,7 +548,22 @@ namespace LCS
 
         internal string GetPagedDeployablePackageListUrl(CloudHostedInstance instance)
         {
-            return $"{LcsUrl}/Environment/GetPagedDeployablePackageList/{LcsProjectId}?lcsEnvironmentActionId=2&lcsEnvironmentId={instance.EnvironmentId}";
+            return $"{LcsUrl}/{GetDeployablePackageListEndpoint(instance)}/GetPagedDeployablePackageList/{LcsProjectId}?lcsEnvironmentActionId=2&lcsEnvironmentId={instance.EnvironmentId}";
+        }
+
+        internal string GetDeployablePackageListEndpoint(CloudHostedInstance instance)
+        {
+            switch (instance.RefinedEnvironmentType)
+            {
+                case RefinedEnvironmentType.DevTestDev:
+                    {
+                        return "Environment";
+                    }
+                default:
+                    {
+                        return "EnvironmentServicingV2";
+                    }
+            }
         }
 
         internal List<RDPConnectionDetails> GetRdpConnectionDetails(CloudHostedInstance instance)
