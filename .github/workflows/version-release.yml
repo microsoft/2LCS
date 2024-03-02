@@ -29,7 +29,7 @@ jobs:
       run: nuget restore 2LCS/2LCS.csproj
 
     - name: Build
-      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release
+      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:OutputPath=2LCS/bin/Release
 
     - name: Upload 2LCS_${{ github.event.release.tag_name }} .zip
       uses: actions/upload-artifact@v4
