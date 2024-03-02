@@ -54,4 +54,4 @@ jobs:
         draft: false
         prerelease: true
         generate_release_notes: true
-        files: 2LCS_${{ inputs.version }}.zip
+        files: 2LCS_${{ inputs.release_name }}.zip
