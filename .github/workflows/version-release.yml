@@ -35,7 +35,7 @@ jobs:
       run: nuget restore 2LCS/2LCS.csproj
 
     - name: Build
-      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:OutputPath=2LCS/bin/Release /p:Version=${{ inputs.version }}
+      run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:OutputPath=bin/Release /p:Version=${{ inputs.version }}
 
     - name: Upload ${{ inputs.release_name }}.zip
       uses: actions/upload-artifact@v4
