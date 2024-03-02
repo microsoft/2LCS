@@ -9,14 +9,13 @@ name: Build and add to new release
 # trigger manually
 on: 
   workflow_dispatch:
-
-  inputs:
-    release_name:
-      description: 'Name of the release (e.g. v.0.47.0)'
-      required: true
-    version:
-      description: 'Version of the release (e.g. 0.47.0)'
-      required: true
+    inputs:
+      release_name:
+        description: 'Name of the release (e.g. v.0.47.0)'
+        required: true
+      version:
+        description: 'Version of the release (e.g. 0.47.0)'
+        required: true
 
 jobs:
   build:
