@@ -21,7 +21,6 @@ jobs:
       run: msbuild 2LCS/2LCS.csproj /p:VersionSuffix=pr /p:Configuration=Release /p:Version=0.0.0.${{ github.event.pull_request.number }} /p:InformationalVersion=0.0.0.${{ github.event.pull_request.number }}-pr
     - name: Upload 2LCS.zip
       uses: actions/upload-artifact@v3
-      # uses: softprops/action-gh-release@v1
       with:
         name: 2LCS
         path: 2LCS/bin/Release    

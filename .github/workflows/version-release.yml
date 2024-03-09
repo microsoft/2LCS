@@ -47,7 +47,7 @@ jobs:
       run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_${{ inputs.release_name }}.zip
 
     - name: Create release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         name: ${{ inputs.release_name }}
         tag_name: ${{ inputs.release_name }}
