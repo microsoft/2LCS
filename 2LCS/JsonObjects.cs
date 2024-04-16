@@ -707,6 +707,7 @@ namespace LCS.JsonObjects
         public string Status { get; set; }
         public bool IsModified { get; set; }
         public int WorkflowInstanceId { get; set; }
+        public string ReleaseName { get; set; }
     }
 
     public class JITOptions
