@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 namespace LCS.JsonObjects
@@ -395,7 +395,7 @@ namespace LCS.JsonObjects
         public object ADOauthCode { get; set; }
         public string ADUserId { get; set; }
         public List<string> AllEmails { get; set; }
-        public List<string> AlternateEmails { get; set; }
+        public object AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
@@ -652,7 +652,7 @@ namespace LCS.JsonObjects
         public object ADOauthCode { get; set; }
         public string ADUserId { get; set; }
         public List<string> AllEmails { get; set; }
-        public List<string> AlternateEmails { get; set; }
+        public object AlternateEmails { get; set; }
         public int CreatedBy { get; set; }
         public string CreatedDate { get; set; }//Todo
         public string DisplayName { get; set; }
