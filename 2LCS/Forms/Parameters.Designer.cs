@@ -46,20 +46,23 @@
             LocalCredentialsCheckbox = new System.Windows.Forms.CheckBox();
             RDPCredentialsCheckbox = new System.Windows.Forms.CheckBox();
             groupBoxLCSUrls = new System.Windows.Forms.GroupBox();
+            labelLcsDiagUrl = new System.Windows.Forms.Label();
+            labelLcsFixUrl = new System.Windows.Forms.Label();
+            labelLcsUpdateUrl = new System.Windows.Forms.Label();
             labelLcsUrl = new System.Windows.Forms.Label();
             textBoxLcsDiagUrl = new System.Windows.Forms.TextBox();
             textBoxLcsFixUrl = new System.Windows.Forms.TextBox();
             textBoxLcsUpdateUrl = new System.Windows.Forms.TextBox();
             textBoxLcsUrl = new System.Windows.Forms.TextBox();
-            labelLcsUpdateUrl = new System.Windows.Forms.Label();
-            labelLcsFixUrl = new System.Windows.Forms.Label();
-            labelLcsDiagUrl = new System.Windows.Forms.Label();
+            groupBox1 = new System.Windows.Forms.GroupBox();
+            addExternalIpAddress = new System.Windows.Forms.CheckBox();
             groupBoxExportConfig.SuspendLayout();
             groupBoxUIConfig.SuspendLayout();
             groupBoxCaching.SuspendLayout();
             groupCHE.SuspendLayout();
             groupBoxCredentials.SuspendLayout();
             groupBoxLCSUrls.SuspendLayout();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // AutoRefreshCheckBox
@@ -75,7 +78,7 @@
             // closeButton
             // 
             closeButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            closeButton.Location = new System.Drawing.Point(312, 722);
+            closeButton.Location = new System.Drawing.Point(304, 801);
             closeButton.Name = "closeButton";
             closeButton.Size = new System.Drawing.Size(163, 32);
             closeButton.TabIndex = 4;
@@ -179,7 +182,7 @@
             // 
             groupCHE.Controls.Add(uriSchemeEnabled);
             groupCHE.Controls.Add(alwaysLogAsAdmin);
-            groupCHE.Location = new System.Drawing.Point(11, 432);
+            groupCHE.Location = new System.Drawing.Point(12, 433);
             groupCHE.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             groupCHE.Name = "groupCHE";
             groupCHE.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
@@ -242,12 +245,39 @@
             groupBoxLCSUrls.Controls.Add(textBoxLcsFixUrl);
             groupBoxLCSUrls.Controls.Add(textBoxLcsUpdateUrl);
             groupBoxLCSUrls.Controls.Add(textBoxLcsUrl);
-            groupBoxLCSUrls.Location = new System.Drawing.Point(11, 548);
+            groupBoxLCSUrls.Location = new System.Drawing.Point(12, 624);
             groupBoxLCSUrls.Name = "groupBoxLCSUrls";
-            groupBoxLCSUrls.Size = new System.Drawing.Size(461, 165);
+            groupBoxLCSUrls.Size = new System.Drawing.Size(460, 165);
             groupBoxLCSUrls.TabIndex = 10;
             groupBoxLCSUrls.TabStop = false;
             groupBoxLCSUrls.Text = "LCS Urls";
+            // 
+            // labelLcsDiagUrl
+            // 
+            labelLcsDiagUrl.AutoSize = true;
+            labelLcsDiagUrl.Location = new System.Drawing.Point(9, 132);
+            labelLcsDiagUrl.Name = "labelLcsDiagUrl";
+            labelLcsDiagUrl.Size = new System.Drawing.Size(130, 20);
+            labelLcsDiagUrl.TabIndex = 7;
+            labelLcsDiagUrl.Text = "LCS Diagnostic Url";
+            // 
+            // labelLcsFixUrl
+            // 
+            labelLcsFixUrl.AutoSize = true;
+            labelLcsFixUrl.Location = new System.Drawing.Point(9, 99);
+            labelLcsFixUrl.Name = "labelLcsFixUrl";
+            labelLcsFixUrl.Size = new System.Drawing.Size(139, 20);
+            labelLcsFixUrl.TabIndex = 6;
+            labelLcsFixUrl.Text = "LCS Issue Search Url";
+            // 
+            // labelLcsUpdateUrl
+            // 
+            labelLcsUpdateUrl.AutoSize = true;
+            labelLcsUpdateUrl.Location = new System.Drawing.Point(9, 66);
+            labelLcsUpdateUrl.Name = "labelLcsUpdateUrl";
+            labelLcsUpdateUrl.Size = new System.Drawing.Size(108, 20);
+            labelLcsUpdateUrl.TabIndex = 5;
+            labelLcsUpdateUrl.Text = "LCS Update Url";
             // 
             // labelLcsUrl
             // 
@@ -286,38 +316,30 @@
             textBoxLcsUrl.Size = new System.Drawing.Size(203, 27);
             textBoxLcsUrl.TabIndex = 0;
             // 
-            // labelLcsUpdateUrl
+            // groupBox1
             // 
-            labelLcsUpdateUrl.AutoSize = true;
-            labelLcsUpdateUrl.Location = new System.Drawing.Point(9, 66);
-            labelLcsUpdateUrl.Name = "labelLcsUpdateUrl";
-            labelLcsUpdateUrl.Size = new System.Drawing.Size(108, 20);
-            labelLcsUpdateUrl.TabIndex = 5;
-            labelLcsUpdateUrl.Text = "LCS Update Url";
+            groupBox1.Controls.Add(addExternalIpAddress);
+            groupBox1.Location = new System.Drawing.Point(11, 549);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new System.Drawing.Size(461, 69);
+            groupBox1.TabIndex = 11;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Microsoft-hosted environments";
             // 
-            // labelLcsFixUrl
+            // addExternalIpAddress
             // 
-            labelLcsFixUrl.AutoSize = true;
-            labelLcsFixUrl.Location = new System.Drawing.Point(9, 99);
-            labelLcsFixUrl.Name = "labelLcsFixUrl";
-            labelLcsFixUrl.Size = new System.Drawing.Size(139, 20);
-            labelLcsFixUrl.TabIndex = 6;
-            labelLcsFixUrl.Text = "LCS Issue Search Url";
-            // 
-            // labelLcsDiagUrl
-            // 
-            labelLcsDiagUrl.AutoSize = true;
-            labelLcsDiagUrl.Location = new System.Drawing.Point(9, 132);
-            labelLcsDiagUrl.Name = "labelLcsDiagUrl";
-            labelLcsDiagUrl.Size = new System.Drawing.Size(130, 20);
-            labelLcsDiagUrl.TabIndex = 7;
-            labelLcsDiagUrl.Text = "LCS Diagnostic Url";
+            addExternalIpAddress.Location = new System.Drawing.Point(9, 26);
+            addExternalIpAddress.Name = "addExternalIpAddress";
+            addExternalIpAddress.Size = new System.Drawing.Size(363, 31);
+            addExternalIpAddress.TabIndex = 2;
+            addExternalIpAddress.Text = "Add external IP when creating firewall exception";
             // 
             // Parameters
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(519, 770);
+            ClientSize = new System.Drawing.Size(487, 845);
+            Controls.Add(groupBox1);
             Controls.Add(groupBoxLCSUrls);
             Controls.Add(groupBoxCredentials);
             Controls.Add(groupBoxUIConfig);
@@ -344,6 +366,7 @@
             groupBoxCredentials.ResumeLayout(false);
             groupBoxLCSUrls.ResumeLayout(false);
             groupBoxLCSUrls.PerformLayout();
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -380,5 +403,7 @@
         private System.Windows.Forms.Label labelLcsDiagUrl;
         private System.Windows.Forms.Label labelLcsFixUrl;
         private System.Windows.Forms.Label labelLcsUpdateUrl;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox addExternalIpAddress;
     }
 }
