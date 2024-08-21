@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -11,6 +12,8 @@ namespace LCS.Forms
         public AddNsg()
         {
             InitializeComponent();
+
+            PopulateWithOwnIP();
         }
 
         public bool Cancelled { get; private set; }
@@ -39,6 +42,27 @@ namespace LCS.Forms
         {
             Cancelled = true;
             Close();
+        }
+
+        private void PopulateWithOwnIP()
+        {
+            if (Properties.Settings.Default.populateOwnIPForNSG)
+            {
+                try
+                {
+                    var ownIpAddress = new HttpClient().GetStringAsync("http://icanhazip.com").Result;
+                    ownIpAddress = ownIpAddress.Replace("\\r\\n", "").Replace("\\n", "").Trim();
+
+                    if (!string.IsNullOrEmpty(ownIpAddress))
+                    {
+                        textBox2.Text = ownIpAddress;
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Failed to get your IP address. Please enter it manually.");
+                }
+            }
         }
 
         private bool ValidateRule()

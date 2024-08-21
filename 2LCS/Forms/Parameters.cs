@@ -47,6 +47,8 @@ namespace LCS.Forms
             textBoxLcsUpdateUrl.Text = Properties.Settings.Default.lcsUpdateURL;
             textBoxLcsDiagUrl.Text = Properties.Settings.Default.lcsDiagURL;
             textBoxLcsFixUrl.Text = Properties.Settings.Default.lcsFixURL;
+            addExternalIpAddress.Checked = Properties.Settings.Default.populateOwnIPForNSG;
+
             SetStoreCacheEnabledDisabled();
         }
 
@@ -65,6 +67,8 @@ namespace LCS.Forms
             Properties.Settings.Default.lcsUpdateURL = textBoxLcsUpdateUrl.Text;
             Properties.Settings.Default.lcsDiagURL = textBoxLcsDiagUrl.Text;
             Properties.Settings.Default.lcsFixURL = textBoxLcsFixUrl.Text;
+            Properties.Settings.Default.populateOwnIPForNSG = addExternalIpAddress.Checked;
+
             Properties.Settings.Default.Save();
         }
 
