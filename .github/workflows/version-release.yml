@@ -23,13 +23,13 @@ jobs:
     permissions:
       contents: write
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
     - name: Setup NuGet
-      uses: nuget/setup-nuget@v2
+      uses: nuget/setup-nuget@d105a947828025cd7a980103c35ba2bfae586d0f # v2.0.2
 
     - name: Restore NuGet packages
       run: nuget restore 2LCS/2LCS.csproj
@@ -38,7 +38,7 @@ jobs:
       run: msbuild 2LCS/2LCS.csproj /p:Configuration=Release /p:OutputPath=bin/Release /p:Version=${{ inputs.version }}
 
     - name: Upload ${{ inputs.release_name }}.zip
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: 2LCS_${{ inputs.release_name }}
         path: 2LCS/bin/Release
@@ -47,7 +47,7 @@ jobs:
       run: Compress-Archive -Path 2LCS\bin\Release\* -DestinationPath 2LCS_${{ inputs.release_name }}.zip
 
     - name: Create release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
       with:
         name: ${{ inputs.release_name }}
         tag_name: ${{ inputs.release_name }}
