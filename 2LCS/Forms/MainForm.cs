@@ -83,7 +83,7 @@ namespace LCS.Forms
 
         private DataGridView SelectedDataGridView => tabControl.SelectedTab == tabControl.TabPages["cheTabPage"] ? cheDataGridView : saasDataGridView;
 
-        public static RDPConnectionDetails ChooseRdpLogonUser(List<RDPConnectionDetails> rdpList)
+        public static RDPConnectionDetails ChooseRdpLogonUser(List<RDPConnectionDetails> rdpList, IWin32Window owner)
         {
             if (Properties.Settings.Default.alwaysLogAsAdmin)
             {
@@ -104,7 +104,7 @@ namespace LCS.Forms
                 form.Text = "Choose user";
                 form.ClientSize = new Size(280, 60);
                 form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.StartPosition = FormStartPosition.CenterScreen;
+                form.StartPosition = FormStartPosition.CenterParent;
                 form.AcceptButton = button_OK;
                 form.CancelButton = button_Cancel;
                 form.MinimizeBox = false;
@@ -127,7 +127,7 @@ namespace LCS.Forms
                 }
                 form.Controls.Add(panel);
 
-                DialogResult dialogResult = form.ShowDialog();
+                DialogResult dialogResult = form.ShowDialog(owner);
 
                 if (dialogResult == DialogResult.Cancel)
                     return null;
@@ -212,7 +212,7 @@ namespace LCS.Forms
             {
                 HttpClientHelper = _httpClientHelper
             };
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (!form.Cancelled && (form.LcsProject != null))
             {
                 Projects = form.Projects;
@@ -259,7 +259,7 @@ namespace LCS.Forms
                 RDPConnectionDetails rdpEntry;
                 if (rdpList.Count > 1)
                 {
-                    rdpEntry = ChooseRdpLogonUser(rdpList);
+                    rdpEntry = ChooseRdpLogonUser(rdpList, this);
                 }
                 else
                 {
@@ -351,7 +351,7 @@ namespace LCS.Forms
                 DefaultExt = "rdg",
                 AddExtension = true
             };
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 using StreamWriter sw = new StreamWriter(savefile.FileName);
                 sw.Write(sb);
@@ -401,7 +401,7 @@ namespace LCS.Forms
                 DefaultExt = "rdm",
                 AddExtension = true
             };
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 using StreamWriter sw = new StreamWriter(savefile.FileName);
                 sw.Write(sb);
@@ -421,7 +421,7 @@ namespace LCS.Forms
                         CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName),
                         Text = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
                     };
-                    form.Show();
+                    form.Show(this);
                 }
             }
         }
@@ -437,21 +437,21 @@ namespace LCS.Forms
                     CredentialsDict = _httpClientHelper.GetCredentials(instance.EnvironmentId, vm.ItemName),
                     Text = $"Instance: {instance.InstanceId}, VM: {vm.MachineName}"
                 };
-                form.Show();
+                form.Show(this);
             }
         }
 
         private void CookieToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var form = new CookieEdit();
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (form.Cancelled || string.IsNullOrEmpty(form.Cookie)) return;
             if (form.Cookie == Properties.Settings.Default.cookie) return;
             Properties.Settings.Default.cookie = form.Cookie;
             Properties.Settings.Default.projects = "";
             Properties.Settings.Default.instances = "";
             Properties.Settings.Default.Save();
-            MessageBox.Show("Application will now restart", "Message", MessageBoxButtons.OK);
+            MessageBox.Show(this, "Application will now restart", "Message", MessageBoxButtons.OK);
             Application.Restart();
         }
 
@@ -561,7 +561,7 @@ namespace LCS.Forms
         private void CustomLinksToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var form = new CustomLinks();
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (form.Cancelled) return;
             RemoveCustomLinksMenuItems();
             CreateCustomLinksMenuItems();
@@ -594,7 +594,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
-                if (MessageBox.Show($"Deallocation is the step before deletion. Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(this, $"Deallocation is the step before deletion. Do you really want to deallocate {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.StartStopDeployment(instance, "deallocate")));
                 }
@@ -610,7 +610,7 @@ namespace LCS.Forms
             foreach (DataGridViewRow row in SelectedDataGridView.SelectedRows)
             {
                 var instance = (CloudHostedInstance)row.DataBoundItem;
-                if (MessageBox.Show($"Deletion cannot be cancelled or rolled back. Do you really want to delete {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show(this, $"Deletion cannot be cancelled or rolled back. Do you really want to delete {instance.DisplayName} instance?", "Confirmation", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     tasks.Add(Task.Run(() => new HttpClientHelper(_cookies) { LcsUrl = _lcsUrl, LcsUpdateUrl = _lcsUpdateUrl, LcsDiagUrl = _lcsDiagUrl, LcsProjectId = _selectedProject.Id.ToString() }.DeleteEnvironment(instance)));
                 }
@@ -634,7 +634,7 @@ namespace LCS.Forms
                     {
                         Packages = packages
                     };
-                    form.ShowDialog();
+                    form.ShowDialog(this);
                     if (!form.Cancelled && (form.DeployablePackage != null))
                     {
                         package = form.DeployablePackage;
@@ -661,7 +661,7 @@ namespace LCS.Forms
                     LogEntries = log.ToString(),
                     Text = $"Deployment log for package: {package.Name}"
                 };
-                form.Show();
+                form.Show(this);
             }
             Cursor = Cursors.Default;
         }
@@ -677,7 +677,7 @@ namespace LCS.Forms
                 var buildInfo = _httpClientHelper.GetEnvironmentBuildInfoDetails(instance, environmentId.ToString());
                 if (buildInfo == null || buildInfo.BuildInfoTreeView.Count == 0)
                 {
-                    MessageBox.Show($"Request to get build info details. Please try again later.");
+                    MessageBox.Show(this, $"Request to get build info details. Please try again later.");
                     continue;
                 }
                 using var form = new BuildInfoDetailsForm
@@ -685,7 +685,7 @@ namespace LCS.Forms
                     BuildInfo = buildInfo,
                     Text = $"Instance: {instance.InstanceId}, Build version: {buildInfo.BuildVersion}, Platform build: {buildInfo.InstalledPlatformBuild}"
                 };
-                form.ShowDialog();
+                form.ShowDialog(this);
             }
             Cursor = Cursors.Default;
         }
@@ -776,7 +776,7 @@ namespace LCS.Forms
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
             };
 
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 try
                 {
@@ -786,7 +786,7 @@ namespace LCS.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(this, ex.Message);
                 }
             }
             _selectedProject = previousProject;
@@ -888,7 +888,7 @@ namespace LCS.Forms
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
             };
 
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 try
                 {
@@ -898,7 +898,7 @@ namespace LCS.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(this, ex.Message);
                 }
             }
             _selectedProject = previousProject;
@@ -1291,7 +1291,7 @@ namespace LCS.Forms
                     DefaultExt = "docx",
                     AddExtension = true
                 };
-                if (savefile.ShowDialog() == DialogResult.OK)
+                if (savefile.ShowDialog(this) == DialogResult.OK)
                 {
                     try
                     {
@@ -1299,7 +1299,7 @@ namespace LCS.Forms
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(ex.Message);
+                        MessageBox.Show(this, ex.Message);
                     }
                 }
             }
@@ -1368,7 +1368,7 @@ namespace LCS.Forms
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
             };
 
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 try
                 {
@@ -1378,7 +1378,7 @@ namespace LCS.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(this, ex.Message);
                 }
             }
             _selectedProject = previousProject;
@@ -1440,12 +1440,12 @@ namespace LCS.Forms
                 var kbs = _httpClientHelper.GetAvailableHotfixes(diagId, (int)hotfixesType);
                 if (kbs == null)
                 {
-                    MessageBox.Show($"Request to get available updates failed. Please try again later.");
+                    MessageBox.Show(this, $"Request to get available updates failed. Please try again later.");
                     continue;
                 }
                 if (kbs.Count == 0)
                 {
-                    MessageBox.Show($"There are no {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.");
+                    MessageBox.Show(this, $"There are no {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance.");
                     continue;
                 }
                 using var form = new AvailableKBs
@@ -1453,7 +1453,7 @@ namespace LCS.Forms
                     Hotfixes = kbs,
                     Text = $"{kbs.Count} {label} available for {((CloudHostedInstance)row.DataBoundItem).DisplayName} instance."
                 };
-                form.ShowDialog();
+                form.ShowDialog(this);
             }
             Cursor = Cursors.Default;
         }
@@ -1499,7 +1499,7 @@ namespace LCS.Forms
         {
             WebBrowserHelper.FixBrowserVersion();
             using var form = new Login();
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (form.Cancelled) return;
             _cookies = GetUriCookieContainer();
             if (_cookies == null) return;
@@ -1542,7 +1542,7 @@ namespace LCS.Forms
 
         private void LogoutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(
+            if (MessageBox.Show(this,
                     $"When you log off, all locally saved information about your projects and instances will be deleted. You will need to refresh data from LCS.{Environment.NewLine}{Environment.NewLine}Application will restart.{Environment.NewLine}{Environment.NewLine}Do you want to proceed?",
                     "Confirmation", MessageBoxButtons.YesNo) != DialogResult.Yes) return;
             Properties.Settings.Default.projects = "";
@@ -1696,12 +1696,12 @@ namespace LCS.Forms
                 if (rdpList.Count == 0)
                 {
                     Cursor = Cursors.Default;
-                    MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
+                    MessageBox.Show(this, $"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.");
                     return;
                 }
                 else if (rdpList.Count > 1)
                 {
-                    rdpEntry = ChooseRdpLogonUser(rdpList);
+                    rdpEntry = ChooseRdpLogonUser(rdpList, this);
                 }
                 else
                 {
@@ -1734,7 +1734,7 @@ namespace LCS.Forms
         private void ParametersToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var form = new Parameters();
-            form.ShowDialog();
+            form.ShowDialog(this);
         }
 
         private string ParseCustomLink(string template, CloudHostedInstance instance)
@@ -1862,7 +1862,7 @@ namespace LCS.Forms
         private void SaasAddNsgRule_Click(object sender, EventArgs e)
         {
             using var form = new AddNsg();
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (form.Cancelled || (form.Rule == null)) return;
             Cursor = Cursors.WaitCursor;
             var tasks = new List<Task>();
@@ -1899,7 +1899,7 @@ namespace LCS.Forms
                         NetworkSecurityGroup = networkSecurityGroup,
                         Text = $"Choose firewall rule to delete"
                     };
-                    form.ShowDialog();
+                    form.ShowDialog(this);
                     if (!form.Cancelled && (form.NSGRule != null))
                     {
                         nsgRule = form.NSGRule;
@@ -1929,7 +1929,7 @@ namespace LCS.Forms
                     LogEntries = log.ToString(),
                     Text = $"Log for deletion of firewall rule: {nsgRule.Name}"
                 };
-                form.Show();
+                form.Show(this);
             }
             Cursor = Cursors.Default;
         }
@@ -2012,7 +2012,7 @@ namespace LCS.Forms
                 DefaultExt = "rdg",
                 AddExtension = true
             };
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 using StreamWriter sw = new StreamWriter(savefile.FileName);
                 sw.Write(sb);
@@ -2062,7 +2062,7 @@ namespace LCS.Forms
                 DefaultExt = "rdm",
                 AddExtension = true
             };
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 using StreamWriter sw = new StreamWriter(savefile.FileName);
                 sw.Write(sb);
@@ -2082,7 +2082,7 @@ namespace LCS.Forms
                     Text = $"Choose machine to connect to. Instance: {instance.DisplayName}",
                     RDPConnections = rdpList
                 };
-                form.ShowDialog();
+                form.ShowDialog(this);
                 if (!form.Cancelled && (form.RDPConnection != null))
                 {
                     var rdpEntry = form.RDPConnection;
@@ -2124,7 +2124,7 @@ namespace LCS.Forms
                     Text = $"Instance: {instance.InstanceId}",
                     CredentialsDict = credentials
                 };
-                form.Show();
+                form.Show(this);
             }
         }
 
@@ -2149,7 +2149,7 @@ namespace LCS.Forms
                     Text = $"Instance: {instance.InstanceId}",
                     CredentialsDict = credentials
                 };
-                form.Show();
+                form.Show(this);
             }
         }
 
@@ -2212,7 +2212,7 @@ namespace LCS.Forms
                     Text = $"RDP connection details for {instance.DisplayName}",
                     LogEntries = details.ToString()
                 };
-                form.Show();
+                form.Show(this);
             }
             Cursor = Cursors.Default;
         }
@@ -2323,7 +2323,7 @@ namespace LCS.Forms
             if (calendar == null || calendar.Count == 0)
             {
                 Cursor = Cursors.Default;
-                MessageBox.Show($"Request to get upcoming service updates calendar failed. You are using learning project or you do not have access to that information.");
+                MessageBox.Show(this, $"Request to get upcoming service updates calendar failed. You are using learning project or you do not have access to that information.");
                 return;
             }
             using var form = new UpcomingUpdates
@@ -2331,7 +2331,7 @@ namespace LCS.Forms
                 Calendar = calendar,
                 Text = $"Upcoming service updates for {_selectedProject.Name} project."
             };
-            form.ShowDialog();
+            form.ShowDialog(this);
 
             Cursor = Cursors.Default;
         }
@@ -2399,7 +2399,7 @@ namespace LCS.Forms
                 Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
             };
 
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (savefile.ShowDialog(this) == DialogResult.OK)
             {
                 try
                 {
@@ -2409,7 +2409,7 @@ namespace LCS.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show(this, ex.Message);
                 }
             }
             _selectedProject = previousProject;
@@ -2435,7 +2435,7 @@ namespace LCS.Forms
             {
                 AvailableServices = _httpClientHelper.GetServicesToRestart()
             };
-            form.ShowDialog();
+            form.ShowDialog(this);
             if (form.Cancelled || (form.ServicesToRestart == null)) return;
             Cursor = Cursors.WaitCursor;
 
@@ -2489,7 +2489,7 @@ namespace LCS.Forms
                     LogEntries = log.ToString(),
                     Text = $"Restarting service(s) log"
                 };
-                logForm.ShowDialog();
+                logForm.ShowDialog(this);
             }
         }
 
@@ -2507,7 +2507,7 @@ namespace LCS.Forms
                         ActionDetails = actions,
                         Text = $"Environment changes for {instance.DisplayName} instance."
                     };
-                    form.ShowDialog();
+                    form.ShowDialog(this);
                 }
             }
             Cursor = Cursors.Default;
@@ -2552,13 +2552,13 @@ namespace LCS.Forms
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             About2LCS about2LCS = new About2LCS();
-            about2LCS.ShowDialog();
+            about2LCS.ShowDialog(this);
         }
 
         private void exportListOfNuGetPackagesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var form = new AssetLibrarySearch(_httpClientHelper);
-            form.ShowDialog();
+            form.ShowDialog(this);
         }
     }
 

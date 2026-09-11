@@ -60,7 +60,7 @@ namespace LCS.Forms
                 }
                 catch
                 {
-                    MessageBox.Show("Failed to get your IP address. Please enter it manually.");
+                    MessageBox.Show(this, "Failed to get your IP address. Please enter it manually.");
                 }
             }
         }
@@ -69,12 +69,12 @@ namespace LCS.Forms
         {
             if (string.IsNullOrEmpty(textBox1.Text))
             {
-                MessageBox.Show("Rule name is empty.");
+                MessageBox.Show(this, "Rule name is empty.");
                 return false;
             }
             if (string.IsNullOrEmpty(textBox2.Text))
             {
-                MessageBox.Show("IP address field is empty.");
+                MessageBox.Show(this, "IP address field is empty.");
                 return false;
             }
             Rule = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)

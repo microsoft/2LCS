@@ -97,7 +97,7 @@ namespace LCS.Forms
 
             if (result != null)
             {
-                MessageBox.Show(string.Format("Error while trying to clear cache, caching disabled.\n {0}", result), "Error");
+                MessageBox.Show(this, string.Format("Error while trying to clear cache, caching disabled.\n {0}", result), "Error");
             }
         }
 
