@@ -76,7 +76,7 @@ public partial class AssetLibrarySearch : Form
             Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*"
         };
 
-        if (saveFile.ShowDialog() == DialogResult.OK)
+        if (saveFile.ShowDialog(this) == DialogResult.OK)
         {
             try
             {
@@ -86,7 +86,7 @@ public partial class AssetLibrarySearch : Form
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(this, ex.Message);
             }
         }
     }

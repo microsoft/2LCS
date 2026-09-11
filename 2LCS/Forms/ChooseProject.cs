@@ -65,7 +65,7 @@ namespace LCS.Forms
                 LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
                 if (LcsProject.RequestPending == true)
                 {
-                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
+                    MessageBox.Show(this, $"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
                     return;
                 }
                 UpdateProjectLinks();
@@ -84,7 +84,7 @@ namespace LCS.Forms
                 LcsProject = (LcsProject)projectsDataGridView.SelectedRows[0].DataBoundItem;
                 if (LcsProject.RequestPending == true)
                 {
-                    MessageBox.Show($"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
+                    MessageBox.Show(this, $"Invitation to the project {LcsProject.Name} has not been completed yet for your user account.\n\nVisit LCS and accept invitation first!", "Warning! Action needed.");
                     return;
                 }
                 UpdateProjectLinks();

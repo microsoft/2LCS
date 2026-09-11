@@ -67,7 +67,7 @@ namespace LCS.Forms
 
                 using (var form = new Login())
                 {
-                    form.ShowDialog();
+                    form.ShowDialog(this);
                 }
 
                 worker.RunWorkerAsync();
@@ -80,7 +80,7 @@ namespace LCS.Forms
 
         private bool CheckFailed(string message, string caption)
         {
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(this, message, caption, MessageBoxButtons.OK, MessageBoxIcon.Error);
             return false;
         }
 
@@ -136,7 +136,7 @@ namespace LCS.Forms
                         {
                             if (rdpList.Count > 1)
                             {
-                                rdpEntry = MainForm.ChooseRdpLogonUser(rdpList);
+                                rdpEntry = MainForm.ChooseRdpLogonUser(rdpList, this);
                             }
                             else
                             {
@@ -163,28 +163,28 @@ namespace LCS.Forms
                             }
                             else
                             {
-                                MessageBox.Show($"Operation cancelled", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                MessageBox.Show(this, $"Operation cancelled", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             }
                         }
                         else
                         {
-                            MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            MessageBox.Show(this, $"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
 
                     }
                     else
                     {
-                        MessageBox.Show($"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(this, $"Cannot retrieve RDP connection details. This instance is not accessible through RDP or you do not have access to see those details. Check if you have Environment Manager role.", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show($"Cannot find cloud-hosted instance with ID {rdpData.Environment} on project {project.Name}", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(this, $"Cannot find cloud-hosted instance with ID {rdpData.Environment} on project {project.Name}", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("Unsupported operation", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, "Unsupported operation", "Operation failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
