@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Net.Http;
 using System.Windows.Forms;
 
@@ -17,6 +18,9 @@ namespace LCS.Forms
         }
 
         public bool Cancelled { get; private set; }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Dictionary<string, string> Rule { get; set; }
 
         protected override CreateParams CreateParams

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace LCS.Forms
         }
 
         internal bool Cancelled { get; private set; }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal HttpClientHelper HttpClientHelper { get; set; }
         internal LcsProject LcsProject { get; private set; }
 
