@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -11,6 +12,8 @@ namespace LCS.Forms
             InitializeComponent();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Dictionary<string, string> CredentialsDict { get; set; }
 
         private void Credentials_Load(object sender, EventArgs e)

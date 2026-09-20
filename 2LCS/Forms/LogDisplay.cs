@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace LCS.Forms
@@ -10,6 +11,8 @@ namespace LCS.Forms
             InitializeComponent();
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string LogEntries { get; set; }
 
         private void LogDisplay_Load(object sender, EventArgs e)

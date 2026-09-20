@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace LCS
 {
@@ -14,6 +15,8 @@ namespace LCS
             Navigate("about:blank");
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string UserAgent { get; set; }
 
         private void BeforeNavigate(object pDisp, ref object url, ref object flags, ref object targetFrameName,
