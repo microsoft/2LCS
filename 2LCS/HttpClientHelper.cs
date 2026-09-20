@@ -23,9 +23,6 @@ namespace LCS
 
         internal HttpClientHelper(CookieContainer cookieContainer)
         {
-            //Use Tls1.2 as default transport layer
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-
             CookieContainer = cookieContainer;
             var httpClientHandler = new HttpClientHandler
             {
